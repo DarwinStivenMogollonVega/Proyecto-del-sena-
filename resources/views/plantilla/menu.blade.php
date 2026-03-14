@@ -1,3 +1,42 @@
+@once
+<style>
+    .dz-admin-sidebar .sidebar-brand {
+        background: var(--adm-sidebar-panel);
+        border-bottom: 1px solid var(--adm-sidebar-border);
+    }
+
+    .dz-admin-sidebar .sidebar-brand .brand-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.95rem 0.8rem;
+    }
+
+    .dz-admin-sidebar .sidebar-brand .brand-project-logo-full {
+        margin-right: 0;
+        border-radius: 0.7rem;
+        padding: 0.28rem 0.4rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        box-shadow: 0 10px 22px rgba(2, 6, 23, 0.16);
+    }
+
+    .dz-admin-sidebar .sidebar-brand .brand-project-logo-icon {
+        margin-right: 0;
+        padding: 0.2rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        box-shadow: 0 10px 22px rgba(2, 6, 23, 0.16);
+    }
+
+    html[data-theme='dark'] .dz-admin-sidebar .sidebar-brand .brand-project-logo-full,
+    html[data-theme='dark'] .dz-admin-sidebar .sidebar-brand .brand-project-logo-icon {
+        background: rgba(255, 255, 255, 0.94);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+</style>
+@endonce
+
 <aside class="app-sidebar shadow dz-admin-sidebar">
     <!--begin::Sidebar Brand-->
     <div class="sidebar-brand">
@@ -18,9 +57,6 @@
             />
             <!--end::Brand Image-->
 
-            <!--begin::Brand Text-->
-            <span class="brand-text fw-light">DisMusic</span>
-            <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
     </div>

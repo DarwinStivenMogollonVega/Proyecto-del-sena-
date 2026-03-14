@@ -14,6 +14,7 @@ use App\Models\ProductoResena;
 use App\Models\Proveedor;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class AdminAnalyticsService
@@ -134,34 +135,36 @@ class AdminAnalyticsService
 
     private function dashboardStats(): array
     {
-        $proveedoresData = $this->proveedoresAnalytics();
-        $topProveedorVentas = $proveedoresData['rows']->sortByDesc('total_vendidos')->first();
-        $topProveedorProductos = $proveedoresData['rows']->sortByDesc('total_productos')->first();
+        return Cache::remember('analytics.dashboard.stats', now()->addMinutes(5), function (): array {
+            $proveedoresData = $this->proveedoresAnalytics();
+            $topProveedorVentas = $proveedoresData['rows']->sortByDesc('total_vendidos')->first();
+            $topProveedorProductos = $proveedoresData['rows']->sortByDesc('total_productos')->first();
 
-        return [
-            'totalUsuarios' => User::count(),
-            'usuariosActivos' => User::where('activo', 1)->count(),
-            'totalPedidos' => Pedido::count(),
-            'pedidosPendientes' => Pedido::where('estado', 'pendiente')->count(),
-            'pedidosEnviados' => Pedido::where('estado', 'enviado')->count(),
-            'pedidosCancelados' => Pedido::whereIn('estado', ['cancelado', 'anulado'])->count(),
-            'pedidosEntregados' => Pedido::where('estado', 'entregado')->count(),
-            'ingresoTotal' => (float) (Pedido::sum('total') ?? 0),
-            'totalProductos' => Producto::count(),
-            'stockTotalProductos' => (int) (Producto::sum('cantidad') ?? 0),
-            'stockBajo' => Producto::where('cantidad', '<=', 5)->count(),
-            'productosSinStock' => Producto::where('cantidad', '<=', 0)->count(),
-            'totalCategorias' => Categoria::count(),
-            'totalCatalogos' => Catalogo::count(),
-            'totalArtistas' => Artista::count(),
-            'totalMovimientosInventario' => InventarioMovimiento::count(),
-            'totalActividadPanel' => AdminActivityLog::count(),
-            'totalProveedores' => (int) $proveedoresData['rows']->count(),
-            'totalProductosConProveedor' => (int) $proveedoresData['rows']->sum('total_productos'),
-            'totalVendidosProveedores' => (int) $proveedoresData['rows']->sum('total_vendidos'),
-            'topProveedorVentas' => $topProveedorVentas['proveedor'] ?? 'Sin datos',
-            'topProveedorProductos' => $topProveedorProductos['proveedor'] ?? 'Sin datos',
-        ];
+            return [
+                'totalUsuarios' => User::count(),
+                'usuariosActivos' => User::where('activo', 1)->count(),
+                'totalPedidos' => Pedido::count(),
+                'pedidosPendientes' => Pedido::where('estado', 'pendiente')->count(),
+                'pedidosEnviados' => Pedido::where('estado', 'enviado')->count(),
+                'pedidosCancelados' => Pedido::whereIn('estado', ['cancelado', 'anulado'])->count(),
+                'pedidosEntregados' => Pedido::where('estado', 'entregado')->count(),
+                'ingresoTotal' => (float) (Pedido::sum('total') ?? 0),
+                'totalProductos' => Producto::count(),
+                'stockTotalProductos' => (int) (Producto::sum('cantidad') ?? 0),
+                'stockBajo' => Producto::where('cantidad', '<=', 5)->count(),
+                'productosSinStock' => Producto::where('cantidad', '<=', 0)->count(),
+                'totalCategorias' => Categoria::count(),
+                'totalCatalogos' => Catalogo::count(),
+                'totalArtistas' => Artista::count(),
+                'totalMovimientosInventario' => InventarioMovimiento::count(),
+                'totalActividadPanel' => AdminActivityLog::count(),
+                'totalProveedores' => (int) $proveedoresData['rows']->count(),
+                'totalProductosConProveedor' => (int) $proveedoresData['rows']->sum('total_productos'),
+                'totalVendidosProveedores' => (int) $proveedoresData['rows']->sum('total_vendidos'),
+                'topProveedorVentas' => $topProveedorVentas['proveedor'] ?? 'Sin datos',
+                'topProveedorProductos' => $topProveedorProductos['proveedor'] ?? 'Sin datos',
+            ];
+        });
     }
 
     /**
@@ -180,8 +183,8 @@ class AdminAnalyticsService
                 ['label' => 'Ingreso',    'value' => '$' . number_format((float) $stats['ingresoTotal'], 2)],
             ],
             'productos' => [
-                ['label' => 'Productos',   'value' => Producto::count()],
-                ['label' => 'Stock bajo',  'value' => Producto::where('cantidad', '<=', 5)->count()],
+                ['label' => 'Productos',   'value' => $stats['totalProductos']],
+                ['label' => 'Stock bajo',  'value' => $stats['stockBajo']],
             ],
             'stock' => [
                 ['label' => 'Stock total', 'value' => $stats['stockTotalProductos']],
@@ -198,13 +201,14 @@ class AdminAnalyticsService
                 ['label' => 'Con compras',  'value' => User::role('cliente')->whereHas('pedidos')->count()],
             ],
             'usuarios' => [
-                ['label' => 'Total',    'value' => User::count()],
-                ['label' => 'Activos',  'value' => User::where('activo', 1)->count()],
+                ['label' => 'Total',    'value' => $stats['totalUsuarios'],
+                ],
+                ['label' => 'Activos',  'value' => $stats['usuariosActivos']],
             ],
             'panel' => [
-                ['label' => 'Categorias', 'value' => Categoria::count()],
-                ['label' => 'Catalogos',  'value' => Catalogo::count()],
-                ['label' => 'Artistas',   'value' => Artista::count()],
+                ['label' => 'Categorias', 'value' => $stats['totalCategorias']],
+                ['label' => 'Catalogos',  'value' => $stats['totalCatalogos']],
+                ['label' => 'Artistas',   'value' => $stats['totalArtistas']],
             ],
         ];
     }
@@ -215,7 +219,8 @@ class AdminAnalyticsService
      */
     public function categoriasVentasCards(): Collection
     {
-        return Categoria::leftJoin('productos', 'productos.categoria_id', '=', 'categorias.id')
+        $cards = Cache::remember('analytics.categorias_ventas.cards', now()->addMinutes(5), function () {
+            return Categoria::leftJoin('productos', 'productos.categoria_id', '=', 'categorias.id')
             ->leftJoin('pedido_detalles', 'pedido_detalles.producto_id', '=', 'productos.id')
             ->leftJoin('pedidos', 'pedidos.id', '=', 'pedido_detalles.pedido_id')
             ->select(
@@ -228,7 +233,10 @@ class AdminAnalyticsService
             )
             ->groupBy('categorias.id', 'categorias.nombre')
             ->orderByDesc('total_ventas')
-            ->get()
+            ->get();
+        });
+
+        return collect($cards)
             ->map(function ($cat) {
                 $slug        = 'cat-' . $cat->id;
                 $ventas      = (float) $cat->total_ventas;
@@ -328,7 +336,8 @@ class AdminAnalyticsService
      */
     private function proveedoresAnalytics(): array
     {
-        $proveedores = Proveedor::leftJoin('productos', 'productos.proveedor_id', '=', 'proveedores.id')
+        $rows = Cache::remember('analytics.proveedores.rows', now()->addMinutes(5), function () {
+            $proveedores = Proveedor::leftJoin('productos', 'productos.proveedor_id', '=', 'proveedores.id')
             ->leftJoin('pedido_detalles', 'pedido_detalles.producto_id', '=', 'productos.id')
             ->select(
                 'proveedores.id',
@@ -342,7 +351,7 @@ class AdminAnalyticsService
             ->orderByDesc('ingresos')
             ->get();
 
-        $productosTop = Producto::join('proveedores', 'proveedores.id', '=', 'productos.proveedor_id')
+            $productosTop = Producto::join('proveedores', 'proveedores.id', '=', 'productos.proveedor_id')
             ->leftJoin('pedido_detalles', 'pedido_detalles.producto_id', '=', 'productos.id')
             ->select(
                 'proveedores.id as proveedor_id',
@@ -366,18 +375,19 @@ class AdminAnalyticsService
                     ->implode(', ');
             });
 
-        $rows = $proveedores->map(function ($p) use ($productosTop): array {
-            return [
-                'proveedor' => $p->nombre,
-                'total_productos' => (int) $p->total_productos,
-                'total_vendidos' => (int) $p->total_vendidos,
-                'ingresos' => (float) $p->ingresos,
-                'productos_top' => $productosTop[$p->id] ?? 'Sin productos',
-            ];
-        })->values();
+            return $proveedores->map(function ($p) use ($productosTop): array {
+                return [
+                    'proveedor' => $p->nombre,
+                    'total_productos' => (int) $p->total_productos,
+                    'total_vendidos' => (int) $p->total_vendidos,
+                    'ingresos' => (float) $p->ingresos,
+                    'productos_top' => $productosTop[$p->id] ?? 'Sin productos',
+                ];
+            })->values()->all();
+        });
 
         return [
-            'rows' => $rows,
+            'rows' => collect($rows),
         ];
     }
 

@@ -13,14 +13,14 @@ class WebController extends Controller
     public function index(Request $request){
         $searchTerm = $request->has('search') && $request->search ? $request->search : null;
 
-        $masMasVendidos = Producto::with(['categoria', 'catalogo', 'resenas'])
+        $masMasVendidos = Producto::with(['categoria', 'catalogo'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->withCount('resenas')
             ->orderBy('resenas_count', 'desc')
             ->limit(6)
             ->get();
 
-        $mejorValorados = Producto::with(['categoria', 'catalogo', 'resenas'])
+        $mejorValorados = Producto::with(['categoria', 'catalogo'])
             ->withAvg('resenas', 'puntuacion')
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->orderByDesc('resenas_avg_puntuacion')
@@ -33,13 +33,13 @@ class WebController extends Controller
             ->filter(fn($p) => $p->promedio_calificacion > 0)
             ->values();
 
-        $ofertasEspeciales = Producto::with(['categoria', 'catalogo', 'resenas'])
+        $ofertasEspeciales = Producto::with(['categoria', 'catalogo'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->orderBy('precio', 'asc')
             ->limit(6)
             ->get();
 
-        $disponiblesAhora = Producto::with(['categoria', 'catalogo', 'resenas'])
+        $disponiblesAhora = Producto::with(['categoria', 'catalogo'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->where('cantidad', '>', 0)
             ->orderBy('updated_at', 'desc')
@@ -65,11 +65,13 @@ class WebController extends Controller
         }
         $productos = $query->paginate(10);
 
+        $metricasProductos = Producto::selectRaw('COUNT(*) as total_productos, SUM(CASE WHEN cantidad > 0 THEN 1 ELSE 0 END) as disponibles')->first();
+
         $metricas = [
-            'totalProductos' => Producto::count(),
+            'totalProductos' => (int) ($metricasProductos->total_productos ?? 0),
             'totalCategorias' => Categoria::count(),
             'totalCatalogos' => Catalogo::count(),
-            'disponibles' => Producto::where('cantidad', '>', 0)->count(),
+            'disponibles' => (int) ($metricasProductos->disponibles ?? 0),
         ];
 
         return view('web.index', compact(
@@ -92,8 +94,8 @@ class WebController extends Controller
             },
         ])->findOrFail($id);
 
-        $promedio = (float) $producto->resenas()->avg('puntuacion');
-        $totalResenas = $producto->resenas()->count();
+        $promedio = (float) ($producto->resenas->avg('puntuacion') ?? 0);
+        $totalResenas = (int) $producto->resenas->count();
         $miResena = auth()->check()
             ? $producto->resenas->firstWhere('user_id', auth()->id())
             : null;

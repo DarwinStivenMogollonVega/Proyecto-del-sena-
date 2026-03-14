@@ -160,7 +160,7 @@
 
                             <div class="col-md-6">
                                 <label for="telefono" class="checkout-label">Telefono</label>
-                                <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}" required>
+                                <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono', auth()->user()->telefono ?? '') }}" required>
                             </div>
 
                             <div class="col-md-6">
@@ -175,7 +175,7 @@
 
                             <div class="col-12">
                                 <label for="direccion" class="checkout-label">Direccion de entrega</label>
-                                <textarea name="direccion" id="direccion" class="form-control" rows="3" required>{{ old('direccion') }}</textarea>
+                                <textarea name="direccion" id="direccion" class="form-control" rows="3" required>{{ old('direccion', auth()->user()->direccion ?? '') }}</textarea>
                             </div>
 
                             <div class="col-12">
@@ -194,12 +194,12 @@
                                         <select name="tipo_documento" id="tipo_documento" class="form-select">
                                             <option value="">Seleccione...</option>
                                             <option value="nit" {{ old('tipo_documento') == 'nit' ? 'selected' : '' }}>NIT</option>
-                                            <option value="cedula" {{ old('tipo_documento') == 'cedula' ? 'selected' : '' }}>Cedula</option>
+                                            <option value="cedula" {{ old('tipo_documento', auth()->user()->documento_identidad ? 'cedula' : '') == 'cedula' ? 'selected' : '' }}>Cedula</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="numero_documento" class="checkout-label">Numero de documento</label>
-                                        <input type="text" name="numero_documento" id="numero_documento" class="form-control" value="{{ old('numero_documento') }}" maxlength="40">
+                                        <input type="text" name="numero_documento" id="numero_documento" class="form-control" value="{{ old('numero_documento', auth()->user()->documento_identidad ?? '') }}" maxlength="40">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="correo_factura" class="checkout-label">Correo para facturacion</label>

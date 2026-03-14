@@ -267,7 +267,14 @@ class PedidoController extends Controller
             abort(403, 'No tienes permisos para crear facturas.');
         }
 
-        $usuarios = User::orderBy('name')->get(['id', 'name', 'email']);
+        $usuarios = User::orderBy('name')->get([
+            'id',
+            'name',
+            'email',
+            'telefono',
+            'documento_identidad',
+            'direccion',
+        ]);
 
         return view('admin.facturas.create', compact('usuarios'));
     }

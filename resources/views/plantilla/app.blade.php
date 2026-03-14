@@ -519,7 +519,47 @@
 
       .btn:hover,
       .btn:focus {
-        transform: none;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+      }
+
+      button:not(.btn-close):not(.navbar-toggler):hover,
+      button:not(.btn-close):not(.navbar-toggler):focus,
+      input[type='submit']:hover,
+      input[type='submit']:focus,
+      input[type='button']:hover,
+      input[type='button']:focus,
+      input[type='reset']:hover,
+      input[type='reset']:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.18);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.14);
+      }
+
+      button:not(.btn-close):not(.navbar-toggler):active,
+      input[type='submit']:active,
+      input[type='button']:active,
+      input[type='reset']:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.14);
+      }
+
+      .btn:disabled,
+      .btn.disabled {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      button:disabled,
+      input[type='submit']:disabled,
+      input[type='button']:disabled,
+      input[type='reset']:disabled {
+        transform: none !important;
+        box-shadow: none !important;
       }
 
       .form-control:hover,
@@ -556,6 +596,10 @@
         .dropdown-menu,
         .alert,
         .btn,
+        button,
+        input[type='submit'],
+        input[type='button'],
+        input[type='reset'],
         .form-control,
         .form-select,
         .input-group-text,
@@ -692,6 +736,35 @@
         });
       }
 
+      function initAdminHoverDropdowns() {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches || typeof bootstrap === 'undefined') {
+          return;
+        }
+
+        document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+          var toggle = dropdown.querySelector('.dropdown-toggle');
+          if (!toggle) {
+            return;
+          }
+
+          var instance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+          var hideTimer;
+
+          dropdown.addEventListener('mouseenter', function () {
+            if (hideTimer) {
+              clearTimeout(hideTimer);
+            }
+            instance.show();
+          });
+
+          dropdown.addEventListener('mouseleave', function () {
+            hideTimer = setTimeout(function () {
+              instance.hide();
+            }, 120);
+          });
+        });
+      }
+
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
         scrollbarTheme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'os-theme-dark' : 'os-theme-light',
@@ -701,6 +774,7 @@
       document.addEventListener('DOMContentLoaded', function () {
         applyAdminTheme(document.documentElement.getAttribute('data-theme') || 'light');
         initAdminVisualFx();
+        initAdminHoverDropdowns();
 
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
         if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {

@@ -18,12 +18,18 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $this->authorize('user-list'); 
-        $texto=$request->input('texto');
-        $registros=User::with('roles')
-                    ->where('name', 'like',"%{$texto}%")
-                    ->orWhere('email', 'like',"%{$texto}%")
-                    ->orderBy('id', 'desc')
-                    ->paginate(10);
+        $texto = trim((string) $request->input('texto'));
+
+        $registros = User::with('roles')
+            ->when($texto !== '', function ($query) use ($texto) {
+                $query->where(function ($subQuery) use ($texto) {
+                    $subQuery->where('name', 'like', "%{$texto}%")
+                        ->orWhere('email', 'like', "%{$texto}%");
+                });
+            })
+            ->orderByDesc('id')
+            ->paginate(10);
+
         return view('usuario.index', compact('registros','texto'));
     }
 

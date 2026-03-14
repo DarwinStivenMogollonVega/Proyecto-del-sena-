@@ -33,6 +33,13 @@ class UserRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($id), // 👈 Correcto, todo en array
             ],
+            'telefono' => 'nullable|string|max:20',
+            'documento_identidad' => 'nullable|string|max:30',
+            'fecha_nacimiento' => 'nullable|date|before:today',
+            'direccion' => 'nullable|string|max:255',
+            'ciudad' => 'nullable|string|max:120',
+            'pais' => 'nullable|string|max:120',
+            'codigo_postal' => 'nullable|string|max:20',
         ];
 
         if ($method === 'POST') {
@@ -53,6 +60,15 @@ class UserRequest extends FormRequest
             'email.required' => 'El campo correo electrónico es obligatorio.',
             'email.email' => 'Debe ingresar un correo electrónico válido.',
             'email.unique' => 'Este correo electrónico ya está registrado.',
+
+            'telefono.max' => 'El teléfono no puede tener más de 20 caracteres.',
+            'documento_identidad.max' => 'El documento no puede tener más de 30 caracteres.',
+            'fecha_nacimiento.date' => 'La fecha de nacimiento no es válida.',
+            'fecha_nacimiento.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
+            'direccion.max' => 'La dirección no puede tener más de 255 caracteres.',
+            'ciudad.max' => 'La ciudad no puede tener más de 120 caracteres.',
+            'pais.max' => 'El país no puede tener más de 120 caracteres.',
+            'codigo_postal.max' => 'El código postal no puede tener más de 20 caracteres.',
 
             'password.required' => 'El campo contraseña es obligatorio.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',

@@ -99,11 +99,18 @@
             display: flex;
             flex-direction: column;
             background:
-                radial-gradient(circle at 12% 8%, var(--dz-overlay-1), transparent 35%),
-                radial-gradient(circle at 84% 20%, var(--dz-overlay-2), transparent 30%),
+                radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%),
+                radial-gradient(circle at 85% 16%, rgba(184, 153, 144, 0.16), transparent 30%),
                 linear-gradient(165deg, var(--dz-page-grad-1) 0%, var(--dz-page-grad-2) 45%, var(--dz-page-grad-3) 100%);
             background-attachment: fixed;
             transition: background 0.25s ease, color 0.25s ease;
+        }
+
+        html[data-theme='dark'] body {
+            background:
+                radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%),
+                radial-gradient(circle at 85% 16%, rgba(77, 32, 16, 0.20), transparent 30%),
+                linear-gradient(165deg, var(--dz-page-grad-1) 0%, var(--dz-page-grad-2) 46%, var(--dz-page-grad-3) 100%);
         }
 
         h1, h2, h3, h4, h5, h6,
@@ -171,6 +178,26 @@
 
         .btn {
             border-radius: 0.8rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.28) 28%, transparent 56%);
+            transform: translateX(-140%);
+            transition: transform 0.55s ease;
+            pointer-events: none;
+        }
+
+        button:not(.btn-close):not(.navbar-toggler),
+        input[type='submit'],
+        input[type='button'],
+        input[type='reset'] {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
         }
 
         .btn-primary {
@@ -476,15 +503,15 @@
         body::before {
             top: 4rem;
             left: -8rem;
-            background: radial-gradient(circle, rgba(196, 99, 16, 0.20) 0%, rgba(196, 99, 16, 0) 72%);
-            animation: dzOrbLeft 38s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(196, 99, 16, 0.22) 0%, rgba(196, 99, 16, 0) 72%);
+            animation: dzOrbLeft 40s ease-in-out infinite;
         }
 
         body::after {
             right: -7rem;
             bottom: -7rem;
-            background: radial-gradient(circle, rgba(184, 153, 144, 0.22) 0%, rgba(184, 153, 144, 0) 72%);
-            animation: dzOrbRight 40s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(77, 32, 16, 0.24) 0%, rgba(77, 32, 16, 0) 72%);
+            animation: dzOrbRight 42s ease-in-out infinite;
         }
 
         .navbar,
@@ -567,7 +594,57 @@
         .btn:focus,
         .page-link:hover,
         .page-link:focus {
-            transform: none;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 16px 30px rgba(46, 18, 6, 0.20);
+        }
+
+        .btn:hover::before,
+        .btn:focus::before {
+            transform: translateX(135%);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.14);
+        }
+
+        button:not(.btn-close):not(.navbar-toggler):hover,
+        button:not(.btn-close):not(.navbar-toggler):focus,
+        input[type='submit']:hover,
+        input[type='submit']:focus,
+        input[type='button']:hover,
+        input[type='button']:focus,
+        input[type='reset']:hover,
+        input[type='reset']:focus {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 16px 30px rgba(46, 18, 6, 0.20);
+        }
+
+        button:not(.btn-close):not(.navbar-toggler):active,
+        input[type='submit']:active,
+        input[type='button']:active,
+        input[type='reset']:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.14);
+        }
+
+        .btn:disabled,
+        .btn.disabled {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn:disabled::before,
+        .btn.disabled::before {
+            display: none;
+        }
+
+        button:disabled,
+        input[type='submit']:disabled,
+        input[type='button']:disabled,
+        input[type='reset']:disabled {
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .form-control:hover,
@@ -793,6 +870,35 @@
                 });
             }
 
+            function initHoverDropdowns() {
+                if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches || typeof bootstrap === 'undefined') {
+                    return;
+                }
+
+                document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
+                    var toggle = dropdown.querySelector('.dropdown-toggle');
+                    if (!toggle) {
+                        return;
+                    }
+
+                    var instance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+                    var hideTimer;
+
+                    dropdown.addEventListener('mouseenter', function () {
+                        if (hideTimer) {
+                            clearTimeout(hideTimer);
+                        }
+                        instance.show();
+                    });
+
+                    dropdown.addEventListener('mouseleave', function () {
+                        hideTimer = setTimeout(function () {
+                            instance.hide();
+                        }, 120);
+                    });
+                });
+            }
+
             document.addEventListener('click', function (e) {
                 var toggle = e.target.closest('[data-theme-toggle]');
                 if (!toggle) {
@@ -805,6 +911,7 @@
 
             applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
             initSiteVisualFx();
+            initHoverDropdowns();
         })();
     </script>
     @stack('scripts')

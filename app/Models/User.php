@@ -22,7 +22,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'activo'
+        'activo',
+        'telefono',
+        'documento_identidad',
+        'fecha_nacimiento',
+        'direccion',
+        'ciudad',
+        'pais',
+        'codigo_postal',
     ];
 
     /**
@@ -45,6 +52,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'fecha_nacimiento' => 'date',
         ];
     }
 

@@ -26,25 +26,35 @@
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <label class="form-label">Usuario</label>
-                                    <select name="user_id" class="form-select" required>
+                                    <select name="user_id" id="user_id" class="form-select" required>
                                         <option value="">Seleccione...</option>
                                         @foreach($usuarios as $u)
-                                            <option value="{{ $u->id }}" {{ old('user_id') == $u->id ? 'selected' : '' }}>{{ $u->name }} ({{ $u->email }})</option>
+                                            <option
+                                                value="{{ $u->id }}"
+                                                data-name="{{ $u->name }}"
+                                                data-email="{{ $u->email }}"
+                                                data-telefono="{{ $u->telefono ?? '' }}"
+                                                data-documento="{{ $u->documento_identidad ?? '' }}"
+                                                data-direccion="{{ $u->direccion ?? '' }}"
+                                                {{ old('user_id') == $u->id ? 'selected' : '' }}
+                                            >
+                                                {{ $u->name }} ({{ $u->email }})
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Nombre cliente</label>
-                                    <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Email cliente</label>
-                                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                                    <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label class="form-label">Telefono</label>
-                                    <input type="text" name="telefono" class="form-control" value="{{ old('telefono') }}" required>
+                                    <input type="text" name="telefono" id="telefono" class="form-control" value="{{ old('telefono') }}" required>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Metodo de pago</label>
@@ -77,21 +87,21 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Numero documento</label>
-                                    <input type="text" name="numero_documento" class="form-control" value="{{ old('numero_documento') }}" required>
+                                    <input type="text" name="numero_documento" id="numero_documento" class="form-control" value="{{ old('numero_documento') }}" required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label">Razon social</label>
-                                    <input type="text" name="razon_social" class="form-control" value="{{ old('razon_social') }}" required>
+                                    <input type="text" name="razon_social" id="razon_social" class="form-control" value="{{ old('razon_social') }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Correo factura</label>
-                                    <input type="email" name="correo_factura" class="form-control" value="{{ old('correo_factura') }}" required>
+                                    <input type="email" name="correo_factura" id="correo_factura" class="form-control" value="{{ old('correo_factura') }}" required>
                                 </div>
 
                                 <div class="col-12">
                                     <label class="form-label">Direccion</label>
-                                    <input type="text" name="direccion" class="form-control" value="{{ old('direccion') }}" required>
+                                    <input type="text" name="direccion" id="direccion" class="form-control" value="{{ old('direccion') }}" required>
                                 </div>
                             </div>
 
@@ -114,5 +124,47 @@
 document.getElementById('mnuFacturas')?.classList.add('active');
 document.getElementById('mnuComercial')?.classList.add('menu-open');
 document.getElementById('mnuComercialLink')?.classList.add('active');
+
+(function () {
+    var userSelect = document.getElementById('user_id');
+    var nombre = document.getElementById('nombre');
+    var email = document.getElementById('email');
+    var telefono = document.getElementById('telefono');
+    var numeroDocumento = document.getElementById('numero_documento');
+    var razonSocial = document.getElementById('razon_social');
+    var correoFactura = document.getElementById('correo_factura');
+    var direccion = document.getElementById('direccion');
+
+    if (!userSelect || !nombre || !email || !telefono || !numeroDocumento || !razonSocial || !correoFactura || !direccion) {
+        return;
+    }
+
+    function fillFromUser(force) {
+        var selected = userSelect.options[userSelect.selectedIndex];
+        if (!selected || !selected.value) {
+            return;
+        }
+
+        var setValue = function (el, value) {
+            if (force || !el.value) {
+                el.value = value || '';
+            }
+        };
+
+        setValue(nombre, selected.dataset.name || '');
+        setValue(email, selected.dataset.email || '');
+        setValue(telefono, selected.dataset.telefono || '');
+        setValue(numeroDocumento, selected.dataset.documento || '');
+        setValue(razonSocial, selected.dataset.name || '');
+        setValue(correoFactura, selected.dataset.email || '');
+        setValue(direccion, selected.dataset.direccion || '');
+    }
+
+    userSelect.addEventListener('change', function () {
+        fillFromUser(true);
+    });
+
+    fillFromUser(false);
+})();
 </script>
 @endpush

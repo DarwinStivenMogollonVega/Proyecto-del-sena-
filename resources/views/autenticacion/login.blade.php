@@ -1,10 +1,31 @@
 @extends('autenticacion.app')
+@push('estilos')
+<style>
+  .login-brand .auth-brand-mark-full {
+    width: min(15rem, 62vw);
+    height: 4.2rem;
+    padding: 0.28rem 0.4rem;
+  }
+
+  .login-brand .auth-brand-mark-icon {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+
+  @media (max-width: 575.98px) {
+    .login-brand .auth-brand-mark-icon {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+</style>
+@endpush
 @section('titulo', 'DisMusic - Login')
 @section('contenido')
 <div class="auth-shell">
   <section class="auth-form-panel">
     <div class="auth-card p-4 p-lg-5">
-      <a href="{{ route('web.index') }}" class="auth-brand mb-4">
+      <a href="{{ route('web.index') }}" class="auth-brand login-brand mb-4">
         <span class="auth-brand-mark auth-brand-mark-full">
           <img
             src="{{ asset('logo_proyecto_con_nombre-removebg-preview.png') }}"
@@ -20,10 +41,6 @@
             class="auth-brand-icon"
             onerror="this.onerror=null;this.src='{{ asset('assets/img/AdminLTELogo.png') }}';"
           >
-        </span>
-        <span>
-          <strong class="d-block fs-4">DisMusic</strong>
-          <small class="auth-copy">Acceso a tu cuenta</small>
         </span>
       </a>
 
@@ -82,15 +99,6 @@
 
   <aside class="auth-summary-panel">
     <div>
-      <span class="summary-kicker">
-        <img
-          src="{{ asset('logo_proyecto-removebg-preview.png') }}"
-          alt="DisMusic"
-          class="summary-kicker-icon"
-          onerror="this.onerror=null;this.src='{{ asset('logo_proyecto_con_nombre-removebg-preview.png') }}';"
-        >
-        DisMusic
-      </span>
       <h2 class="summary-title mt-3 mb-3">Tu tienda para descubrir, guardar y comprar discos sin perder el hilo.</h2>
       <p class="summary-copy mb-4">Desde aqui puedes entrar a tu cuenta y retomar tu experiencia: revisar productos, seguir tus pedidos y completar compras con rapidez.</p>
 

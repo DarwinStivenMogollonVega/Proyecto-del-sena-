@@ -103,6 +103,51 @@
                         @error('email') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="telefono" class="form-label">Telefono</label>
+                        <input type="text" class="form-control @error('telefono') is-invalid @enderror" id="telefono" name="telefono" value="{{ old('telefono', $registro->telefono ?? '') }}" placeholder="Ejemplo: +591 70000000">
+                        @error('telefono') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="documento_identidad" class="form-label">Documento de identidad</label>
+                        <input type="text" class="form-control @error('documento_identidad') is-invalid @enderror" id="documento_identidad" name="documento_identidad" value="{{ old('documento_identidad', $registro->documento_identidad ?? '') }}" placeholder="CI, DNI o pasaporte">
+                        @error('documento_identidad') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" class="form-control @error('fecha_nacimiento') is-invalid @enderror" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', optional($registro->fecha_nacimiento)->format('Y-m-d')) }}">
+                        @error('fecha_nacimiento') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="ciudad" class="form-label">Ciudad</label>
+                        <input type="text" class="form-control @error('ciudad') is-invalid @enderror" id="ciudad" name="ciudad" value="{{ old('ciudad', $registro->ciudad ?? '') }}">
+                        @error('ciudad') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="pais" class="form-label">Pais</label>
+                        <input type="text" class="form-control @error('pais') is-invalid @enderror" id="pais" name="pais" value="{{ old('pais', $registro->pais ?? '') }}">
+                        @error('pais') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="direccion" class="form-label">Direccion</label>
+                        <input type="text" class="form-control @error('direccion') is-invalid @enderror" id="direccion" name="direccion" value="{{ old('direccion', $registro->direccion ?? '') }}" placeholder="Calle, zona, referencia">
+                        @error('direccion') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="codigo_postal" class="form-label">Codigo postal</label>
+                        <input type="text" class="form-control @error('codigo_postal') is-invalid @enderror" id="codigo_postal" name="codigo_postal" value="{{ old('codigo_postal', $registro->codigo_postal ?? '') }}">
+                        @error('codigo_postal') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="password" class="form-label">Nueva contrasena</label>
