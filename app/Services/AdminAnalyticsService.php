@@ -37,7 +37,7 @@ class AdminAnalyticsService
             [
                 'slug' => 'stock',
                 'titulo' => 'Stock de Productos',
-                'descripcion' => 'Conteo de existencias, productos con stock bajo y productos agotados.',
+                'descripcion' => 'Conteo de existencias, productos con pocas unidades y productos agotados.',
                 'icono' => 'bi-box-seam-fill',
             ],
             [
@@ -184,12 +184,12 @@ class AdminAnalyticsService
             ],
             'productos' => [
                 ['label' => 'Productos',   'value' => $stats['totalProductos']],
-                ['label' => 'Stock bajo',  'value' => $stats['stockBajo']],
+                ['label' => 'Pocas unidades',  'value' => $stats['stockBajo']],
             ],
             'stock' => [
                 ['label' => 'Stock total', 'value' => $stats['stockTotalProductos']],
-                ['label' => 'Stock bajo',  'value' => $stats['stockBajo']],
-                ['label' => 'Sin stock',   'value' => $stats['productosSinStock']],
+                ['label' => 'Pocas unidades',  'value' => $stats['stockBajo']],
+                ['label' => 'Agotado',   'value' => $stats['productosSinStock']],
             ],
             'proveedores' => [
                 ['label' => 'Proveedores', 'value' => $stats['totalProveedores']],
@@ -450,7 +450,7 @@ class AdminAnalyticsService
                 ['label' => 'Categorias registradas', 'value' => Categoria::count()],
                 ['label' => 'Catalogos registrados', 'value' => Catalogo::count()],
                 ['label' => 'Artistas registrados', 'value' => Artista::count()],
-                ['label' => 'Stock bajo (<=5)', 'value' => Producto::where('cantidad', '<=', 5)->count()],
+                ['label' => 'Pocas unidades (<=5)', 'value' => Producto::where('cantidad', '<=', 5)->count()],
                 ['label' => 'Movimientos de inventario', 'value' => InventarioMovimiento::count()],
             ],
             'headings' => ['Producto', 'Categoria', 'Catalogo', 'Artista', 'Stock', 'Precio'],
@@ -475,7 +475,7 @@ class AdminAnalyticsService
                 'stock' => (int) $producto->cantidad,
                 'estado_stock' => $producto->cantidad <= 0
                     ? 'Agotado'
-                    : ($producto->cantidad <= 5 ? 'Bajo' : 'Disponible'),
+                    : ($producto->cantidad <= 5 ? 'Pocas unidades' : 'Disponible'),
             ]);
 
         $promedioStock = (float) (Producto::avg('cantidad') ?? 0);
@@ -483,10 +483,10 @@ class AdminAnalyticsService
         return [
             'categoria' => 'stock',
             'titulo' => 'Estadisticas de Stock de Productos',
-            'descripcion' => 'Control de existencias con enfoque en stock total, stock bajo y productos agotados.',
+            'descripcion' => 'Control de existencias con enfoque en stock total, pocas unidades y productos agotados.',
             'summary' => [
                 ['label' => 'Stock total unidades', 'value' => $stats['stockTotalProductos']],
-                ['label' => 'Productos con stock bajo', 'value' => $stats['stockBajo']],
+                ['label' => 'Productos con pocas unidades', 'value' => $stats['stockBajo']],
                 ['label' => 'Productos agotados', 'value' => $stats['productosSinStock']],
                 ['label' => 'Promedio stock por producto', 'value' => number_format($promedioStock, 2)],
             ],
@@ -644,7 +644,7 @@ class AdminAnalyticsService
                 ['label' => 'Pedidos que la incluyen',     'value' => $totalPedidos],
                 ['label' => 'Unidades vendidas',           'value' => $totalUnidades],
                 ['label' => 'Ingreso total',               'value' => '$' . number_format($totalVentas, 2)],
-                ['label' => 'Productos con stock bajo',    'value' => $stockBajo],
+                ['label' => 'Productos con pocas unidades',    'value' => $stockBajo],
             ],
             'headings' => ['Producto', 'Precio', 'Stock', 'Veces pedido', 'Unidades vendidas', 'Ingreso'],
             'rows'     => $rows,

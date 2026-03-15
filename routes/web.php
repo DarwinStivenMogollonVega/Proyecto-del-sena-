@@ -82,6 +82,10 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::post('/admin/inventario/{id}/movimiento', [InventarioController::class, 'moverStock'])->name('inventario.movimiento');
 
     Route::get('/admin/seguridad', [SeguridadController::class, 'index'])->name('admin.seguridad.index');
+    Route::get('/admin/guia-soporte', function () {
+        return view('plantilla.guia');
+    })->name('admin.guia');
+
     Route::patch('/pedidos/{id}/estado', [PedidoController::class, 'cambiarEstado'])->name('pedidos.cambiar.estado');    
 
     Route::get('/estadisticas', [EstadisticaController::class, 'index'])->name('estadisticas.index');

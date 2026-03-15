@@ -84,7 +84,7 @@
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h3 class="card-title">Alertas de stock bajo</h3>
+                        <h3 class="card-title">Alertas de pocas unidades</h3>
                     </div>
                     <div class="card-body">
                         @forelse($alertas as $alerta)

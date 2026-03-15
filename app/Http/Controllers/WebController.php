@@ -13,14 +13,16 @@ class WebController extends Controller
     public function index(Request $request){
         $searchTerm = $request->has('search') && $request->search ? $request->search : null;
 
-        $masMasVendidos = Producto::with(['categoria', 'catalogo'])
+        $masMasVendidos = Producto::with(['categoria', 'catalogo', 'artista'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->withCount('resenas')
+            ->withAvg('resenas', 'puntuacion')
             ->orderBy('resenas_count', 'desc')
             ->limit(6)
             ->get();
 
-        $mejorValorados = Producto::with(['categoria', 'catalogo'])
+        $mejorValorados = Producto::with(['categoria', 'catalogo', 'artista'])
+            ->withCount('resenas')
             ->withAvg('resenas', 'puntuacion')
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
             ->orderByDesc('resenas_avg_puntuacion')
@@ -33,20 +35,26 @@ class WebController extends Controller
             ->filter(fn($p) => $p->promedio_calificacion > 0)
             ->values();
 
-        $ofertasEspeciales = Producto::with(['categoria', 'catalogo'])
+        $ofertasEspeciales = Producto::with(['categoria', 'catalogo', 'artista'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
+            ->withCount('resenas')
+            ->withAvg('resenas', 'puntuacion')
             ->orderBy('precio', 'asc')
             ->limit(6)
             ->get();
 
-        $disponiblesAhora = Producto::with(['categoria', 'catalogo'])
+        $disponiblesAhora = Producto::with(['categoria', 'catalogo', 'artista'])
             ->when($searchTerm, fn($q) => $q->where('nombre', 'like', '%' . $searchTerm . '%'))
+            ->withCount('resenas')
+            ->withAvg('resenas', 'puntuacion')
             ->where('cantidad', '>', 0)
             ->orderBy('updated_at', 'desc')
             ->limit(6)
             ->get();
 
-        $query = Producto::with(['categoria', 'catalogo']);
+        $query = Producto::with(['categoria', 'catalogo', 'artista'])
+            ->withCount('resenas')
+            ->withAvg('resenas', 'puntuacion');
         if ($searchTerm) {
             $query->where('nombre', 'like', '%' . $searchTerm . '%');
         }

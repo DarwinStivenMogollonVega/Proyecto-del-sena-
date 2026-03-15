@@ -94,18 +94,179 @@
         box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35) inset;
     }
 
-    .navbar-dark .navbar-nav .nav-link.dropdown-toggle.show,
-    .navbar-dark .navbar-nav .nav-item.dropdown.dropdown-lit > .nav-link {
+    .navbar-dark .navbar-nav .nav-link.dropdown-toggle:not(.dropdown-cta-btn).show,
+    .navbar-dark .navbar-nav .nav-item.dropdown.dropdown-lit > .nav-link:not(.dropdown-cta-btn) {
         color: #fff;
         background: rgba(255, 255, 255, 0.18);
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
         border-radius: 999px;
     }
 
-    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-toggle.show,
-    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-item.dropdown.dropdown-lit > .nav-link {
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-toggle:not(.dropdown-cta-btn).show,
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-item.dropdown.dropdown-lit > .nav-link:not(.dropdown-cta-btn) {
         background: rgba(148, 163, 184, 0.2);
         box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.35) inset;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.5rem 0.9rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 22% 50%, rgba(255, 255, 255, 0.22), transparent 56%);
+        opacity: 0.8;
+        transition: opacity 0.25s ease, transform 0.3s ease;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn > i {
+        transition: transform 0.35s ease;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:hover,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:focus,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn.show {
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.34);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:hover::before,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:focus::before,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn.show::before {
+        opacity: 1;
+        transform: translateX(7px);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:hover > i,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:focus > i,
+    .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn.show > i {
+        transform: rotate(-12deg);
+    }
+
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn {
+        background: rgba(148, 163, 184, 0.12);
+        border-color: rgba(148, 163, 184, 0.28);
+    }
+
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:hover,
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn:focus,
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.dropdown-cta-btn.show {
+        background: rgba(148, 163, 184, 0.22);
+        border-color: rgba(148, 163, 184, 0.38);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.5rem 0.9rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        font-weight: 700;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 22% 50%, rgba(255, 255, 255, 0.22), transparent 56%);
+        opacity: 0.8;
+        transition: opacity 0.25s ease, transform 0.3s ease;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn .nav-cta-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.7rem;
+        height: 1.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn .nav-cta-icon i {
+        margin-right: 0 !important;
+        transition: transform 0.35s ease;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn .nav-cta-text {
+        min-width: auto;
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:hover,
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:focus {
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.34);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:hover::before,
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:focus::before {
+        opacity: 1;
+        transform: translateX(7px);
+    }
+
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:hover .nav-cta-icon i,
+    .navbar-dark .navbar-nav .nav-link.nav-cta-btn:focus .nav-cta-icon i {
+        transform: rotate(-12deg);
+    }
+
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.nav-cta-btn {
+        background: rgba(148, 163, 184, 0.12);
+        border-color: rgba(148, 163, 184, 0.28);
+    }
+
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.nav-cta-btn:hover,
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.nav-cta-btn:focus {
+        background: rgba(148, 163, 184, 0.22);
+        border-color: rgba(148, 163, 184, 0.38);
+    }
+
+    html[data-theme='dark'] .navbar-dark .navbar-nav .nav-link.nav-cta-btn .nav-cta-icon {
+        background: rgba(148, 163, 184, 0.24);
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
     }
 
     .dropdown-menu .dropdown-item.user-route-active {
@@ -120,25 +281,78 @@
     }
 
     .cart-cta-btn {
-        background: linear-gradient(135deg, #c46310, #4d2010);
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border: 1px solid rgba(255, 255, 255, 0.26);
         color: #fff;
-        border: none;
+        background: rgba(255, 255, 255, 0.08);
         border-radius: 999px;
         padding: 0.5rem 1rem;
         font-weight: 700;
-        box-shadow: 0 10px 24px rgba(196, 99, 16, 0.38);
-        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cart-cta-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 22% 50%, rgba(255, 255, 255, 0.22), transparent 56%);
+        opacity: 0.8;
+        transition: opacity 0.25s ease, transform 0.3s ease;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .cart-cta-btn > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .cart-cta-btn .cart-cta-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.7rem;
+        height: 1.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .cart-cta-btn .cart-cta-icon i {
+        transition: transform 0.35s ease;
+    }
+
+    .cart-cta-btn .cart-cta-text {
+        min-width: 3.65rem;
     }
 
     .cart-cta-btn:hover {
         color: #fff;
-        transform: translateY(-1px);
-        filter: brightness(1.08);
-        box-shadow: 0 14px 28px rgba(196, 99, 16, 0.46);
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.34);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .cart-cta-btn:hover::before,
+    .cart-cta-btn:focus::before {
+        opacity: 1;
+        transform: translateX(7px);
+    }
+
+    .cart-cta-btn:hover .cart-cta-icon i,
+    .cart-cta-btn:focus .cart-cta-icon i {
+        transform: rotate(-12deg);
     }
 
     .cart-cta-btn .badge {
-        background: rgba(22, 8, 0, 0.85) !important;
+        background: rgba(22, 8, 0, 0.72) !important;
         color: #fff !important;
         font-weight: 700;
     }
@@ -148,8 +362,19 @@
     }
 
     html[data-theme='dark'] .cart-cta-btn {
-        background: linear-gradient(135deg, #e07030, #7c2810);
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+        background: rgba(148, 163, 184, 0.12);
+        border-color: rgba(148, 163, 184, 0.28);
+    }
+
+    html[data-theme='dark'] .cart-cta-btn:hover,
+    html[data-theme='dark'] .cart-cta-btn:focus {
+        background: rgba(148, 163, 184, 0.22);
+        border-color: rgba(148, 163, 184, 0.38);
+    }
+
+    html[data-theme='dark'] .cart-cta-btn .cart-cta-icon {
+        background: rgba(148, 163, 184, 0.24);
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
     }
 
     html[data-theme='dark'] .dz-brand {
@@ -158,12 +383,54 @@
     }
 
     .theme-switch-btn {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
         border: 1px solid rgba(255, 255, 255, 0.26);
         color: #fff;
         background: rgba(255, 255, 255, 0.08);
         border-radius: 999px;
         font-weight: 700;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .theme-switch-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 22% 50%, rgba(255, 255, 255, 0.22), transparent 56%);
+        opacity: 0.8;
+        transition: opacity 0.25s ease, transform 0.3s ease;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .theme-switch-btn > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .theme-switch-btn .theme-switch-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.7rem;
+        height: 1.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .theme-switch-btn .theme-switch-icon i {
+        transition: transform 0.35s ease;
+    }
+
+    .theme-switch-btn .theme-switch-text {
+        min-width: 3.65rem;
     }
 
     .theme-switch-btn:hover,
@@ -171,6 +438,30 @@
         color: #fff;
         background: rgba(255, 255, 255, 0.16);
         border-color: rgba(255, 255, 255, 0.34);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-switch-btn:hover::before,
+    .theme-switch-btn:focus::before {
+        opacity: 1;
+        transform: translateX(7px);
+    }
+
+    .theme-switch-btn.is-toggling .theme-switch-icon i {
+        animation: themeIconSpin 0.45s ease;
+    }
+
+    @keyframes themeIconSpin {
+        0% {
+            transform: rotate(0deg) scale(1);
+        }
+        45% {
+            transform: rotate(125deg) scale(1.18);
+        }
+        100% {
+            transform: rotate(180deg) scale(1);
+        }
     }
 
     html[data-theme='dark'] .theme-switch-btn {
@@ -182,6 +473,11 @@
     html[data-theme='dark'] .theme-switch-btn:focus {
         background: rgba(148, 163, 184, 0.22);
         border-color: rgba(148, 163, 184, 0.38);
+    }
+
+    html[data-theme='dark'] .theme-switch-btn .theme-switch-icon {
+        background: rgba(148, 163, 184, 0.24);
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
     }
 
     @media (max-width: 991.98px) {
@@ -256,14 +552,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link nav-scroll-link {{ request()->routeIs('web.index') ? 'active is-section-active' : '' }}" href="{{ $inicioHref }}" data-scrollspy-link aria-current="{{ request()->routeIs('web.index') ? 'page' : 'false' }}"><i class="bi bi-house-door"></i>Inicio</a>
+                    <a class="nav-link nav-scroll-link nav-cta-btn {{ request()->routeIs('web.index') ? 'active is-section-active' : '' }}" href="{{ $inicioHref }}" data-scrollspy-link aria-current="{{ request()->routeIs('web.index') ? 'page' : 'false' }}">
+                        <span class="nav-cta-icon"><i class="bi bi-house-door"></i></span>
+                        <span class="nav-cta-text">Inicio</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('web.acerca') ? 'active' : '' }}" href="{{ route('web.acerca') }}"><i class="bi bi-info-circle"></i>Acerca</a>
+                    <a class="nav-link nav-cta-btn {{ request()->routeIs('web.acerca') ? 'active' : '' }}" href="{{ route('web.acerca') }}">
+                        <span class="nav-cta-icon"><i class="bi bi-info-circle"></i></span>
+                        <span class="nav-cta-text">Acerca</span>
+                    </a>
                 </li>
 
-                <li class="nav-item dropdown {{ $catalogoActive ? 'dropdown-lit' : '' }}">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catálogo</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
                         @foreach($catalogos as $catalogo)
                             <li>
@@ -276,8 +578,8 @@
                     </ul>
                 </li>
 
-                <li class="nav-item dropdown {{ $categoriaActive ? 'dropdown-lit' : '' }}">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownCategoria" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categorías</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCategoria" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-grid-fill me-1"></i>Categorías</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategoria">
                         @foreach($categorias as $categoria)
                             <li>
@@ -290,9 +592,9 @@
                     </ul>
                 </li>
 
-                <li class="nav-item dropdown {{ $usuarioActive ? 'dropdown-lit' : '' }}">
+                <li class="nav-item dropdown">
                     @auth
-                        <a class="nav-link dropdown-toggle" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-2"></i>{{ auth()->user()->name }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
@@ -336,13 +638,17 @@
             </ul>
 
             <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn">
-                <i class="bi-cart-fill me-1"></i>
-                Carrito
-                <span class="badge ms-1 rounded-pill cart-count-badge">{{ session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0 }}</span>
+                <span class="cart-cta-icon">
+                    <i class="bi bi-cart-fill"></i>
+                </span>
+                <span class="cart-cta-text">Carrito</span>
+                <span class="badge rounded-pill cart-count-badge">{{ session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0 }}</span>
             </a>
             <button type="button" class="btn ms-2 theme-switch-btn" data-theme-toggle>
-                <i class="bi bi-moon-stars-fill me-1"></i>
-                <span data-theme-label>Oscuro</span>
+                <span class="theme-switch-icon">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </span>
+                <span class="theme-switch-text" data-theme-label>Oscuro</span>
             </button>
         </div>
     </div>

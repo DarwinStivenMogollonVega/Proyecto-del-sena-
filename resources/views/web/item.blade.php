@@ -84,6 +84,56 @@
         margin-top: 0.75rem;
     }
 
+    .add-to-cart-btn {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        border-radius: 999px;
+        border-color: #c46310;
+        color: #c46310;
+        font-weight: 700;
+        box-shadow: 0 10px 22px rgba(196, 99, 16, 0.22);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .add-to-cart-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.4) 50%, transparent 80%);
+        transform: translateX(-130%);
+        transition: transform 0.6s ease;
+        pointer-events: none;
+    }
+
+    .add-to-cart-btn:hover,
+    .add-to-cart-btn:focus {
+        background: #c46310;
+        border-color: #c46310;
+        color: #fff;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 16px 30px rgba(196, 99, 16, 0.34);
+    }
+
+    .add-to-cart-btn:hover::before,
+    .add-to-cart-btn:focus::before {
+        transform: translateX(130%);
+    }
+
+    html[data-theme='dark'] .add-to-cart-btn {
+        border-color: #e07a30;
+        color: #f2d7c4;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.48);
+    }
+
+    html[data-theme='dark'] .add-to-cart-btn:hover,
+    html[data-theme='dark'] .add-to-cart-btn:focus {
+        background: #e07a30;
+        border-color: #e07a30;
+        color: #1e0c04;
+        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.6);
+    }
+
     html[data-theme='dark'] .product-main-card,
     html[data-theme='dark'] .rating-card,
     html[data-theme='dark'] .review-list-card,
@@ -154,10 +204,10 @@
                     </div>
 
                     @if ($producto->cantidad >= 50)
-                        <p class="text-success fw-semibold mb-2"><i class="bi bi-check-circle me-1"></i> Producto disponible</p>
-                    @elseif ($producto->cantidad >= 10 && $producto->cantidad < 50)
+                        <p class="text-success fw-semibold mb-2"><i class="bi bi-check-circle me-1"></i> Disponible</p>
+                    @elseif ($producto->cantidad > 0)
                         <p class="text-warning fw-semibold mb-2"><i class="bi bi-exclamation-circle me-1"></i> Pocas unidades</p>
-                    @elseif ($producto->cantidad == 0)
+                    @else
                         <p class="text-danger fw-semibold mb-2"><i class="bi bi-x-circle me-1"></i> Agotado</p>
                     @endif
 
@@ -167,7 +217,7 @@
                         @csrf
                         <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
-                        <button class="btn btn-outline-dark" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
+                        <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
                         <a class="btn btn-outline-secondary" href="javascript:history.back()">Regresar</a>
                     </form>
                 </div>

@@ -219,7 +219,7 @@
                         <div class="stat-value">{{ $stats['totalProductos'] }}</div>
                         <div class="stat-label">Productos</div>
                         @if($stats['stockBajo'] > 0)
-                            <small class="text-red fw-semibold"><i class="bi bi-exclamation-triangle-fill"></i> {{ $stats['stockBajo'] }} stock bajo</small>
+                            <small class="text-red fw-semibold"><i class="bi bi-exclamation-triangle-fill"></i> {{ $stats['stockBajo'] }} pocas unidades</small>
                         @else
                             <small class="text-green fw-semibold"><i class="bi bi-check-circle-fill"></i> Stock OK</small>
                         @endif

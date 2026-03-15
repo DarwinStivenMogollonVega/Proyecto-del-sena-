@@ -215,8 +215,8 @@
             <a href="{{ route('perfil.recibos') }}" class="btn btn-outline-light btn-sm quick-action">
                 <i class="bi bi-file-earmark-text me-1"></i> Historial facturas
             </a>
-            <a href="{{ route('perfil.edit') }}" class="btn btn-outline-light btn-sm quick-action">
-                <i class="bi bi-person-gear me-1"></i> Editar perfil
+            <a href="{{ route('perfil.pedidos') }}" class="btn btn-outline-light btn-sm quick-action">
+                <i class="bi bi-receipt me-1"></i> Ver pedidos
             </a>
         </div>
     </section>

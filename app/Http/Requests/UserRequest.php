@@ -40,6 +40,7 @@ class UserRequest extends FormRequest
             'ciudad' => 'nullable|string|max:120',
             'pais' => 'nullable|string|max:120',
             'codigo_postal' => 'nullable|string|max:20',
+            'avatar'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ];
 
         if ($method === 'POST') {

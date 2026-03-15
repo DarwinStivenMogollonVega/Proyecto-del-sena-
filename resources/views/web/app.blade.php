@@ -106,6 +106,22 @@
             transition: background 0.25s ease, color 0.25s ease;
         }
 
+        html.theme-shifting body {
+            animation: dzThemeShiftFlash 0.42s ease;
+        }
+
+        @keyframes dzThemeShiftFlash {
+            0% {
+                filter: saturate(1) brightness(1);
+            }
+            38% {
+                filter: saturate(1.08) brightness(1.05);
+            }
+            100% {
+                filter: saturate(1) brightness(1);
+            }
+        }
+
         html[data-theme='dark'] body {
             background:
                 radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%),
@@ -730,6 +746,10 @@
                 filter: none !important;
                 opacity: 1 !important;
             }
+
+            html.theme-shifting body {
+                animation: none !important;
+            }
         }
 
         @media (max-width: 991.98px) {
@@ -868,6 +888,12 @@
                         label.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
                     }
                 });
+
+                document.documentElement.classList.add('theme-shifting');
+                clearTimeout(window.__dzThemeShiftTimer);
+                window.__dzThemeShiftTimer = setTimeout(function () {
+                    document.documentElement.classList.remove('theme-shifting');
+                }, 430);
             }
 
             function initHoverDropdowns() {
@@ -905,6 +931,19 @@
                     return;
                 }
                 e.preventDefault();
+                e.stopPropagation();
+                /* Cooldown: ignora disparos rápidos (doble clic, tecla retenida, hold) */
+                if (window.__dzThemeToggleLocked) {
+                    return;
+                }
+                window.__dzThemeToggleLocked = true;
+                setTimeout(function () {
+                    window.__dzThemeToggleLocked = false;
+                }, 700);
+                toggle.classList.add('is-toggling');
+                setTimeout(function () {
+                    toggle.classList.remove('is-toggling');
+                }, 460);
                 var current = document.documentElement.getAttribute('data-theme') || 'light';
                 applyTheme(current === 'dark' ? 'light' : 'dark');
             });

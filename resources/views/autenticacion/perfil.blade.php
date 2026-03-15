@@ -51,6 +51,66 @@
         box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
     }
 
+    /* ── Avatar upload ─────────────────────────────── */
+    .avatar-upload-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+        padding: 1.4rem 0 1.6rem;
+        border-bottom: 1px solid var(--dz-border);
+        margin-bottom: 1.6rem;
+    }
+    .avatar-ring {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid var(--dz-border);
+        overflow: hidden;
+        background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: border-color .2s;
+    }
+    .avatar-ring:hover { border-color: #f59e0b; }
+    .avatar-ring img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .avatar-initial {
+        width: 100%; height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+    }
+    .avatar-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity .2s;
+    }
+    .avatar-ring:hover .avatar-overlay { opacity: 1; }
+    .avatar-overlay i { font-size: 1.4rem; color: #fff; }
+    .avatar-hint {
+        font-size: .78rem;
+        color: var(--dz-muted);
+        text-align: center;
+        max-width: 240px;
+        line-height: 1.4;
+    }
+    html[data-theme='dark'] .avatar-ring { border-color: #334155; }
+    html[data-theme='dark'] .avatar-ring:hover { border-color: #f59e0b; }
+
     @media (max-width: 575.98px) {
         .profile-hero {
             padding: 1.25rem;
@@ -88,9 +148,26 @@
                 </div>
             @endif
 
-            <form action="{{ route('perfil.update') }}" method="POST" id="formRegistroUsuario">
+            <form action="{{ route('perfil.update') }}" method="POST" id="formRegistroUsuario" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                {{-- ── Avatar ──────────────────────────────── --}}
+                <div class="avatar-upload-wrap">
+                    <div class="avatar-ring" id="avatarRing" title="Cambiar foto">
+                        @if ($registro->avatar)
+                            <img src="{{ asset('uploads/avatars/' . $registro->avatar) }}" id="avatarPreview" alt="Avatar">
+                        @else
+                            <div class="avatar-initial" id="avatarInitial">{{ strtoupper(mb_substr(trim($registro->name), 0, 1)) }}</div>
+                            <img src="" id="avatarPreview" alt="Avatar" style="display:none;">
+                        @endif
+                        <div class="avatar-overlay"><i class="bi bi-camera-fill"></i></div>
+                    </div>
+                    <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/webp" class="d-none">
+                    <span class="avatar-hint">Haz clic en la imagen para cambiar tu foto de perfil (JPG, PNG o WEBP, máx. 2 MB)</span>
+                    @error('avatar') <small class="text-danger">{{ $message }}</small> @enderror
+                </div>
+
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name" class="form-label">Nombre</label>
@@ -170,3 +247,30 @@
     </section>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    const ring    = document.getElementById('avatarRing');
+    const input   = document.getElementById('avatarInput');
+    const preview = document.getElementById('avatarPreview');
+    const initial = document.getElementById('avatarInitial');
+
+    if (!ring || !input) return;
+
+    ring.addEventListener('click', () => input.click());
+
+    input.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            if (initial) initial.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    });
+})();
+</script>
+@endpush
