@@ -1,0 +1,35 @@
+/* mis-pedidos-section.css: Migración de estilos desde mis_pedidos.blade.php */
+
+.orders-page {
+    background:
+        radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.12), transparent 30%),
+        radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.09), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0));
+    border-radius: 1rem;
+    padding-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.orders-hero {
+    margin-top: 1.5rem;
+    border-radius: 1rem;
+    color: #fff;
+    padding: 2rem;
+    background:
+        radial-gradient(circle at 14% 20%, rgba(245, 158, 11, 0.35), transparent 42%),
+        radial-gradient(circle at 82% 15%, rgba(59, 130, 246, 0.2), transparent 35%),
+        linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.24);
+    position: relative;
+    overflow: hidden;
+}
+.orders-hero::after {
+    content: '';
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    right: -80px;
+    top: -90px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+}

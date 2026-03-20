@@ -27,20 +27,12 @@
     <div class="auth-card p-4 p-lg-5">
       <a href="{{ route('web.index') }}" class="auth-brand login-brand mb-4">
         <span class="auth-brand-mark auth-brand-mark-full">
-          <img
-            src="{{ asset('logo_proyecto_con_nombre-removebg-preview.png') }}"
-            alt="DisMusic"
-            class="auth-brand-icon"
-            onerror="this.onerror=null;this.src='{{ asset('logo_proyecto-removebg-preview.png') }}';"
-          >
+          <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
+          <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
         </span>
         <span class="auth-brand-mark auth-brand-mark-icon">
-          <img
-            src="{{ asset('logo_proyecto-removebg-preview.png') }}"
-            alt="DisMusic"
-            class="auth-brand-icon"
-            onerror="this.onerror=null;this.src='{{ asset('assets/img/AdminLTELogo.png') }}';"
-          >
+          <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
+          <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
         </span>
       </a>
 
@@ -88,7 +80,10 @@
         <div class="d-grid mb-3">
           <button type="submit" class="btn auth-btn-primary">Entrar a DisMusic</button>
         </div>
-
+        <div class="mt-3">
+          <small class="auth-copy">¿No tienes cuenta?</small><br>
+          <a class="auth-link" href="{{ route('registro') }}">Registrarse</a>
+        </div>
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pt-2">
           <span class="auth-copy">Prefieres seguir explorando primero?</span>
           <a href="{{ route('web.index') }}" class="auth-link fw-semibold">Volver a la tienda</a>

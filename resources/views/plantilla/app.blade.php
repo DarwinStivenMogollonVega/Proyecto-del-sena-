@@ -280,6 +280,11 @@
         object-fit: contain;
         margin-right: 0.55rem;
       }
+      .logo-dis-music.light { display: block; }
+      .logo-dis-music.dark { display: none; }
+      html[data-theme='dark'] .logo-dis-music.light { display: none; }
+      html[data-theme='dark'] .logo-dis-music.dark { display: block; }
+      }
 
       .app-sidebar .brand-link .brand-project-logo-icon {
         width: 2.1rem;

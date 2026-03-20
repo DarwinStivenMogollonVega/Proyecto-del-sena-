@@ -1,0 +1,154 @@
+/* ===================== LOGO CUSTOM ===================== */
+.dz-brand-logo.logo-dis-music.dz-logo-custom {
+  width: 80px;
+  min-width: 56px;
+  max-width: 164px;
+  height: auto;
+  object-fit: contain;
+}
+.logo-light {
+  display: block;
+}
+.logo-dark {
+  display: none;
+}
+html[data-theme='dark'] .logo-light {
+  display: none !important;
+}
+html[data-theme='dark'] .logo-dark {
+  display: block !important;
+}
+/* ===================== RESPONSIVE ===================== */
+
+/* ===== MOBILE ===== */
+@media (max-width: 576px) {
+  .dz-container { padding: 0.7rem 2vw; }
+  .dz-navbar { padding: 0.7rem 2vw; }
+  .dz-logo { max-width: 90px; height: 32px; }
+  .dz-card { padding: 1rem; }
+  .dz-hero { padding: 1rem; }
+  .dz-row { gap: 1rem; }
+  .dz-col { min-width: 100px; max-width: 100%; }
+  .dz-btn { font-size: 0.95rem; padding: 0.5rem 1rem; }
+}
+
+/* ===== TABLET ===== */
+@media (min-width: 577px) and (max-width: 992px) {
+  .dz-container { padding: 1.2rem 3vw; }
+  .dz-navbar { padding: 1rem 3vw; }
+  .dz-logo { max-width: 120px; height: 38px; }
+  .dz-card { padding: 1.2rem; }
+  .dz-hero { padding: 1.5rem; }
+  .dz-row { gap: 1.2rem; }
+  .dz-col { min-width: 180px; max-width: 48%; }
+  .dz-btn { font-size: 1rem; padding: 0.7rem 1.2rem; }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 993px) and (max-width: 1400px) {
+  .dz-container { padding: 2rem 4vw; }
+  .dz-navbar { padding: 1.2rem 4vw; }
+  .dz-logo { max-width: 180px; height: 48px; }
+  .dz-card { padding: 2rem; }
+  .dz-hero { padding: 2.5rem; }
+  .dz-row { gap: 2rem; }
+  .dz-col { min-width: 220px; max-width: 32%; }
+  .dz-btn { font-size: 1.15rem; padding: 0.9rem 1.5rem; }
+}
+
+/* ===== DESKTOP MODERNO ===== */
+@media (min-width: 1401px) and (max-width: 1920px) {
+  .dz-container { padding: 2.5rem 6vw; }
+  .dz-navbar { padding: 1.5rem 6vw; }
+  .dz-logo { max-width: 220px; height: 56px; }
+  .dz-card { padding: 2.5rem; }
+  .dz-hero { padding: 3rem; }
+  .dz-row { gap: 2.5rem; }
+  .dz-col { min-width: 260px; max-width: 28%; }
+  .dz-btn { font-size: 1.2rem; padding: 1rem 2rem; }
+}
+
+/* ===== ULTRAWIDE ===== */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .dz-container { padding: 3rem 8vw; }
+  .dz-navbar { padding: 2rem 8vw; }
+  .dz-logo { max-width: 260px; height: 64px; }
+  .dz-card { padding: 3rem; }
+  .dz-hero { padding: 3.5rem; }
+  .dz-row { gap: 3rem; }
+  .dz-col { min-width: 320px; max-width: 24%; }
+  .dz-btn { font-size: 1.3rem; padding: 1.2rem 2.5rem; }
+}
+
+/* ===== TV / 4K ===== */
+@media (min-width: 2561px) {
+  .dz-container { padding: 4rem 10vw; }
+  .dz-navbar { padding: 2.5rem 10vw; }
+  .dz-logo { max-width: 320px; height: 80px; }
+  .dz-card { padding: 4rem; }
+  .dz-hero { padding: 4.5rem; }
+  .dz-row { gap: 4rem; }
+  .dz-col { min-width: 400px; max-width: 20%; }
+  .dz-btn { font-size: 1.5rem; padding: 1.5rem 3rem; }
+}
+/* ===================== BASE VARIABLES ===================== */
+:root {
+  --dz-primary: #c46310;
+  --dz-secondary: #fff;
+  --dz-accent: #ffe5c2;
+  --dz-dark-bg: #232c3b;
+  --dz-dark-accent: #c46310;
+  --dz-dark-primary: #fff;
+  --dz-dark-border: #3d1e0a;
+  --dz-bg: #fff;
+  --dz-font: 'Inter', Arial, sans-serif;
+  --dz-radius: 0.7rem;
+  --dz-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  --dz-spacing: 1.5rem;
+  --dz-max-width: 1200px;
+  --dz-border: 1px solid #f3e3d1;
+  --dz-font-weight: 600;
+  --dz-btn-hover-bg: #ffe5c2;
+  --dz-btn-hover-color: #a04a00;
+  --dz-dropdown-hover-bg: #ffe5c2;
+  --dz-dropdown-hover-color: #a04a00;
+}
+/* ===================== Responsive Design by Device ===================== */
+
+/* --------------------- Mobile (max-width: 576px) --------------------- */
+@media (max-width: 576px) {
+  html { font-size: 15px; }
+  .container-fluid, .container { padding: 0.5rem 0.5rem; }
+  .navbar { padding: 0.5rem 0.5rem; }
+  .navbar-brand img { max-width: 90px; }
+  .about-card, .card, .catalogo-card { margin-bottom: 1rem; }
+  .hero-section, .store-hero, .catalogo-hero { padding: 1rem; }
+  .about-hero h1, .catalogo-title, .store-hero h1 { font-size: 1.3rem; }
+  .about-highlight, .about-block { font-size: 1rem; }
+  .navbar-collapse { text-align: left; }
+  .navbar-toggler { display: block; }
+  .navbar-nav { flex-direction: column; }
+  .nav-link, .btn { font-size: 1rem; padding: 0.5rem 1rem; }
+  html { font-size: 1.1vw; }
+  .container-fluid, .container { padding: 2rem 4vw; max-width: 1200px; margin: auto; }
+  .navbar { padding: 1.2rem 4vw; }
+  .navbar-brand img { max-width: 10vw; min-width: 100px; }
+  .about-card, .card, .catalogo-card { margin-bottom: 2rem; }
+  .hero-section, .store-hero, .catalogo-hero { padding: 2.5rem 3vw; }
+  .about-hero h1, .catalogo-title, .store-hero h1 { font-size: 2.1rem; }
+  .about-highlight, .about-block { font-size: 1.15rem; }
+  .navbar-collapse { text-align: right; }
+  .navbar-toggler { display: none; }
+  .navbar-nav { flex-direction: row; gap: 1.5rem; }
+  .nav-link, .btn { font-size: 1.15rem; padding: 0.9rem 1.5rem; }
+  .row { display: flex; flex-wrap: wrap; gap: 2rem; }
+  .col-md-4 { flex: 1 1 30%; max-width: 32%; min-width: 250px; }
+  .navbar-collapse { text-align: left; }
+  .navbar-toggler { display: block; }
+  .navbar-nav { flex-direction: column; }
+  .nav-link, .btn { font-size: 1.1rem; padding: 0.7rem 1.2rem; }
+}
+
+/* --------------------- Desktop (min-width: 993px, max-width: 1400px) --------------------- */
+/*
+  /* Desktop: restaurado a diseño original */

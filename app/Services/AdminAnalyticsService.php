@@ -439,12 +439,16 @@ class AdminAnalyticsService
                 'artista' => $producto->artista->nombre ?? 'Sin artista',
                 'stock' => (int) $producto->cantidad,
                 'precio' => number_format((float) $producto->precio, 2, '.', ''),
+                'descuento' => number_format((float) $producto->descuento, 2, '.', ''),
+                'precio_final' => number_format((float) ($producto->precio - $producto->descuento), 2, '.', ''),
             ]);
 
+        $totalDescuentos = Producto::where('descuento', '>', 0)->sum('descuento');
+        $productosConDescuento = Producto::where('descuento', '>', 0)->count();
         return [
             'categoria' => 'productos',
             'titulo' => 'Estadisticas de Productos e Inventario',
-            'descripcion' => 'Informacion del panel de productos, stock actual y cobertura del catalogo.',
+            'descripcion' => 'Informacion del panel de productos, stock actual, cobertura del catalogo y descuentos aplicados.',
             'summary' => [
                 ['label' => 'Total productos', 'value' => Producto::count()],
                 ['label' => 'Categorias registradas', 'value' => Categoria::count()],
@@ -452,8 +456,10 @@ class AdminAnalyticsService
                 ['label' => 'Artistas registrados', 'value' => Artista::count()],
                 ['label' => 'Pocas unidades (<=5)', 'value' => Producto::where('cantidad', '<=', 5)->count()],
                 ['label' => 'Movimientos de inventario', 'value' => InventarioMovimiento::count()],
+                ['label' => 'Productos con descuento', 'value' => $productosConDescuento],
+                ['label' => 'Total descuentos aplicados', 'value' => '$' . number_format($totalDescuentos, 2)],
             ],
-            'headings' => ['Producto', 'Categoria', 'Catalogo', 'Artista', 'Stock', 'Precio'],
+            'headings' => ['Producto', 'Categoria', 'Catalogo', 'Artista', 'Stock', 'Precio', 'Descuento', 'Precio final'],
             'rows' => $rows,
         ];
     }

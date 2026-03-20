@@ -1,0 +1,36 @@
+/* Tamaño de logos en header */
+.logo-dis-music {
+    width: 434px;
+    min-width: 233px;
+    max-width: 650px;
+    height: auto;
+    object-fit: contain;
+}
+@media (max-width: 600px) {
+    .logo-dis-music {
+        width: 278px;
+        min-width: 137px;
+    }
+}
+
+/* Visibilidad según modo */
+.logo-dis-music.light { display: block !important; }
+.logo-dis-music.dark { display: none !important; }
+html[data-theme='dark'] .logo-dis-music.light { display: none !important; }
+html[data-theme='dark'] .logo-dis-music.dark { display: block !important; }
+
+/* Centrar logo del header */
+.dz-header-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Centrar el texto del título junto al logo */
+.dz-header-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}

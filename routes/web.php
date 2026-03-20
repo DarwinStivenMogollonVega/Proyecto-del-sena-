@@ -49,6 +49,27 @@ Route::get('/carrito/restar', [CarritoController::class, 'restar'])->name('carri
 Route::get('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 Route::get('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
 
+Route::get('/deseados', function() {
+    return view('web.wishlist');
+})->name('web.wishlist');
+
+Route::post('/deseados/agregar/{id}', function($id) {
+    $producto = App\Models\Producto::find($id);
+    if (!$producto) {
+        return redirect()->back()->with('error', 'Producto no encontrado');
+    }
+    $wishlist = session('wishlist', []);
+    $wishlist[$id] = [
+        'id' => $producto->id,
+        'nombre' => $producto->nombre,
+        'artista' => $producto->artista?->nombre,
+        'precio' => $producto->precio,
+        'imagen' => $producto->imagen,
+    ];
+    session(['wishlist' => $wishlist]);
+    return redirect()->back()->with('success', 'Producto agregado a la lista de deseados');
+})->name('web.wishlist.add');
+
 // 🔹 Rutas protegidas (solo usuarios autenticados)
 Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::resource('usuarios', UserController::class);

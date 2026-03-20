@@ -1,0 +1,159 @@
+/* acerca-section.css: Estilos personalizados para la vista Acerca */
+/* Estilos de logos importados del index-section.css */
+.store-hero-brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: left;
+}
+.logo {
+    display: block;
+    width: 212px;
+    max-width: 42vw;
+    min-width: 94px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+    margin: 0 auto;
+    transition: filter 0.2s, width 0.2s;
+}
+/* Visibilidad según modo para logos */
+.logo.logo-light { display: block !important; }
+.logo.logo-dark { display: none !important; }
+html[data-theme='dark'] .logo.logo-light { display: none !important; }
+html[data-theme='dark'] .logo.logo-dark { display: block !important; }
+html[data-theme='dark'] .logo-dark {
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18)) brightness(1.15) contrast(1.1);
+}
+html[data-theme='dark'] .logo-light {
+    filter: none;
+}
+@media (max-width: 600px) {
+    .logo {
+        width: 141px;
+        min-width: 71px;
+    }
+    .hero-title {
+        font-size: 1.2rem;
+        margin-left: 0.3rem;
+    }
+}
+.hero-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: var(--dz-heading);
+    z-index: 2;
+    margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.about-hero {
+    background:
+        radial-gradient(circle at 10% 15%, var(--dz-page-grad-1, rgba(245, 158, 11, 0.26)), transparent 36%),
+        radial-gradient(circle at 88% 14%, var(--dz-page-grad-2, rgba(249, 115, 22, 0.22)), transparent 30%),
+        linear-gradient(135deg, var(--dz-page-grad-3, #111827) 0%, var(--dz-accent, #7c2d12) 52%, var(--dz-surface, #1f2937) 100%);
+    color: var(--dz-heading, #fff);
+    border-radius: 1rem;
+    padding: 2.1rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.2);
+    text-align: center;
+}
+.about-hero img.logo-acerca {
+    margin-bottom: 1.2rem;
+    width: 212px;
+    max-width: 42vw;
+    min-width: 94px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.about-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.03em;
+}
+.about-hero p {
+    color: rgba(255, 255, 255, 0.88);
+    margin-bottom: 0;
+    font-size: 1.15rem;
+}
+
+.about-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    padding: 1.3rem 1.25rem;
+    height: 100%;
+    transition: box-shadow 0.2s;
+}
+.about-card:hover {
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.13);
+}
+.about-card h5 {
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+    color: #0f172a;
+    font-size: 1.18rem;
+}
+.about-card p {
+    color: #475569;
+    line-height: 1.65;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+}
+
+.about-block {
+    background: #f3e3d1;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 24px rgba(196, 99, 16, 0.08);
+}
+.about-block h4 {
+    font-weight: 700;
+    color: #c46310;
+    margin-bottom: 1rem;
+}
+.about-block p {
+    color: #7c2d12;
+    font-size: 1.08rem;
+    margin-bottom: 0.7rem;
+}
+.about-highlight {
+    background: #ffe5c2;
+    color: #a04a00;
+    border-radius: 0.7rem;
+    padding: 0.9rem 1.2rem;
+    font-weight: 600;
+    font-size: 1.12rem;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 12px rgba(196, 99, 16, 0.07);
+}
+
+@media (max-width: 600px) {
+    .about-hero img.logo-acerca {
+        width: 141px;
+        min-width: 71px;
+    }
+    .about-hero h1 {
+        font-size: 1.4rem;
+    }
+    .about-block {
+        padding: 1rem;
+    }
+}

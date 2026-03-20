@@ -3,126 +3,7 @@
 @section('titulo', 'Mi perfil - DiscZone')
 
 @push('estilos')
-<style>
-    .profile-page {
-        background: radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.12), transparent 30%), radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.09), transparent 28%), linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0));
-        border-radius: 1rem;
-        padding-bottom: 2rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .profile-hero {
-        margin-top: 1.5rem;
-        border-radius: 1rem;
-        color: #fff;
-        padding: 2rem;
-        background: radial-gradient(circle at 14% 20%, rgba(245, 158, 11, 0.35), transparent 42%), radial-gradient(circle at 82% 15%, rgba(59, 130, 246, 0.2), transparent 35%), linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
-        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.24);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .profile-title-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 0.8rem;
-        background: rgba(255, 255, 255, 0.18);
-        margin-right: 0.6rem;
-    }
-
-    .profile-card {
-        background: var(--dz-surface);
-        border: 1px solid var(--dz-border);
-        border-radius: 1rem;
-        box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
-    }
-
-    html[data-theme='dark'] .profile-page {
-        background: radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.15), transparent 30%), radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.14), transparent 28%), linear-gradient(180deg, rgba(31, 41, 55, 0.65), rgba(17, 24, 39, 0));
-    }
-
-    html[data-theme='dark'] .profile-card {
-        background: #111827;
-        border-color: #334155;
-        box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
-    }
-
-    /* ── Avatar upload ─────────────────────────────── */
-    .avatar-upload-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.9rem;
-        padding: 1.4rem 0 1.6rem;
-        border-bottom: 1px solid var(--dz-border);
-        margin-bottom: 1.6rem;
-    }
-    .avatar-ring {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        border: 3px solid var(--dz-border);
-        overflow: hidden;
-        background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-        flex-shrink: 0;
-        cursor: pointer;
-        transition: border-color .2s;
-    }
-    .avatar-ring:hover { border-color: #f59e0b; }
-    .avatar-ring img {
-        width: 100%; height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-    .avatar-initial {
-        width: 100%; height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.4rem;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1;
-    }
-    .avatar-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity .2s;
-    }
-    .avatar-ring:hover .avatar-overlay { opacity: 1; }
-    .avatar-overlay i { font-size: 1.4rem; color: #fff; }
-    .avatar-hint {
-        font-size: .78rem;
-        color: var(--dz-muted);
-        text-align: center;
-        max-width: 240px;
-        line-height: 1.4;
-    }
-    html[data-theme='dark'] .avatar-ring { border-color: #334155; }
-    html[data-theme='dark'] .avatar-ring:hover { border-color: #f59e0b; }
-
-    @media (max-width: 575.98px) {
-        .profile-hero {
-            padding: 1.25rem;
-        }
-
-        .profile-title-icon {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 0.6rem;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/perfil-section.css') }}">
 @endpush
 
 @section('contenido')
@@ -165,6 +46,14 @@
                     </div>
                     <input type="file" name="avatar" id="avatarInput" accept="image/jpeg,image/png,image/webp" class="d-none">
                     <span class="avatar-hint">Haz clic en la imagen para cambiar tu foto de perfil (JPG, PNG o WEBP, máx. 2 MB)</span>
+                    <div id="avatarEditOptions" style="display:none; margin-top: 1rem;">
+                        <div class="mb-2">Previsualización:</div>
+                        <img id="avatarEditPreview" src="" alt="Previsualización" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #f59e0b;">
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="avatarEditCancel">Cancelar</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="avatarEditSave">Guardar foto</button>
+                        </div>
+                    </div>
                     @error('avatar') <small class="text-danger">{{ $message }}</small> @enderror
                 </div>
 
@@ -255,6 +144,10 @@
     const input   = document.getElementById('avatarInput');
     const preview = document.getElementById('avatarPreview');
     const initial = document.getElementById('avatarInitial');
+    const editOptions = document.getElementById('avatarEditOptions');
+    const editPreview = document.getElementById('avatarEditPreview');
+    const editCancel = document.getElementById('avatarEditCancel');
+    const editSave = document.getElementById('avatarEditSave');
 
     if (!ring || !input) return;
 
@@ -265,12 +158,28 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            if (initial) initial.style.display = 'none';
+            // Previsualización editable
+            editPreview.src = e.target.result;
+            editOptions.style.display = 'block';
         };
         reader.readAsDataURL(file);
     });
+
+    if (editCancel) {
+        editCancel.addEventListener('click', function () {
+            input.value = '';
+            editOptions.style.display = 'none';
+        });
+    }
+    if (editSave) {
+        editSave.addEventListener('click', function () {
+            // Guardar la foto (previsualización se aplica)
+            preview.src = editPreview.src;
+            preview.style.display = 'block';
+            if (initial) initial.style.display = 'none';
+            editOptions.style.display = 'none';
+        });
+    }
 })();
 </script>
 @endpush

@@ -1,0 +1,124 @@
+/* Tamaño de logos en nav */
+.dz-brand-logo {
+    width: 59px;
+    min-width: 30px;
+    max-width: 86px;
+    height: auto;
+    object-fit: contain;
+}
+.dz-brand-logo.logo-dis-music.light.img-fluid,
+.dz-brand-logo.logo-dis-music.dark.img-fluid {
+    width: 78.75px;
+    min-width: 26px;
+    max-width: 115px;
+    height: auto;
+    object-fit: contain;
+}
+.logo {
+    display: block;
+    width: 212px;
+    max-width: 42vw;
+    min-width: 94px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+    margin: 0 auto;
+    transition: filter 0.2s, width 0.2s;
+}
+/* Visibilidad según modo para logos */
+.logo.logo-light { display: block !important; }
+.logo.logo-dark { display: none !important; }
+html[data-theme='dark'] .logo.logo-light { display: none !important; }
+html[data-theme='dark'] .logo.logo-dark { display: block !important; }
+html[data-theme='dark'] .logo-dark {
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18)) brightness(1.15) contrast(1.1);
+}
+html[data-theme='dark'] .logo-light {
+    filter: none;
+}
+@media (max-width: 600px) {
+    .logo {
+        width: 141px;
+        min-width: 71px;
+    }
+}
+@media (max-width: 600px) {
+    .dz-brand-logo {
+        width: 36px;
+        min-width: 14px;
+    }
+}
+@media (max-width: 600px) {
+    html[data-theme='light'] .dz-brand-logo.light {
+        width: 36px;
+        min-width: 14px;
+        max-width: 60px;
+    }
+}
+
+/* Ajuste de tamaño y color de botones del navbar en modo claro */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn {
+    font-size: 1.08rem;
+    padding: 0.55rem 1.2rem;
+    border-radius: 0.7rem;
+    background: #fff;
+    color: #c46310;
+    border: 1px solid #f3e3d1;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+.navbar .nav-link:hover,
+.navbar .nav-cta-btn:hover,
+.navbar .dropdown-cta-btn:hover {
+    background: #ffe5c2;
+    color: #a04a00;
+}
+html[data-theme='dark'] .navbar .nav-link,
+html[data-theme='dark'] .navbar .nav-cta-btn,
+html[data-theme='dark'] .navbar .dropdown-cta-btn {
+    background: #232c3b;
+    color: #fff;
+    border-color: #3d1e0a;
+}
+html[data-theme='dark'] .navbar .nav-link:hover,
+html[data-theme='dark'] .navbar .nav-cta-btn:hover,
+html[data-theme='dark'] .navbar .dropdown-cta-btn:hover {
+    background: #c46310;
+    color: #fff;
+}
+
+/* Mejora visibilidad de los menús del navbar en modo claro */
+.navbar .dropdown-menu {
+    background: #fff;
+    color: #c46310;
+    border: 1px solid #f3e3d1;
+    font-size: 1.05rem;
+}
+.navbar .dropdown-item {
+    color: #c46310;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.45rem 1.1rem;
+}
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+    background: #ffe5c2;
+    color: #a04a00;
+}
+html[data-theme='dark'] .navbar .dropdown-menu {
+    background: #232c3b;
+    color: #fff;
+    border-color: #3d1e0a;
+}
+html[data-theme='dark'] .navbar .dropdown-item {
+    color: #fff;
+}
+html[data-theme='dark'] .navbar .dropdown-item:hover,
+html[data-theme='dark'] .navbar .dropdown-item:focus {
+    background: #c46310;
+    color: #fff;
+}

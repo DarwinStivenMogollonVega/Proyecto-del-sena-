@@ -42,19 +42,9 @@
     <div class="sidebar-brand">
         <!--begin::Brand Link-->
         <a href="{{ route('dashboard') }}" class="brand-link">
-            <!--begin::Brand Image-->
-            <img
-                src="{{ asset('logo_proyecto_con_nombre-removebg-preview.png') }}"
-                alt="DisMusic"
-                class="brand-project-logo brand-project-logo-full shadow-none"
-                onerror="this.onerror=null;this.src='{{ asset('logo_proyecto-removebg-preview.png') }}';"
-            />
-            <img
-                src="{{ asset('logo_proyecto-removebg-preview.png') }}"
-                alt="DisMusic"
-                class="brand-project-logo brand-project-logo-icon shadow-none"
-                onerror="this.onerror=null;this.src='{{ asset('assets/img/AdminLTELogo.png') }}';"
-            />
+            <!-- Logos adaptados a modo claro/oscuro -->
+            <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="brand-project-logo brand-project-logo-full logo-dis-music light shadow-none" />
+            <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="brand-project-logo brand-project-logo-full logo-dis-music dark shadow-none" />
             <!--end::Brand Image-->
 
         </a>

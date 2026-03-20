@@ -2,148 +2,39 @@
 @section('titulo', $categoria->nombre . ' - DiscZone')
 
 @push('estilos')
-<style>
-    .categoria-hero {
-        background: linear-gradient(135deg, #fdf2ea 0%, #f8d8bc 55%, #fdeee0 100%);
-        border: 1px solid #e8cfc0;
-        border-radius: 1rem;
-        color: var(--dz-heading);
-        overflow: hidden;
-        position: relative;
-        box-shadow: 0 20px 40px -24px rgba(196, 99, 16, 0.28);
-    }
-
-    .categoria-hero h1 {
-        color: #200c03;
-    }
-
-    .categoria-hero .hero-subtitle {
-        color: #8a6a5c;
-    }
-
-    .categoria-hero::after {
-        content: '';
-        position: absolute;
-        right: -70px;
-        top: -80px;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: rgba(196, 99, 16, 0.12);
-    }
-
-    .categoria-filter {
-        border: 1px solid var(--dz-border);
-        border-radius: 1rem;
-        background: var(--dz-surface);
-        box-shadow: 0 10px 24px rgba(46, 18, 6, 0.06);
-    }
-
-    .categoria-card {
-        border: 1px solid var(--dz-border);
-        border-radius: 1rem;
-        overflow: hidden;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .categoria-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(196, 99, 16, 0.15);
-    }
-
-    .categoria-card .card-img-top {
-        height: 250px;
-        object-fit: cover;
-    }
-
-    .categoria-title {
-        color: var(--dz-heading);
-        font-weight: 700;
-    }
-
-    .categoria-card .card-body {
-        color: var(--dz-text);
-    }
-
-    .categoria-card .price-label,
-    .categoria-card .text-success {
-        color: #c46310;
-    }
-
-    html[data-theme='dark'] .categoria-hero {
-        background: linear-gradient(135deg, #160800 0%, #c46310 55%, #4d2010 100%);
-        border-color: rgba(255,255,255,0.10);
-        color: #fdf0e4;
-        box-shadow: 0 20px 40px -24px rgba(0,0,0,0.65);
-    }
-
-    html[data-theme='dark'] .categoria-hero h1 {
-        color: #fdf0e4;
-    }
-
-    html[data-theme='dark'] .categoria-hero .hero-subtitle {
-        color: rgba(253, 240, 228, 0.80);
-    }
-
-    html[data-theme='dark'] .categoria-filter,
-    html[data-theme='dark'] .categoria-card {
-        background: #1a0800;
-        border-color: #3d1e0a;
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.55);
-    }
-
-    html[data-theme='dark'] .categoria-title,
-    html[data-theme='dark'] .categoria-card .card-body,
-    html[data-theme='dark'] .categoria-card h5,
-    html[data-theme='dark'] .categoria-card .text-muted {
-        color: #f0e0d2 !important;
-    }
-
-    html[data-theme='dark'] .categoria-card .text-success {
-        color: #e07a30 !important;
-    }
-
-    html[data-theme='dark'] .categoria-filter .form-control::placeholder {
-        color: #c4a898;
-    }
-
-    @media (max-width: 575.98px) {
-        .categoria-card .card-img-top {
-            height: 210px;
-        }
-
-        .categoria-filter .input-group {
-            flex-wrap: wrap;
-        }
-
-        .categoria-filter .input-group > * {
-            width: 100%;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/categoria-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/header-section.css') }}">
 @endpush
 @section('header')
 @endsection
 @section('contenido')
-<div class="container px-4 px-lg-5 mt-4">
-    <div class="categoria-hero p-4 p-lg-5 mb-4">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <div>
-                <h1 class="h3 fw-bold mb-1">{{ $categoria->nombre }}</h1>
-                <p class="mb-0 hero-subtitle">Explora productos de esta categoria con filtros rapidos.</p>
+   <div class="container px-4 px-lg-5">
+    <section id="inicio" class="store-hero p-4 p-lg-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="store-hero-brand">
+                    <!-- Logo removido por solicitud -->
+                </div>
+                <h1 class="display-6 fw-bold mb-2">Descubre tu proximo disco favorito</h1>
+                <p class="mb-0 hero-subtitle">Explora el catalogo, compara precios y encuentra nuevas joyas para tu coleccion.</p>
             </div>
-            <a href="{{ route('web.index') }}" class="btn btn-light">
-                <i class="bi bi-arrow-left me-1"></i> Volver al inicio
-            </a>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
+                <a href="#productos" class="btn btn-light px-4">
+                    <i class="bi bi-vinyl-fill me-1"></i> Explorar ahora
+                </a>
+            </div>
         </div>
-    </div>
+    </section>
+    <!-- Separador visual -->
+    <hr class="d-none d-md-block mb-4">
 </div>
 
 <form method="GET" action="{{ route('web.categoria.show', $categoria->id) }}">
     <div class="container px-4 px-lg-5 mt-4">
         <div class="categoria-filter p-3 p-md-4">
             <div class="row">
-                <div class="col-md-8 mb-3">
+                <div class="col-12 col-md-8 mb-3">
                     <div class="input-group">
                         <input type="text" class="form-control" id="searchInput" placeholder="Buscar productos..."
                             aria-label="Buscar productos" name="search" value="{{ request('search') }}">
@@ -153,7 +44,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
+                <div class="col-12 col-md-4 mb-3">
                     <div class="input-group">
                         <label class="input-group-text" for="sortSelect">Ordenar por:</label>
                         <select class="form-select" id="sortSelect" name="sort" onchange="this.form.submit()">
@@ -174,7 +65,7 @@
     @if($productos->count())
         <div class="row">
             @foreach ($productos as $producto)
-                <div class="col-md-4 mb-4">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                     <div class="card categoria-card h-100 shadow-sm position-relative">
                         @if($producto->imagen)
                             <img src="{{ asset('uploads/productos/' . $producto->imagen) }}" 

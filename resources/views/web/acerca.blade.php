@@ -1,105 +1,43 @@
 @extends('web.app')
 
 @push('estilos')
-<style>
-    .about-hero {
-        background:
-            radial-gradient(circle at 10% 15%, rgba(245, 158, 11, 0.26), transparent 36%),
-            radial-gradient(circle at 88% 14%, rgba(249, 115, 22, 0.22), transparent 30%),
-            linear-gradient(135deg, #111827 0%, #7c2d12 52%, #1f2937 100%);
-        color: #fff;
-        border-radius: 1rem;
-        padding: 2.1rem;
-        margin-top: 1.5rem;
-        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.2);
-    }
-
-    .about-hero p {
-        color: rgba(255, 255, 255, 0.88);
-        margin-bottom: 0;
-    }
-
-    .about-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 1rem;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-        padding: 1.3rem 1.25rem;
-        height: 100%;
-    }
-
-    .about-card h5 {
-        font-weight: 700;
-        margin-bottom: 0.7rem;
-        color: #0f172a;
-    }
-
-    .about-card p {
-        color: #475569;
-        line-height: 1.65;
-        margin-bottom: 0;
-    }
-
-    .about-block {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 1rem;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-        padding: 1.4rem;
-    }
-
-    .about-block h4 {
-        font-weight: 700;
-        margin-bottom: 0.85rem;
-    }
-
-    .about-block p {
-        color: #475569;
-        line-height: 1.75;
-        margin-bottom: 0.95rem;
-    }
-
-    .about-highlight {
-        border-left: 4px solid #f97316;
-        background: #fff7ed;
-        border-radius: 0.75rem;
-        padding: 0.95rem 1rem;
-        color: #9a3412;
-        font-weight: 500;
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/acerca-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/header-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5">
-    <section class="about-hero">
+    <section class="about-hero text-center mb-4">
         <h1 class="fw-bold mb-2">Acerca de DiscZone</h1>
-        <p>
-            DiscZone es una tienda digital enfocada en usuarios que valoran la musica en formato fisico y buscan una experiencia de compra clara, completa y confiable.
+        <p class="lead mb-3">
+            DiscZone es una tienda digital enfocada en usuarios que valoran la música en formato físico y buscan una experiencia de compra clara, completa y confiable.
         </p>
     </section>
+    <!-- Separador visual -->
+    <hr class="d-none d-md-block mb-4">
 
     <section class="mt-4">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="about-card">
-                    <h5>Descubrimiento musical</h5>
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-4 mb-3">
+                <div class="about-card h-100 shadow-sm rounded">
+                    <h5 class="fw-bold">Descubrimiento musical</h5>
                     <p>
-                        En DiscZone, el usuario puede navegar por categorias y catalogos para encontrar discos segun estilo, coleccion o preferencia personal. La busqueda y el ordenamiento por precio ayudan a localizar productos de forma rapida.
+                        En DiscZone, el usuario puede navegar por categorías y catálogos para encontrar discos según estilo, colección o preferencia personal. La búsqueda y el ordenamiento por precio ayudan a localizar productos de forma rápida.
                     </p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="about-card">
-                    <h5>Compra guiada</h5>
+            <div class="col-12 col-md-4 mb-3">
+                <div class="about-card h-100 shadow-sm rounded">
+                    <h5 class="fw-bold">Compra guiada</h5>
                     <p>
-                        El proceso de compra esta pensado para ser sencillo: agregar al carrito, ajustar cantidades, completar datos de entrega y metodo de pago, y confirmar el pedido. Todo el flujo esta orientado a reducir pasos innecesarios.
+                        El proceso de compra está pensado para ser sencillo: agregar al carrito, ajustar cantidades, completar datos de entrega y método de pago, y confirmar el pedido. Todo el flujo está orientado a reducir pasos innecesarios.
                     </p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="about-card">
-                    <h5>Seguimiento del usuario</h5>
+            <div class="col-12 col-md-4 mb-3">
+                <div class="about-card h-100 shadow-sm rounded">
+                    <h5 class="fw-bold">Seguimiento del usuario</h5>
                     <p>
                         Cada usuario puede gestionar su perfil y consultar sus pedidos, incluyendo estado de compra y detalles de productos adquiridos. Esto permite tener trazabilidad y control sobre su historial dentro de la plataforma.
                     </p>
@@ -109,19 +47,74 @@
     </section>
 
     <section class="about-block mt-4">
-        <h4>Que representa DiscZone para el usuario</h4>
-        <p>
-            DiscZone combina una interfaz moderna con una estructura de compra practica para quienes quieren adquirir musica fisica sin complicaciones. El sistema prioriza la experiencia del usuario en cada paso: desde la exploracion del catalogo hasta la confirmacion del pedido.
-        </p>
-        <p>
-            La plataforma esta construida para que el usuario siempre tenga contexto: ve disponibilidad, conoce el precio claramente, administra su carrito y recibe retroalimentacion en cada accion importante. Esto mejora la confianza y evita fricciones durante el proceso de compra.
-        </p>
-        <p>
-            Ademas, DiscZone no se limita a mostrar productos. Tambien permite que la relacion con la tienda continue despues de la compra, gracias al perfil y a la seccion de pedidos, donde el usuario puede consultar su informacion y revisar el estado de sus ordenes de forma organizada.
-        </p>
-        <div class="about-highlight mt-2">
-            En resumen, DiscZone es una tienda musical centrada en el usuario: descubrir, comprar y dar seguimiento a sus pedidos en un solo lugar.
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h4 class="fw-bold mb-2 text-dark">¿Qué representa DiscZone para el usuario?</h4>
+            <p>
+                DiscZone combina una interfaz moderna con una estructura de compra práctica para quienes quieren adquirir música física sin complicaciones. El sistema prioriza la experiencia del usuario en cada paso: desde la exploración del catálogo hasta la confirmación del pedido.
+            </p>
+            <p>
+                La plataforma está construida para que el usuario siempre tenga contexto: ve disponibilidad, conoce el precio claramente, administra su carrito y recibe retroalimentación en cada acción importante. Esto mejora la confianza y evita fricciones durante el proceso de compra.
+            </p>
+            <p>
+                Además, DiscZone no se limita a mostrar productos. También permite que la relación con la tienda continúe después de la compra, gracias al perfil y a la sección de pedidos, donde el usuario puede consultar su información y revisar el estado de sus órdenes de forma organizada.
+            </p>
+            <div class="about-highlight mt-2 bg-warning bg-opacity-10 p-3 rounded">
+                <span class="fw-bold text-warning">En resumen, DiscZone es una tienda musical centrada en el usuario: descubrir, comprar y dar seguimiento a sus pedidos en un solo lugar.</span>
+            </div>
         </div>
     </section>
+
+    <!-- Sección de adaptabilidad visual -->
+    <section class="about-responsive mt-5">
+        <h3 class="fw-bold mb-4 text-center">Adaptabilidad visual según el dispositivo</h3>
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <div class="about-card h-100 shadow-sm rounded bg-light">
+                    <h5 class="fw-bold text-primary mb-2">Vista adaptable desde un celular</h5>
+                    <ul class="mb-2">
+                        <li>Elementos compactos y apilados verticalmente.</li>
+                        <li>Botones grandes y fáciles de tocar.</li>
+                        <li>Menú accesible y navegación simplificada.</li>
+                        <li>Imágenes optimizadas para pantallas pequeñas.</li>
+                        <li>Tarjetas y bloques ocupan el ancho completo.</li>
+                    </ul>
+                    <div class="text-center">
+                        <i class="bi bi-phone display-6 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="about-card h-100 shadow-sm rounded bg-light">
+                    <h5 class="fw-bold text-success mb-2">Vista adaptable desde un computador</h5>
+                    <ul class="mb-2">
+                        <li>Distribución en columnas para aprovechar el espacio.</li>
+                        <li>Menú superior fijo y accesible.</li>
+                        <li>Imágenes de mayor resolución.</li>
+                        <li>Tarjetas y bloques con sombra y bordes redondeados.</li>
+                        <li>Interacciones con mouse y teclado.</li>
+                    </ul>
+                    <div class="text-center">
+                        <i class="bi bi-laptop display-6 text-success"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="about-card h-100 shadow-sm rounded bg-light">
+                    <h5 class="fw-bold text-warning mb-2">Vista adaptable desde un televisor</h5>
+                    <ul class="mb-2">
+                        <li>Elementos grandes y espaciados.</li>
+                        <li>Texto e íconos de mayor tamaño.</li>
+                        <li>Interfaz simplificada para control remoto.</li>
+                        <li>Menú y navegación optimizados para pantalla amplia.</li>
+                        <li>Imágenes y botones visibles desde lejos.</li>
+                    </ul>
+                    <div class="text-center">
+                        <i class="bi bi-tv display-6 text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Fin sección de adaptabilidad visual -->
 </div>
 @endsection

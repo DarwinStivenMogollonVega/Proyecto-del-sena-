@@ -1,0 +1,122 @@
+/* catalogo-section.css: Migración de estilos desde catalogo.blade.php */
+
+section {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.catalogo-hero {
+    background: linear-gradient(135deg, #fdf2ea 0%, #f8d8bc 55%, #fdeee0 100%);
+    border: 1px solid #e8cfc0;
+    border-radius: 1rem;
+    color: var(--dz-heading);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px -24px rgba(196, 99, 16, 0.28);
+}
+.catalogo-hero h1 {
+    color: #200c03;
+}
+.catalogo-hero .hero-subtitle {
+    color: #8a6a5c;
+}
+.catalogo-hero::after {
+    content: '';
+    position: absolute;
+    right: -70px;
+    top: -80px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(196, 99, 16, 0.12);
+}
+.catalogo-filter {
+    border: 1px solid var(--dz-border);
+    border-radius: 1rem;
+    background: var(--dz-surface);
+    box-shadow: 0 10px 24px rgba(46, 18, 6, 0.06);
+}
+
+/* Tamaño de logos en nav */
+.dz-brand-logo {
+    width: 269px;
+    min-width: 136px;
+    max-width: 392px;
+    height: auto;
+    object-fit: contain;
+}
+@media (max-width: 600px) {
+    .dz-brand-logo {
+        width: 157px;
+        min-width: 64px;
+    }
+}
+
+/* Ajuste de tamaño y color de botones del navbar en modo claro */
+.logo {
+    display: block;
+        width: 212px;
+        max-width: 42vw;
+        min-width: 94px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+    margin: 0 auto;
+    transition: filter 0.2s, width 0.2s;
+}
+/* Visibilidad según modo para logos del index */
+.logo.logo-light { display: block !important; }
+.logo.logo-dark { display: none !important; }
+html[data-theme='dark'] .logo.logo-light { display: none !important; }
+html[data-theme='dark'] .logo.logo-dark { display: block !important; }
+html[data-theme='dark'] .logo-dark {
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18)) brightness(1.15) contrast(1.1);
+}
+html[data-theme='dark'] .logo-light {
+        filter: none;
+}
+@media (max-width: 600px) {
+    .logo {
+        width: 141px;
+        min-width: 71px;
+    }
+    .hero-title {
+        font-size: 1.2rem;
+        margin-left: 0.3rem;
+    }
+}
+
+/* Mejora visibilidad de los menús del navbar en modo claro */
+.navbar .dropdown-menu {
+    background: #fff;
+    color: #c46310;
+    border: 1px solid #f3e3d1;
+    font-size: 1.05rem;
+}
+.navbar .dropdown-item {
+    color: #c46310;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.45rem 1.1rem;
+}
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+    background: #ffe5c2;
+    color: #a04a00;
+}
+html[data-theme='dark'] .navbar .dropdown-menu {
+    background: #232c3b;
+    color: #fff;
+    border-color: #3d1e0a;
+}
+html[data-theme='dark'] .navbar .dropdown-item {
+    color: #fff;
+}
+html[data-theme='dark'] .navbar .dropdown-item:hover,
+html[data-theme='dark'] .navbar .dropdown-item:focus {
+    background: #c46310;
+    color: #fff;
+}
+

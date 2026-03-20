@@ -71,11 +71,12 @@
         --auth-glass: rgba(254, 248, 243, 0.72);
       }
 
+      /* Modo oscuro global inspirado en perfil */
       html[data-theme='dark'] {
         color-scheme: dark;
-        --auth-surface: rgba(26, 8, 0, 0.92);
-        --auth-surface-strong: #1a0800;
-        --auth-border: #3d1e0a;
+        --auth-surface: #111827;
+        --auth-surface-strong: #111827;
+        --auth-border: #334155;
         --auth-text: #f0e0d2;
         --auth-muted: #b89990;
         --auth-heading: #fdf0e4;
@@ -83,8 +84,31 @@
         --auth-primary: #c46310;
         --auth-primary-contrast: #ffffff;
         --auth-accent: #e07a30;
-        --auth-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
-        --auth-glass: rgba(22, 8, 0, 0.72);
+        --auth-shadow: 0 24px 60px rgba(2, 6, 23, 0.55);
+        --auth-glass: rgba(31, 41, 55, 0.65);
+      }
+
+      html[data-theme='dark'] .auth-shell {
+        background: radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.15), transparent 30%), radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.14), transparent 28%), linear-gradient(180deg, rgba(31, 41, 55, 0.65), rgba(17, 24, 39, 0));
+      }
+      html[data-theme='dark'] .auth-card {
+        background: #111827;
+        border-color: #334155;
+        box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
+      }
+      html[data-theme='dark'] .auth-form-panel {
+        background: transparent;
+      }
+      html[data-theme='dark'] .auth-summary-panel {
+        background: linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
+        color: #fff;
+      }
+      html[data-theme='dark'] .summary-title,
+      html[data-theme='dark'] .summary-copy,
+      html[data-theme='dark'] .summary-pill strong,
+      html[data-theme='dark'] .summary-pill span,
+      html[data-theme='dark'] .summary-list li {
+        color: #fff !important;
       }
 
       body.dz-auth-page {
@@ -432,7 +456,7 @@
       .auth-btn-primary,
       .form-control,
       .input-group-text {
-        transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background-color 0.14s ease;
+        /* transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background-color 0.14s ease; */
       }
 
       .auth-shell,
@@ -441,28 +465,23 @@
         overflow: hidden;
       }
 
+      /* Eliminado el brillito al pasar el ratón */
       .auth-shell::before,
       .auth-card::before,
       .auth-summary-panel::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.05) 30%, transparent 60%);
-        transform: translateX(-135%);
-        transition: transform 0.58s ease;
-        pointer-events: none;
+        display: none !important;
       }
 
       .auth-shell:hover,
       .auth-card:hover,
       .auth-summary-panel:hover {
-        transform: translateY(-0.5px);
+        transform: none !important;
       }
 
       .auth-shell:hover::before,
       .auth-card:hover::before,
       .auth-summary-panel:hover::before {
-        transform: translateX(130%);
+        transform: none !important;
       }
 
       .auth-btn-primary:hover,
@@ -558,41 +577,7 @@
         scrollbarClickScroll: true,
       };
 
-      function initAuthVisualFx() {
-        var selectors = [
-          '.login-box',
-          '.register-box',
-          '.auth-shell',
-          '.auth-card',
-          '.auth-summary-panel',
-          '.auth-form-panel',
-          '.alert'
-        ];
-
-        var elements = Array.from(document.querySelectorAll(selectors.join(',')))
-          .filter(function (element, index, list) {
-            return element && list.indexOf(element) === index;
-          });
-
-        if (!elements.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          return;
-        }
-
-        elements.forEach(function (element, index) {
-          element.classList.add('fx-reveal');
-          element.style.transitionDelay = Math.min(index * 10, 50) + 'ms';
-        });
-
-        requestAnimationFrame(function () {
-          elements.forEach(function (element) {
-            element.classList.add('fx-visible');
-          });
-        });
-      }
-
       document.addEventListener('DOMContentLoaded', function () {
-        initAuthVisualFx();
-
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
         if (sidebarWrapper && typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== 'undefined') {
           OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {

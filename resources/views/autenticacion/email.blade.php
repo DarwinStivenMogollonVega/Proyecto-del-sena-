@@ -1,5 +1,32 @@
 @extends('autenticacion.app')
 @section('titulo', 'DiscZone - Recuperar contrasena')
+@push('estilos')
+<style>
+  /* Modo oscuro inspirado en perfil */
+  html[data-theme='dark'] .auth-shell {
+    background: radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.15), transparent 30%), radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.14), transparent 28%), linear-gradient(180deg, rgba(31, 41, 55, 0.65), rgba(17, 24, 39, 0));
+  }
+  html[data-theme='dark'] .auth-card {
+    background: #111827;
+    border-color: #334155;
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
+  }
+  html[data-theme='dark'] .auth-form-panel {
+    background: transparent;
+  }
+  html[data-theme='dark'] .auth-summary-panel {
+    background: linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
+    color: #fff;
+  }
+  html[data-theme='dark'] .summary-title,
+  html[data-theme='dark'] .summary-copy,
+  html[data-theme='dark'] .summary-pill strong,
+  html[data-theme='dark'] .summary-pill span,
+  html[data-theme='dark'] .summary-list li {
+    color: #fff !important;
+  }
+</style>
+@endpush
 @section('contenido')
 <div class="auth-shell">
   <section class="auth-form-panel">

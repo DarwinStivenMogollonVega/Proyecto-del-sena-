@@ -15,6 +15,6 @@
 
 <footer class="py-5 dz-site-footer">
     <div class="container">
-        <p class="m-0 text-center">Copyright &copy; DiscZone.com 2025</p>
+        <p class="m-0 text-center">Copyright &copy; DiscMusic.com 2026</p>
     </div>
 </footer>
