@@ -1,24 +1,7 @@
 @extends('autenticacion.app')
 @push('estilos')
-<style>
-  .login-brand .auth-brand-mark-full {
-    width: min(15rem, 62vw);
-    height: 4.2rem;
-    padding: 0.28rem 0.4rem;
-  }
-
-  .login-brand .auth-brand-mark-icon {
-    width: 3.4rem;
-    height: 3.4rem;
-  }
-
-  @media (max-width: 575.98px) {
-    .login-brand .auth-brand-mark-icon {
-      width: 4rem;
-      height: 4rem;
-    }
-  }
-</style>
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 @section('titulo', 'DisMusic - Login')
 @section('contenido')

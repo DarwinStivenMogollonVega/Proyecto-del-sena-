@@ -5,9 +5,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-7">
-                    <div class="card-header">
-                        <h3 class="card-title">Productos</h3>
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem; background:#fff;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb;">
+                        <h3 class="card-title" style="color:#222;">Productos</h3>
                     </div>
 
                     <div class="card-body">

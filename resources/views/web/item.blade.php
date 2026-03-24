@@ -1,163 +1,8 @@
 @extends('web.app')
 
 @push('estilos')
-<style>
-    .product-page {
-        padding-top: 2rem;
-        padding-bottom: 3rem;
-    }
-
-    .product-main-card,
-    .rating-card,
-    .review-list-card {
-        background: var(--dz-surface);
-        border: 1px solid var(--dz-border);
-        border-radius: 1rem;
-        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
-    }
-
-    .product-image-wrap {
-        border-radius: 0.9rem;
-        overflow: hidden;
-        border: 1px solid var(--dz-border);
-        background: var(--dz-surface-soft);
-    }
-
-    .product-image-wrap img {
-        width: 100%;
-        height: 460px;
-        object-fit: cover;
-    }
-
-    .price-big {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #b45309;
-    }
-
-    .rating-summary {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        flex-wrap: wrap;
-    }
-
-    .star-view {
-        display: inline-flex;
-        gap: 0.18rem;
-        color: #f59e0b;
-    }
-
-    .rating-input {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-        gap: 0.2rem;
-    }
-
-    .rating-input input {
-        display: none;
-    }
-
-    .rating-input label {
-        cursor: pointer;
-        font-size: 1.55rem;
-        line-height: 1;
-        color: #cbd5e1;
-        transition: color 0.18s ease;
-    }
-
-    .rating-input label:hover,
-    .rating-input label:hover ~ label,
-    .rating-input input:checked ~ label {
-        color: #f59e0b;
-    }
-
-    .review-item {
-        border: 1px solid var(--dz-border);
-        border-radius: 0.8rem;
-        padding: 0.9rem;
-        background: var(--dz-surface-soft);
-    }
-
-    .review-item + .review-item {
-        margin-top: 0.75rem;
-    }
-
-    .add-to-cart-btn {
-        position: relative;
-        overflow: hidden;
-        isolation: isolate;
-        border-radius: 999px;
-        border-color: #c46310;
-        color: #c46310;
-        font-weight: 700;
-        box-shadow: 0 10px 22px rgba(196, 99, 16, 0.22);
-        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
-    }
-
-    .add-to-cart-btn::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.4) 50%, transparent 80%);
-        transform: translateX(-130%);
-        transition: transform 0.6s ease;
-        pointer-events: none;
-    }
-
-    .add-to-cart-btn:hover,
-    .add-to-cart-btn:focus {
-        background: #c46310;
-        border-color: #c46310;
-        color: #fff;
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 16px 30px rgba(196, 99, 16, 0.34);
-    }
-
-    .add-to-cart-btn:hover::before,
-    .add-to-cart-btn:focus::before {
-        transform: translateX(130%);
-    }
-
-    html[data-theme='dark'] .add-to-cart-btn {
-        border-color: #e07a30;
-        color: #f2d7c4;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.48);
-    }
-
-    html[data-theme='dark'] .add-to-cart-btn:hover,
-    html[data-theme='dark'] .add-to-cart-btn:focus {
-        background: #e07a30;
-        border-color: #e07a30;
-        color: #1e0c04;
-        box-shadow: 0 16px 30px rgba(0, 0, 0, 0.6);
-    }
-
-    html[data-theme='dark'] .product-main-card,
-    html[data-theme='dark'] .rating-card,
-    html[data-theme='dark'] .review-list-card,
-    html[data-theme='dark'] .product-image-wrap,
-    html[data-theme='dark'] .review-item {
-        background: #111827;
-        border-color: #334155;
-        box-shadow: 0 14px 28px rgba(2, 6, 23, 0.48);
-    }
-
-    html[data-theme='dark'] .price-big {
-        color: #fbbf24;
-    }
-
-    html[data-theme='dark'] .rating-input label {
-        color: #475569;
-    }
-
-    @media (max-width: 767.98px) {
-        .product-image-wrap img {
-            height: 320px;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/item-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
 @section('contenido')
@@ -218,6 +63,16 @@
                         <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
                         <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
+                        @php
+                            $wishlist = session('wishlist', []);
+                            $inWishlist = in_array($producto->id, $wishlist);
+                        @endphp
+                        <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
+                            </button>
+                        </form>
                         <a class="btn btn-outline-secondary" href="javascript:history.back()">Regresar</a>
                     </form>
                 </div>

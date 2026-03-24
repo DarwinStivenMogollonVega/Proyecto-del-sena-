@@ -4,9 +4,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title">Catálogo</h3>
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem; background:#fff;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb;">
+                        <h3 class="card-title" style="color:#222;">Catálogo</h3>
                     </div>
 
                     <div class="card-body">
@@ -52,7 +52,7 @@
                         </form>
                     </div>
 
-                    <div class="card-footer clearfix"></div>
+                    <div class="card-footer clearfix bg-white border-0"></div>
                 </div>
             </div>
         </div>

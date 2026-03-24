@@ -1,105 +1,72 @@
 @extends('plantilla.app')
 @section('contenido')
-<div class="app-content">
-    <!--begin::Container-->
-    <div class="container-fluid">
-        <!--begin::Row-->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title">Catálogos</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <div>
-                            <form action="{{ route('catalogo.index') }}" method="get">
-                                <div class="input-group">
-                                    <input name="texto" type="text" class="form-control" value="{{ $texto }}"
-                                        placeholder="Ingrese texto a buscar">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="fas fa-search"></i> Buscar
-                                        </button>
-                                        @can('catalogo-create')
-                                        <a href="{{ route('catalogo.create') }}" class="btn btn-primary">Nuevo</a>
-                                        @endcan
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        @if(Session::has('mensaje'))
-                        <div class="alert alert-info alert-dismissible fade show mt-2">
-                            {{ Session::get('mensaje') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-                        </div>
-                        @endif
-
-                        <div class="table-responsive mt-3">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 150px">Opciones</th>
-                                        <th style="width: 20px">ID</th>
-                                        <th>Nombre</th>
-                                        <th>Descripción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if(count($registros) <= 0)
-                                        <tr>
-                                            <td colspan="4">No hay registros que coincidan con la búsqueda</td>
-                                        </tr>
-                                    @else
-                                        @foreach($registros as $reg)
-                                            <tr class="align-middle">
-                                                <td>
-                                                    @can('catalogo-edit')
-                                                    <a href="{{ route('catalogo.edit', $reg->id) }}" class="btn btn-info btn-sm">
-                                                        <i class="bi bi-pencil-fill"></i>
-                                                    </a>
-                                                    @endcan
-                                                    @can('catalogo-delete')
-                                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-eliminar-{{ $reg->id }}">
-                                                        <i class="bi bi-trash-fill"></i>
-                                                    </button>
-                                                    @endcan
-                                                </td>
-                                                <td>{{ $reg->id }}</td>
-                                                <td>{{ $reg->nombre }}</td>
-                                                <td>{{ $reg->descripcion }}</td>
-                                            </tr>
-                                            @can('catalogo-delete')
-                                                @include('catalogo.delete')
-                                            @endcan
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-                        {{ $registros->appends(['texto' => $texto]) }}
-                    </div>
-                </div>
-                <!-- /.card -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!--end::Row-->
+<div class="app-content py-3">
+<div class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h4 class="fw-bold mb-1" style="color:var(--adm-heading)">
+            <i class="bi bi-journal-bookmark-fill me-2" style="color:var(--adm-accent)"></i>Catálogo musical
+        </h4>
     </div>
-    <!--end::Container-->
+    <div class="card shadow-sm border-0" style="border-radius:1rem; background:#fff;">
+        <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb; padding:1.2rem 1.5rem 1rem 1.5rem;">
+            <div class="fw-bold mb-2" style="color:#222; font-size:1.1rem; letter-spacing:.01em;">
+                <i class="bi bi-music-note-list me-2" style="color:var(--adm-accent)"></i>Gestión de catálogos
+            </div>
+            <form action="{{ route('catalogo.index') }}" method="get" class="d-flex align-items-center flex-wrap gap-2 mb-0">
+                <input name="texto" type="text" class="form-control form-control-sm" value="{{ $texto }}" style="max-width:220px; background:#f3f4f6;color:#222;border:1px solid #d1d5db;border-radius:.5rem;padding:.7rem 1rem;box-shadow:none;" placeholder="Ingrese texto a buscar">
+                <button type="submit" class="btn btn-sm btn-secondary" style="border-radius:.4rem;padding:.5rem 1.1rem;"><i class="bi bi-search"></i></button>
+                @can('catalogo-create')
+                <a href="{{ route('catalogo.create') }}" class="btn btn-sm btn-primary" style="border-radius:.4rem;padding:.5rem 1.1rem;">Nuevo</a>
+                @endcan
+            </form>
+        </div>
+        <div class="card-body p-0" style="padding:0 1.5rem 1.5rem 1.5rem;">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" style="font-size:.95rem; background:transparent; color:#222;">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px">Opciones</th>
+                            <th style="width: 20px">ID</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($registros as $reg)
+                            <tr class="align-middle">
+                                <td class="d-flex flex-row gap-2 justify-content-center">
+                                    @can('catalogo-edit')
+                                    <a href="{{ route('catalogo.edit', $reg->id) }}" class="btn btn-outline-info btn-sm d-flex align-items-center justify-content-center" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    @endcan
+                                    @can('catalogo-delete')
+                                    <button class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#modal-eliminar-{{$reg->id}}" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    @endcan
+                                </td>
+                                <td>{{ $reg->id }}</td>
+                                <td><span class="badge bg-primary" style="font-size:.97em;">{{ $reg->nombre }}</span></td>
+                                <td>{{ $reg->descripcion }}</td>
+                            </tr>
+                            @can('catalogo-delete')
+                                @include('catalogo.delete')
+                            @endcan
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4" style="color:#888;">
+                                    <i class="bi bi-inbox me-2"></i>No hay registros que coincidan con la búsqueda
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer clearfix bg-white border-0">
+            {{ $registros->appends(['texto' => $texto]) }}
+        </div>
+    </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.getElementById('mnuCatalogo')?.classList.add('menu-open');
-    document.getElementById('mnuCatalogoLink')?.classList.add('active');
-    document.getElementById('itemCatalogo').classList.add('active');
-</script>
-@endpush

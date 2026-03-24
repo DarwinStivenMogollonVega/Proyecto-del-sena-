@@ -5,9 +5,9 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title">{{ isset($registro) ? 'Editar artista' : 'Crear artista' }}</h3>
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem; background:#fff;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb;">
+                        <h3 class="card-title" style="color:#222;">{{ isset($registro) ? 'Editar artista' : 'Crear artista' }}</h3>
                     </div>
                     <div class="card-body">
                         <form action="{{ isset($registro) ? route('artistas.update', $registro->id) : route('artistas.store') }}" method="POST" enctype="multipart/form-data">
@@ -25,7 +25,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fotografia</label>
+                                    <label class="form-label">Fotografía</label>
                                     <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror">
                                     @error('foto')
                                         <small class="text-danger">{{ $message }}</small>
@@ -39,7 +39,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Biografia</label>
+                                <label class="form-label">Biografía</label>
                                 <textarea name="biografia" rows="6" class="form-control @error('biografia') is-invalid @enderror">{{ old('biografia', $registro->biografia ?? '') }}</textarea>
                                 @error('biografia')
                                     <small class="text-danger">{{ $message }}</small>

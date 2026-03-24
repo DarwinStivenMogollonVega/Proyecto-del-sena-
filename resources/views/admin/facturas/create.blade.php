@@ -15,7 +15,7 @@
                             <div class="alert alert-danger">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                        <div class="card dz-admin-table-card">
                                     @endforeach
                                 </ul>
                             </div>

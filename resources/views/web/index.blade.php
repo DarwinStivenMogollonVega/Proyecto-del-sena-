@@ -66,110 +66,14 @@
         </div>
     </form>
 
-    <section id="productos" class="mt-5">
-        @foreach ([
-            ['title' => 'Los mas vendidos', 'icon' => 'bi-fire', 'items' => $masMasVendidos],
-            ['title' => 'Los mejor valorados', 'icon' => 'bi-star-fill', 'items' => $mejorValorados],
-            ['title' => 'Ofertas especiales', 'icon' => 'bi-tag', 'items' => $ofertasEspeciales],
-            ['title' => 'Disponibles ahora', 'icon' => 'bi-check2-circle', 'items' => $disponiblesAhora],
-        ] as $section)
-            @if($section['items']->isNotEmpty())
-                <div class="product-section">
-                    <div class="section-title">
-                        <i class="bi {{ $section['icon'] }} icon"></i>
-                        <h3>{{ $section['title'] }}</h3>
-                        <span class="section-badge">{{ $section['items']->count() }} productos</span>
-                    </div>
-                    <div class="product-carousel" data-carousel>
-                        <div class="carousel-actions" aria-hidden="false">
-                            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Anterior">
-                                <i class="bi bi-arrow-left"></i>
-                            </button>
-                            <button type="button" class="carousel-btn" data-carousel-next aria-label="Siguiente">
-                                <i class="bi bi-arrow-right"></i>
-                            </button>
-                        </div>
-                        <div class="product-carousel-track" data-carousel-track>
-                        @foreach ($section['items'] as $producto)
-                            <div class="product-carousel-item">
-                                @php
-                                    $stock  = (int) ($producto->cantidad ?? 0);
-                                    $rating = round((float) ($producto->resenas_avg_puntuacion ?? 0), 1);
-                                    $rCount = (int) ($producto->resenas_count ?? 0);
-                                @endphp
-                                <div class="product-card">
-                                    {{-- Thumbnail --}}
-                                    <div class="pc-thumb">
-                                        @if($producto->imagen)
-                                            <img src="{{ asset('uploads/productos/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
-                                        @else
-                                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
-                                        @endif
-                                        @if ($stock >= 50)
-                                            <span class="pc-badge badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
-                                        @elseif ($stock > 0)
-                                            <span class="pc-badge badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
-                                        @else
-                                            <span class="pc-badge badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
-                                        @endif
-                                    </div>
-
-                                    {{-- Info --}}
-                                    <div class="pc-body">
-                                        <p class="pc-name" title="{{ $producto->nombre }}">{{ $producto->nombre }}</p>
-                                        <p class="pc-artist"><i class="bi bi-person-fill me-1"></i>{{ $producto->artista?->nombre ?? 'Artista N/D' }}</p>
-
-                                        <div class="pc-chips">
-                                            @if($producto->categoria)
-                                                <span class="pc-chip" title="{{ $producto->categoria->nombre }}"><i class="bi bi-tags-fill"></i>{{ $producto->categoria->nombre }}</span>
-                                            @endif
-                                            @if($producto->catalogo)
-                                                <span class="pc-chip" title="{{ $producto->catalogo->nombre }}"><i class="bi bi-journal-bookmark-fill"></i>{{ $producto->catalogo->nombre }}</span>
-                                            @endif
-                                        </div>
-
-                                        <div class="pc-stats">
-                                            <span class="pc-stat"><i class="bi bi-star-fill"></i>{{ number_format($rating, 1) }}</span>
-                                            <span class="pc-stat"><i class="bi bi-chat-square-text"></i>{{ $rCount }}</span>
-                                            <span class="pc-stat"><i class="bi bi-box-seam"></i>{{ $stock }}</span>
-                                            @if($producto->anio_lanzamiento)
-                                                <span class="pc-stat"><i class="bi bi-calendar3"></i>{{ $producto->anio_lanzamiento }}</span>
-                                            @endif
-                                        </div>
-
-                                        <div class="pc-footer">
-                                            <span class="pc-price">${{ number_format($producto->precio, 2) }}</span>
-                                             <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline ms-2">
-                                            @csrf
-                                            <button type="submit" class="btn btn-outline-danger btn-sm pc-wishlist-btn" title="Agregar a deseados">
-                                                <i class="bi bi-heart"></i> 
-                                            </button>
-                                        </form>
-                                            <a href="{{ route('web.show', $producto->id) }}" class="pc-btn"><i class="bi bi-eye me-1"></i>Ver</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                        </div>
-                        <div class="product-carousel-progress" data-carousel-progress aria-hidden="true"></div>
-                    </div>
-                </div>
-            @endif
-        @endforeach
-
-        @if($masMasVendidos->isEmpty() && $mejorValorados->isEmpty() && $ofertasEspeciales->isEmpty() && $disponiblesAhora->isEmpty())
-            <div class="text-center py-5 border rounded-4 bg-light-subtle">
-                <p class="text-muted mb-0">No se encontraron productos con esos filtros.</p>
-            </div>
-        @endif
-    </section>
+    <!-- Sección de carouseles por categorías eliminada para mostrar solo el grid vertical de productos -->
 
     <section class="all-products-section">
-        <div class="all-products-head">
-            <h4><i class="bi bi-grid-3x3-gap-fill me-2"></i>Todos los productos</h4>
-            <span class="section-badge">{{ $productos->total() }} registrados</span>
-        </div>
+        <div class="all-products-head d-flex align-items-center" style="gap:0.7rem;">
+            <h4 class="mb-0 d-flex align-items-center"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Todos los productos
+                <span class="section-badge ms-2">{{ $productos->total() }} registrados</span>
+            </h4>
+        </div><br>
 
         @if ($productos->count())
             <div class="all-products-grid">
@@ -232,16 +136,15 @@
                                 <span><i class="bi bi-box-seam me-1"></i>{{ $stockAll }}</span>
                             </div>
 
-                            <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta">
-                                <i class="bi bi-cart-plus"></i>
-                                Ver producto
-                            </a>
-                            <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline ms-2">
+                            <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
                                 @csrf
-                                <button type="submit" class="all-product-cta all-product-wishlist-btn" title="Agregar a deseados">
-                                    <i class="bi bi-heart"></i> Deseados
+                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                    <i class="bi bi-heart"></i>
                                 </button>
                             </form>
+                            <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
+                                <i class="bi bi-eye"></i> ver
+                            </a>
                         </div>
                     </article>
                 @endforeach

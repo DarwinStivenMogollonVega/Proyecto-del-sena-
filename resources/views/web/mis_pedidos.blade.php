@@ -78,106 +78,104 @@
     </section>
 
     <section class="mt-4">
-        <div class="orders-card p-3 p-lg-4">
-            <form action="{{ route('perfil.pedidos') }}" method="get" class="mb-3">
-                <div class="input-group">
-                    <input name="texto" type="text" class="form-control" value="{{ $texto }}" placeholder="Buscar por estado o numero de pedido">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <button type="submit" class="btn btn-dark">Buscar</button>
-                    @if(!empty($texto))
-                        <a href="{{ route('perfil.pedidos') }}" class="btn btn-outline-secondary">Limpiar</a>
-                    @endif
+        <div class="cart-shell mb-4 p-0" style="background: #23140e; border-radius: 16px; border: 1px solid #3a2417;">
+            <div class="cart-table-head p-4 pb-2">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="fs-4 fw-bold mb-0" style="color: #fff;">Tus pedidos</h3>
+                        <p class="mb-0" style="color: #c9a063;">Listado de tus compras realizadas en la tienda.</p>
+                    </div>
                 </div>
-            </form>
-
-            @if(Session::has('mensaje'))
-                <div class="alert alert-info alert-dismissible fade show mt-2">
-                    {{ Session::get('mensaje') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
-                </div>
-            @endif
-
-            <div class="orders-table-wrap mt-3">
-                <table class="table table-hover table-bordered orders-table mb-0">
-                    <thead>
-                        <tr>
-                            <th style="width: 120px">Opciones</th>
-                            <th>ID</th>
-                            <th>Fecha</th>
-                            <th>Metodo pago</th>
-                            <th>Comprobante</th>
-                            <th>Total</th>
-                            <th>Estado</th>
-                            <th>Factura</th>
-                            <th>Detalles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(count($registros) <= 0)
+            </div>
+            <div class="p-4 pt-0">
+                <div class="orders-table-wrap mt-3">
+                    <table class="table table-hover table-bordered orders-table mb-0" style="background: #1a0e07; color: #fff; border-radius: 12px; overflow: hidden;">
+                        <thead style="background: #2d180c; color: #c9a063;">
                             <tr>
-                                <td colspan="9">No hay registros que coincidan con la busqueda</td>
+                                <th style="width: 120px">Opciones</th>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Metodo pago</th>
+                                <th>Comprobante</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Factura</th>
+                                <th>Detalles</th>
                             </tr>
-                        @else
-                            @foreach($registros as $reg)
-                                <tr>
-                                    <td>
-                                        @if(auth()->user()->can('pedido-cancel'))
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-estado-{{ $reg->id }}">
-                                                <i class="bi bi-arrow-repeat"></i>
-                                            </button>
-                                        @else
-                                            <span class="text-muted small">Sin acciones</span>
-                                        @endif
-                                    </td>
-                                    <td>#{{ $reg->id }}</td>
-                                    <td>{{ $reg->created_at->format('d/m/Y') }}</td>
-                                    <td>{{ ucfirst($reg->metodo_pago ?? 'N/A') }}</td>
-                                    <td>
-                                        @if($reg->comprobante_pago)
-                                            <a href="{{ asset('storage/' . $reg->comprobante_pago) }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                                Ver captura
-                                            </a>
-                                        @else
-                                            <span class="text-muted small">Sin archivo</span>
-                                        @endif
-                                    </td>
-                                    <td>${{ number_format($reg->total, 2) }}</td>
-                                    <td>
-                                        @php
-                                            $colores = [
-                                                'pendiente' => 'bg-warning text-dark',
-                                                'enviado' => 'bg-success',
-                                                'anulado' => 'bg-danger',
-                                                'cancelado' => 'bg-secondary',
-                                            ];
-                                        @endphp
-                                        <span class="badge status-pill {{ $colores[$reg->estado] ?? 'bg-dark' }}">{{ ucfirst($reg->estado) }}</span>
-                                    </td>
-                                    <td>
-                                        @if($reg->factura)
-                                            <a href="{{ route('perfil.facturas.show', $reg->factura->id) }}" class="btn btn-sm btn-outline-primary">
-                                                Ver factura
-                                            </a>
-                                        @else
-                                            <a href="{{ route('perfil.recibos.show', $reg->id) }}" class="btn btn-sm btn-primary">
-                                                Generar factura
-                                            </a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-{{ $reg->id }}">
-                                            Ver detalles
-                                        </button>
+                        </thead>
+                        <tbody>
+                            @if(count($registros) <= 0)
+                                <tr style="background: #1a0e07;">
+                                    <td colspan="9" style="padding: 48px 0; border: none;">
+                                        <div class="d-flex flex-column align-items-center justify-content-center">
+                                            <span style="font-size: 3rem; color: #ff9900; line-height: 1;">
+                                                <i class="bi bi-cart-x"></i>
+                                            </span>
+                                            <span class="mt-2" style="color: #fff; font-size: 1.15rem; font-weight: 500;">Tu carrito está vacío. Agrega productos para continuar.</span>
+                                        </div>
                                     </td>
                                 </tr>
-                                <tr class="collapse" id="detalles-{{ $reg->id }}">
-                                    <td colspan="9">
-                                        <div class="detail-box mb-3">
-                                            <strong>Datos de contacto:</strong>
-                                            {{ $reg->nombre ?? '-' }} | {{ $reg->email ?? '-' }} | {{ $reg->telefono ?? '-' }}
-                                            <br>
-                                            <strong>Direccion:</strong> {{ $reg->direccion ?? '-' }}
-                                            @if($reg->requiere_factura_electronica)
+                            @else
+                                @foreach($registros as $reg)
+                                    <tr>
+                                        <td>
+                                            @if(auth()->user()->can('pedido-cancel'))
+                                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-estado-{{ $reg->id }}">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                </button>
+                                            @else
+                                                <span class="text-muted small">Sin acciones</span>
+                                            @endif
+                                        </td>
+                                        <td>#{{ $reg->id }}</td>
+                                        <td>{{ $reg->created_at->format('d/m/Y') }}</td>
+                                        <td>{{ ucfirst($reg->metodo_pago ?? 'N/A') }}</td>
+                                        <td>
+                                            @if($reg->comprobante_pago)
+                                                <a href="{{ asset('storage/' . $reg->comprobante_pago) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                                    Ver captura
+                                                </a>
+                                            @else
+                                                <span class="text-muted small">Sin archivo</span>
+                                            @endif
+                                        </td>
+                                        <td>${{ number_format($reg->total, 2) }}</td>
+                                        <td>
+                                            @php
+                                                $colores = [
+                                                    'pendiente' => 'bg-warning text-dark',
+                                                    'enviado' => 'bg-success',
+                                                    'anulado' => 'bg-danger',
+                                                    'cancelado' => 'bg-secondary',
+                                                ];
+                                            @endphp
+                                            <span class="badge status-pill {{ $colores[$reg->estado] ?? 'bg-dark' }}">{{ ucfirst($reg->estado) }}</span>
+                                        </td>
+                                        <td>
+                                            @if($reg->factura)
+                                                <a href="{{ route('perfil.facturas.show', $reg->factura->id) }}" class="btn btn-sm btn-outline-primary">
+                                                    Ver factura
+                                                </a>
+                                            @else
+                                                <a href="{{ route('perfil.recibos.show', $reg->id) }}" class="btn btn-sm btn-primary">
+                                                    Generar factura
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-{{ $reg->id }}">
+                                                Ver detalles
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse" id="detalles-{{ $reg->id }}">
+                                        <td colspan="9">
+                                            <div class="detail-box mb-3">
+                                                <strong>Datos de contacto:</strong>
+                                                {{ $reg->nombre ?? '-' }} | {{ $reg->email ?? '-' }} | {{ $reg->telefono ?? '-' }}
+                                                <br>
+                                                <strong>Direccion:</strong> {{ $reg->direccion ?? '-' }}
+                                                @if($reg->requiere_factura_electronica)
                                                 <br>
                                                 <strong>Factura electronica:</strong>
                                                 {{ strtoupper($reg->tipo_documento ?? '-') }} {{ $reg->numero_documento ?? '-' }} | {{ $reg->razon_social ?? '-' }} | {{ $reg->correo_factura ?? '-' }}

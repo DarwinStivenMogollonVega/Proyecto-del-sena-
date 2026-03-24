@@ -1,3 +1,77 @@
+/* === Botones adaptados para modo claro (pedido) === */
+.cart-shell .btn-warning {
+    background: #ffb366;
+    color: #7a3a00;
+    border: none;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #c4631012;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.cart-shell .btn-warning:hover {
+    background: #ff9900;
+    color: #fff;
+}
+.cart-shell .btn-outline-light {
+    background: #fff;
+    color: #a04a00;
+    border: 1.5px solid #ffb366;
+    font-weight: 700;
+    border-radius: 12px;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.cart-shell .btn-outline-light:hover {
+    background: #ffb366;
+    color: #fff;
+    border-color: #ff9900;
+}
+.cart-shell .btn-outline-danger {
+    background: #fff;
+    color: #d87c23;
+    border: 1.5px solid #d87c23;
+    font-weight: 700;
+    border-radius: 12px;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.cart-shell .btn-outline-danger:hover {
+    background: #d87c23;
+    color: #fff;
+    border-color: #a04a00;
+}
+/* Modo oscuro: mantener contraste */
+html[data-theme='dark'] .cart-shell .btn-warning {
+    background: #d87c23;
+    color: #fff;
+}
+html[data-theme='dark'] .cart-shell .btn-warning:hover {
+    background: #ff9900;
+    color: #fff;
+}
+html[data-theme='dark'] .cart-shell .btn-outline-light {
+    background: #232c3b;
+    color: #fff;
+    border-color: #bfa77a;
+}
+html[data-theme='dark'] .cart-shell .btn-outline-light:hover {
+    background: #bfa77a;
+    color: #232c3b;
+}
+html[data-theme='dark'] .cart-shell .btn-outline-danger {
+    background: #232c3b;
+    color: #ffb366;
+    border-color: #ffb366;
+}
+html[data-theme='dark'] .cart-shell .btn-outline-danger:hover {
+    background: #ffb366;
+    color: #232c3b;
+    border-color: #ff9900;
+}
+/* Estilo visual moderno para el contenedor del carrito */
+.cart-shell {
+    background: #23140e;
+    border-radius: 16px;
+    border: 1px solid #3a2417;
+}
 /* pedido-section.css: Migración de estilos desde pedido.blade.php */
 
 .cart-wrap {
@@ -5,14 +79,21 @@
     padding-bottom: 2.25rem;
 }
 .cart-hero {
-    background: linear-gradient(135deg, #fef8f3 0%, #fdf2ea 52%, #fdeee0 100%);
+    background: rgba(253, 0, 0, 0.093);
     border: 1px solid #e8cfc0;
     border-radius: 1.25rem;
     color: var(--dz-heading);
     padding: 1.5rem;
     margin-bottom: 1.35rem;
     box-shadow: 0 20px 36px -30px rgba(196, 99, 16, 0.30);
-}
+}.cart-hero {
+        background: var(--dz-surface, #232c3b);
+        border: 1px solid var(--dz-border);
+        color: var(--dz-heading, #fff);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 0.95rem 1rem;
+    }
 .cart-hero h2 {
     margin: 0;
     font-weight: 700;

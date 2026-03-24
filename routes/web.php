@@ -38,6 +38,9 @@ Route::post('/producto/{id}/resena', [WebController::class, 'guardarResena'])
     ->middleware('auth')
     ->name('web.resena.guardar');
 
+// Ruta de soporte (guía de uso)
+Route::view('/soporte', 'web.soporte')->name('web.soporte');
+
 // 🔹 Nueva ruta para mostrar productos por categoría
 Route::get('/categoria-web/{id}', [CategoriaController::class, 'show'])->name('web.categoria.show');
 Route::get('/catalogo-web/{id}', [CatalogoController::class, 'show'])->name('web.catalogo.show');
@@ -81,7 +84,15 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::resource('catalogo', CatalogoController::class); // ✅ NUEVO: rutas del catálogo
     Route::resource('artistas', ArtistaController::class)->except(['show']);
 
-    Route::get('/pedido/formulario', [PedidoController::class, 'formulario'])->name('pedido.formulario');
+
+    // Flujo multi-paso del pedido
+    Route::get('/pedido/datos', [PedidoController::class, 'datosForm'])->name('pedido.datos');
+    Route::post('/pedido/datos', [PedidoController::class, 'datosGuardar'])->name('pedido.datos.guardar');
+    Route::get('/pedido/entrega', [PedidoController::class, 'entregaForm'])->name('pedido.entrega');
+    Route::post('/pedido/entrega', [PedidoController::class, 'entregaGuardar'])->name('pedido.entrega.guardar');
+    Route::get('/pedido/pago', [PedidoController::class, 'pagoForm'])->name('pedido.pago');
+    Route::post('/pedido/pago', [PedidoController::class, 'pagoGuardar'])->name('pedido.pago.guardar');
+    // (opcional: puedes dejar la ruta original para compatibilidad)
     Route::post('/pedido/realizar', [PedidoController::class, 'realizar'])->name('pedido.realizar');
     Route::get('/perfil/pedidos', [PedidoController::class, 'misPedidos'])->name('perfil.pedidos');
     Route::get('/perfil/recibos-factura', [FacturaController::class, 'index'])->name('perfil.recibos');
@@ -89,12 +100,13 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::get('/perfil/facturas/{id}', [FacturaController::class, 'show'])->name('perfil.facturas.show');
     Route::get('/perfil/facturas/{id}/pdf', [FacturaController::class, 'pdf'])->name('perfil.facturas.pdf');
     Route::get('/admin/pedidos', [PedidoController::class, 'adminIndex'])->name('admin.pedidos');
-    Route::get('/admin/facturas', [PedidoController::class, 'adminFacturasIndex'])->name('admin.facturas.index');
-    Route::get('/admin/facturas/crear', [PedidoController::class, 'adminFacturasCreate'])->name('admin.facturas.create');
-    Route::post('/admin/facturas', [PedidoController::class, 'adminFacturasStore'])->name('admin.facturas.store');
-    Route::get('/admin/facturas/{id}/editar', [PedidoController::class, 'adminFacturasEdit'])->name('admin.facturas.edit');
-    Route::put('/admin/facturas/{id}', [PedidoController::class, 'adminFacturasUpdate'])->name('admin.facturas.update');
-    Route::delete('/admin/facturas/{id}', [PedidoController::class, 'adminFacturasDestroy'])->name('admin.facturas.destroy');
+    Route::get('/admin/facturas', [FacturaController::class, 'adminFacturasIndex'])->name('admin.facturas.index');
+    Route::get('/admin/facturas/crear', [FacturaController::class, 'adminCreate'])->name('admin.facturas.create');
+    Route::post('/admin/facturas', [FacturaController::class, 'adminStore'])->name('admin.facturas.store');
+    Route::get('/admin/facturas/{id}/editar', [FacturaController::class, 'adminEdit'])->name('admin.facturas.edit');
+    Route::put('/admin/facturas/{id}', [FacturaController::class, 'adminUpdate'])->name('admin.facturas.update');
+    Route::delete('/admin/facturas/{id}', [FacturaController::class, 'adminDestroy'])->name('admin.facturas.destroy');
+    Route::post('/admin/facturas/{id}/reload', [FacturaController::class, 'adminReload'])->name('admin.facturas.reload');
 
     Route::get('/admin/clientes', [ClienteGestionController::class, 'index'])->name('admin.clientes.index');
     Route::get('/admin/clientes/{id}', [ClienteGestionController::class, 'show'])->name('admin.clientes.show');

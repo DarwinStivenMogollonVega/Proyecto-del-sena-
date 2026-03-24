@@ -6,11 +6,10 @@
         <!--begin::Row-->
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h3 class="card-title">Categoria</h3>
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem; background:#fff;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb;">
+                        <h3 class="card-title" style="color:#222;">Categoría</h3>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body">
                       <form action="{{ isset($registro) ? route('categoria.update', $registro->id) : route('categoria.store') }}" 
                          method="POST" id="formRegistroCategoria">
@@ -44,9 +43,7 @@
                             </div>
                         </form>
                     </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer clearfix">
-
+                    <div class="card-footer clearfix bg-white border-0">
                     </div>
                 </div>
                 <!-- /.card -->

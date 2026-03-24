@@ -1,0 +1,26 @@
+/* Mostrar solo el logo claro en modo claro y el oscuro en modo oscuro */
+.auth-brand-icon.light { display: block; }
+.auth-brand-icon.dark { display: none; }
+
+@media (prefers-color-scheme: dark) {
+  .auth-brand-icon.light { display: none !important; }
+  .auth-brand-icon.dark { display: block !important; }
+}
+/* Estilos para la vista de login */
+.login-brand .auth-brand-mark-full {
+  width: min(15rem, 62vw);
+  height: 4.2rem;
+  padding: 0.28rem 0.4rem;
+}
+
+.login-brand .auth-brand-mark-icon {
+  width: 3.4rem;
+  height: 3.4rem;
+}
+
+@media (max-width: 575.98px) {
+  .login-brand .auth-brand-mark-icon {
+    width: 4rem;
+    height: 4rem;
+  }
+}

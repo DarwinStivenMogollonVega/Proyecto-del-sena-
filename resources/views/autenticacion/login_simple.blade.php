@@ -1,5 +1,8 @@
 @extends('autenticacion.app')
 @section('titulo', 'Login Simple')
+@push('estilos')
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
+@endpush
 @section('contenido')
 <div class="auth-card p-4 p-lg-5 mx-auto" style="max-width:400px;">
   <h2 class="mb-3">Iniciar sesión</h2>

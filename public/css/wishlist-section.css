@@ -1,0 +1,43 @@
+/* Estilos para la sección de wishlist */
+.wishlist-section {
+  background: rgba(253, 0, 0, 0.093);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 2rem 1.5rem;
+}.wishlist-section {
+        background: var(--dz-surface, #232c3b);
+        border: 1px solid var(--dz-border);
+        color: var(--dz-heading, #fff);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 0.95rem 1rem;
+    }
+
+.wishlist-card {
+  border: none;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.2s;
+}
+.wishlist-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.wishlist-card .card-img-top {
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+@media (max-width: 575.98px) {
+  .wishlist-section {
+    padding: 1rem 0.5rem;
+  }
+  .wishlist-card .card-img-top {
+    max-height: 120px;
+  }
+}
+
+.hero-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+}

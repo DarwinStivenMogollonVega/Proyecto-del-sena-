@@ -45,11 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(count($registros)<=0) <tr>
-                                        <td colspan="8">No hay registros que coincidan con la búsqueda</td>
-                                        </tr>
-                                        @else
-                                        @foreach($registros as $reg)
+                                    @forelse($pedidos as $reg)
                                         <tr class="align-middle">
                                             <td>
                                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
@@ -128,8 +124,11 @@
                                             </td>
                                         </tr>
                                         @include('pedido.state')
-                                        @endforeach
-                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="8">No hay registros que coincidan con la búsqueda</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -137,7 +136,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer clearfix">
-                        {{$registros->appends(["texto"=>$texto])}}
+                        {{$pedidos->appends(["texto"=>$texto])}}
                     </div>
                 </div>
                 <!-- /.card -->

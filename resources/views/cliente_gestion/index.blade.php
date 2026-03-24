@@ -7,7 +7,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h3 class="card-title">Gestion de clientes</h3>
-                    </div>
+                        </div>
                     <div class="card-body">
                         <form action="{{ route('admin.clientes.index') }}" method="get" class="mb-3">
                             <div class="input-group">

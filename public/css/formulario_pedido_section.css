@@ -1,0 +1,109 @@
+/* formulario_pedido_section.css: Estilos migrados desde formulario_pedido.blade.php */
+
+.checkout-hero {
+    background: linear-gradient(135deg, #111827, #7c2d12);
+    border-radius: 1rem;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.checkout-hero::after {
+    content: '';
+    position: absolute;
+    left: -60px;
+    bottom: -70px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.25);
+}
+
+.checkout-card {
+    border: 1px solid var(--dz-border);
+    border-radius: 1rem;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+    background: linear-gradient(135deg, #fff7ed 0%, #f3e3d1 100%);
+    /* Color cálido y suave en modo claro */
+}
+
+.checkout-label {
+    font-weight: 600;
+    color: var(--dz-text);
+    margin-bottom: 0.4rem;
+}
+
+.checkout-summary {
+    border: 1px solid var(--dz-border);
+    border-radius: 1rem;
+    box-shadow: 0 12px 28px rgba(17, 24, 39, 0.08);
+    background: var(--dz-surface);
+    position: sticky;
+    top: 1rem;
+}
+
+.checkout-total {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--dz-heading);
+}
+
+.comprobante-wrap {
+    display: none;
+}
+
+.factura-wrap {
+    display: none;
+    border: 1px dashed var(--dz-border);
+    border-radius: 0.8rem;
+    padding: 1rem;
+    background: rgba(148, 163, 184, 0.08);
+}
+
+html[data-theme='dark'] .checkout-card,
+html[data-theme='dark'] .checkout-summary {
+    background: linear-gradient(135deg, #232c3b 0%, #3d1e0a 100%);
+    border-color: #3d1e0a;
+    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
+}
+
+html[data-theme='dark'] .checkout-label,
+html[data-theme='dark'] .checkout-summary .text-muted,
+html[data-theme='dark'] .checkout-summary strong,
+html[data-theme='dark'] .checkout-summary span,
+html[data-theme='dark'] .checkout-summary small {
+    color: #e5e7eb !important;
+}
+
+html[data-theme='dark'] .checkout-total {
+    color: #fbbf24;
+}
+
+@media (max-width: 991.98px) {
+    .checkout-summary {
+        position: static;
+        top: auto;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .checkout-hero {
+        padding: 1.25rem !important;
+    }
+
+    .checkout-hero::after {
+        width: 130px;
+        height: 130px;
+        left: -40px;
+        bottom: -45px;
+    }
+
+    .checkout-card,
+    .checkout-summary {
+        border-radius: 0.85rem;
+    }
+
+    .checkout-total {
+        font-size: 1.35rem;
+    }
+}

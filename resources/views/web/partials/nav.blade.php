@@ -44,6 +44,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link nav-cta-btn {{ request()->routeIs('web.soporte') ? 'active' : '' }}" href="{{ route('web.soporte') }}">
+                        <span class="nav-cta-icon"><i class="bi bi-question-circle"></i></span>
+                        <span class="nav-cta-text">Soporte</span>
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
@@ -87,9 +94,6 @@
                             @endcanany
 
                             <li><h6 class="dropdown-header text-uppercase small fw-bold">Cliente</h6></li>
-                            <li>
-                                <a class="dropdown-item {{ $dashboardClienteActive ? 'user-route-active' : '' }}" href="{{ route('cliente.dashboard') }}" aria-current="{{ $dashboardClienteActive ? 'page' : 'false' }}"><i class="bi bi-bar-chart-line me-2"></i>Mi dashboard</a>
-                            </li>
                             <li>
                                 @if(auth()->user()->can('pedido-list'))
                                     <a class="dropdown-item" href="{{ route('admin.pedidos') }}"><i class="bi bi-receipt me-2"></i>Pedidos administrador</a>

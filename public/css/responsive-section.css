@@ -1,3 +1,110 @@
+/* === Tarjetas de producto modernas (catálogo y categoría) === */
+.dz-product-card {
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px 0 rgba(44, 36, 16, 0.10), 0 1.5px 8px #c4631012;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.18s, transform 0.18s;
+  min-height: 420px;
+}
+.dz-product-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(196,99,16,0.18), 0 2px 16px #c4631022;
+  transform: translateY(-4px) scale(1.025);
+  border-color: #c46310;
+}
+.dz-product-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-top-left-radius: 1.2rem;
+  border-top-right-radius: 1.2rem;
+  background: #f3e3d1;
+  transition: filter 0.18s;
+}
+.dz-product-card:hover .dz-product-img {
+  filter: brightness(0.97) contrast(1.08) drop-shadow(0 2px 8px #c4631022);
+}
+.dz-product-title {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #a04a00;
+  margin: 1rem 0 0.2rem 0;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+.dz-product-price {
+  color: #1ca97c;
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 0.7rem;
+}
+.dz-product-btn {
+  display: block;
+  width: 90%;
+  margin: 0.7rem auto 1.1rem auto;
+  padding: 0.7rem 0;
+  border-radius: 0.7rem;
+  background: #c46310;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border: none;
+  box-shadow: 0 2px 8px #c4631012;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+}
+.dz-product-btn:hover {
+  background: #a04a00;
+  color: #fff;
+  box-shadow: 0 4px 16px #c4631022;
+}
+@media (max-width: 991.98px) {
+  .dz-product-img { height: 180px; }
+  .dz-product-card { min-height: 340px; }
+}
+@media (max-width: 576px) {
+  .dz-product-img { height: 120px; }
+  .dz-product-card { min-height: 220px; }
+  .dz-product-title { font-size: 1rem; }
+  .dz-product-btn { font-size: 0.98rem; }
+}
+html[data-theme='dark'] .dz-product-card {
+  background: #232c3b;
+  border-color: #3d1e0a;
+  box-shadow: 0 4px 24px 0 rgba(44, 36, 16, 0.18), 0 1.5px 8px #0008;
+}
+html[data-theme='dark'] .dz-product-title {
+  color: #ffcc70;
+}
+html[data-theme='dark'] .dz-product-btn {
+  background: #ffcc70;
+  color: #232c3b;
+}
+html[data-theme='dark'] .dz-product-btn:hover {
+  background: #c46310;
+  color: #fff;
+}
+/* Checkout stepper pegado al nav, fondo uniforme y sin espacios extra */
+.checkout-steps-bg {
+    background: linear-gradient(90deg, #fff7ed 0%, #f3e3d1 100%);
+    padding: 2.2rem 0 1.7rem 0;
+    border-radius: 1.5rem;
+    margin-bottom: 2.5rem;
+    transition: background 0.2s;
+}
+html[data-theme='dark'] .checkout-steps-bg {
+    background: linear-gradient(90deg, #232c3b 0%, #3d1e0a 100%);
+}
+@media (max-width: 991.98px) {
+  .checkout-steps-bg {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.2rem !important;
+  }
+}
 /* ===================== LOGO CUSTOM ===================== */
 .dz-brand-logo.logo-dis-music.dz-logo-custom {
   width: 80px;
@@ -20,58 +127,48 @@ html[data-theme='dark'] .logo-dark {
 }
 /* ===================== RESPONSIVE ===================== */
 
-/* ===== MOBILE ===== */
-@media (max-width: 576px) {
-  .dz-container { padding: 0.7rem 2vw; }
-  .dz-navbar { padding: 0.7rem 2vw; }
-  .dz-logo { max-width: 90px; height: 32px; }
-  .dz-card { padding: 1rem; }
-  .dz-hero { padding: 1rem; }
-  .dz-row { gap: 1rem; }
-  .dz-col { min-width: 100px; max-width: 100%; }
-  .dz-btn { font-size: 0.95rem; padding: 0.5rem 1rem; }
-}
 
-/* ===== TABLET ===== */
-@media (min-width: 577px) and (max-width: 992px) {
-  .dz-container { padding: 1.2rem 3vw; }
-  .dz-navbar { padding: 1rem 3vw; }
-  .dz-logo { max-width: 120px; height: 38px; }
+/* ======= RESPONSIVE BREAKPOINTS MEJORADOS ======= */
+/* 11-12 pulgadas: 1366x768, 1920x1080 */
+@media (max-width: 1400px) {
+  .dz-container { padding: 1.2rem 2vw; }
+  .dz-navbar { padding: 1rem 2vw; }
+  .dz-logo { max-width: 120px; height: 36px; }
   .dz-card { padding: 1.2rem; }
-  .dz-hero { padding: 1.5rem; }
+  .dz-hero { padding: 1.2rem; }
   .dz-row { gap: 1.2rem; }
-  .dz-col { min-width: 180px; max-width: 48%; }
+  .dz-col { min-width: 140px; max-width: 48%; }
   .dz-btn { font-size: 1rem; padding: 0.7rem 1.2rem; }
 }
 
-/* ===== DESKTOP ===== */
-@media (min-width: 993px) and (max-width: 1400px) {
-  .dz-container { padding: 2rem 4vw; }
-  .dz-navbar { padding: 1.2rem 4vw; }
+/* 13-15.6 pulgadas: 1920x1080, 2240x1400, 2560x1600 */
+@media (min-width: 1401px) and (max-width: 1920px) {
+  .dz-container { padding: 2rem 5vw; }
+  .dz-navbar { padding: 1.3rem 5vw; }
   .dz-logo { max-width: 180px; height: 48px; }
   .dz-card { padding: 2rem; }
-  .dz-hero { padding: 2.5rem; }
+  .dz-hero { padding: 2rem; }
   .dz-row { gap: 2rem; }
-  .dz-col { min-width: 220px; max-width: 32%; }
+  .dz-col { min-width: 200px; max-width: 32%; }
   .dz-btn { font-size: 1.15rem; padding: 0.9rem 1.5rem; }
 }
 
-/* ===== DESKTOP MODERNO ===== */
-@media (min-width: 1401px) and (max-width: 1920px) {
-  .dz-container { padding: 2.5rem 6vw; }
-  .dz-navbar { padding: 1.5rem 6vw; }
+/* 16-17 pulgadas y 21-24 desktop: 1920x1200, 2560x1440 */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .dz-container { padding: 2.5rem 7vw; }
+  .dz-navbar { padding: 1.7rem 7vw; }
   .dz-logo { max-width: 220px; height: 56px; }
   .dz-card { padding: 2.5rem; }
-  .dz-hero { padding: 3rem; }
+  .dz-hero { padding: 2.5rem; }
   .dz-row { gap: 2.5rem; }
   .dz-col { min-width: 260px; max-width: 28%; }
   .dz-btn { font-size: 1.2rem; padding: 1rem 2rem; }
 }
 
-/* ===== ULTRAWIDE ===== */
-@media (min-width: 1921px) and (max-width: 2560px) {
-  .dz-container { padding: 3rem 8vw; }
-  .dz-navbar { padding: 2rem 8vw; }
+/* 27 pulgadas QHD/2K y 32+ pulgadas 4K */
+@media (min-width: 2561px) and (max-width: 3840px) {
+  .dz-container { padding: 3rem 9vw; }
+  .dz-navbar { padding: 2rem 9vw; }
   .dz-logo { max-width: 260px; height: 64px; }
   .dz-card { padding: 3rem; }
   .dz-hero { padding: 3.5rem; }
@@ -80,10 +177,10 @@ html[data-theme='dark'] .logo-dark {
   .dz-btn { font-size: 1.3rem; padding: 1.2rem 2.5rem; }
 }
 
-/* ===== TV / 4K ===== */
-@media (min-width: 2561px) {
-  .dz-container { padding: 4rem 10vw; }
-  .dz-navbar { padding: 2.5rem 10vw; }
+/* 4K+ (3840x2160 o más) */
+@media (min-width: 3841px) {
+  .dz-container { padding: 4rem 12vw; }
+  .dz-navbar { padding: 2.5rem 12vw; }
   .dz-logo { max-width: 320px; height: 80px; }
   .dz-card { padding: 4rem; }
   .dz-hero { padding: 4.5rem; }

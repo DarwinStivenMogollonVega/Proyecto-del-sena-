@@ -47,7 +47,7 @@
     </section>
 
     <section class="about-block mt-4">
-        <div class="bg-white p-4 rounded shadow-sm">
+        <div class="about-card p-4 rounded shadow-sm">
             <h4 class="fw-bold mb-2 text-dark">¿Qué representa DiscZone para el usuario?</h4>
             <p>
                 DiscZone combina una interfaz moderna con una estructura de compra práctica para quienes quieren adquirir música física sin complicaciones. El sistema prioriza la experiencia del usuario en cada paso: desde la exploración del catálogo hasta la confirmación del pedido.

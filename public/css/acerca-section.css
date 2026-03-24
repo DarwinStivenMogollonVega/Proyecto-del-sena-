@@ -87,14 +87,27 @@ html[data-theme='dark'] .logo-light {
     letter-spacing: 0.03em;
 }
 .about-hero p {
-    color: rgba(255, 255, 255, 0.88);
+    color: #475569;
     margin-bottom: 0;
     font-size: 1.15rem;
 }
 
 .about-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
+    background: radial-gradient(circle at 10% 15%, var(--dz-page-grad-1, rgba(245, 158, 11, 0.26)), transparent 36%),
+        radial-gradient(circle at 88% 14%, var(--dz-page-grad-2, rgba(249, 115, 22, 0.22)), transparent 30%),
+        linear-gradient(135deg, var(--dz-page-grad-3, #111827) 0%, var(--dz-accent, #7c2d12) 52%, var(--dz-surface, #1f2937) 100%);
+    background-attachment: fixed;
+    border: 1px solid #3a2415;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    padding: 1.3rem 1.25rem;
+    height: 100%;
+    color: #475569;
+    transition: box-shadow 0.2s;
+}html[data-theme='dark'] .about-card {
+    background: radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%), radial-gradient(circle at 85% 16%, rgba(184, 153, 144, 0.16), transparent 30%), linear-gradient(165deg, var(--dz-page-grad-1) 0%, var(--dz-page-grad-2) 45%, var(--dz-page-grad-3) 100%);
+    background-attachment: fixed;
+     border: 1px solid #e5e7eb;
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
     padding: 1.3rem 1.25rem;
@@ -107,7 +120,11 @@ html[data-theme='dark'] .logo-light {
 .about-card h5 {
     font-weight: 700;
     margin-bottom: 0.7rem;
-    color: #0f172a;
+    color: #212529;
+    font-size: 1.18rem;
+}html[data-theme='dark'].about-card h5 {
+    font-weight: 700;
+    margin-bottom: 0.7rem;
     font-size: 1.18rem;
 }
 .about-card p {
@@ -118,25 +135,29 @@ html[data-theme='dark'] .logo-light {
 }
 
 .about-block {
-    background: #f3e3d1;
+    background: radial-gradient(circle at 10% 15%, var(--dz-page-grad-1, rgba(245, 158, 11, 0.26)), transparent 36%),
+        radial-gradient(circle at 88% 14%, var(--dz-page-grad-2, rgba(249, 115, 22, 0.22)), transparent 30%),
+        linear-gradient(135deg, var(--dz-page-grad-3, #111827) 0%, var(--dz-accent, #7c2d12) 52%, var(--dz-surface, #1f2937) 100%);
+    background-attachment: fixed;
     border-radius: 1rem;
     padding: 1.5rem;
     margin-top: 2rem;
-    box-shadow: 0 8px 24px rgba(196, 99, 16, 0.08);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.13);
+    color: #f3e9e0;
 }
 .about-block h4 {
     font-weight: 700;
-    color: #c46310;
+    color: #fdf0e4;
     margin-bottom: 1rem;
 }
 .about-block p {
-    color: #7c2d12;
+    color: #475569;
     font-size: 1.08rem;
     margin-bottom: 0.7rem;
 }
 .about-highlight {
-    background: #ffe5c2;
-    color: #a04a00;
+    background: rgba(245, 158, 11, 0.13);
+    color: #fff3e0;
     border-radius: 0.7rem;
     padding: 0.9rem 1.2rem;
     font-weight: 600;

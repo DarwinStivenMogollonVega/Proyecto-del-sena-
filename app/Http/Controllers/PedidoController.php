@@ -13,72 +13,17 @@ use Illuminate\Validation\Rule;
 
 class PedidoController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Maneja el submit del formulario de datos y redirige al paso de entrega.
+     */
+    public function realizar(Request $request)
     {
-        return $this->misPedidos($request);
+        // Aquí puedes validar y guardar los datos si es necesario
+        // Por ahora solo redirige al siguiente paso del checkout
+        return redirect()->route('pedido.entrega');
     }
-
-    public function adminIndex(Request $request)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para ver todos los pedidos.');
-        }
-
-        $texto = $request->input('texto');
-        $query = Pedido::with('user', 'detalles.producto')->orderBy('id', 'desc');
-
-        if (!empty($texto)) {
-            $query->whereHas('user', function ($q) use ($texto) {
-                $q->where('name', 'like', "%{$texto}%");
-            });
-        }
-
-        $registros = $query->paginate(10);
-
-        return view('pedido.index', [
-            'registros' => $registros,
-            'texto' => $texto,
-            'esAdmin' => true,
-        ]);
-    }
-
-    public function misPedidos(Request $request)
-    {
-        $texto = $request->input('texto');
-        $baseQuery = Pedido::where('user_id', auth()->id());
-
-        $query = Pedido::with('user', 'detalles.producto')
-            ->where('user_id', auth()->id())
-            ->orderBy('id', 'desc');
-
-        $query->with('factura');
-
-        if (!empty($texto)) {
-            $query->where(function ($q) use ($texto) {
-                $q->where('estado', 'like', "%{$texto}%")
-                    ->orWhere('id', 'like', "%{$texto}%");
-            });
-        }
-
-        $registros = $query->paginate(10);
-
-        $resumen = [
-            'totalPedidos' => (clone $baseQuery)->count(),
-            'gastoTotal' => (float) ((clone $baseQuery)->sum('total') ?? 0),
-            'pendientes' => (clone $baseQuery)->where('estado', 'pendiente')->count(),
-            'enviados' => (clone $baseQuery)->where('estado', 'enviado')->count(),
-            'cancelados' => (clone $baseQuery)->whereIn('estado', ['cancelado', 'anulado'])->count(),
-            'conFactura' => Factura::where('user_id', auth()->id())->count(),
-        ];
-
-        return view('web.mis_pedidos', [
-            'registros' => $registros,
-            'texto' => $texto,
-            'resumen' => $resumen,
-        ]);
-    }
-
-    public function formulario()
+    // Paso 1: Formulario de datos personales
+    public function datosForm(Request $request)
     {
         $carrito = collect(session()->get('carrito', []))
             ->filter(function ($item) {
@@ -87,330 +32,254 @@ class PedidoController extends Controller
             ->all();
 
         if (empty($carrito)) {
-            return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de pago sin articulos en el carrito.');
+            return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de datos sin artículos en el carrito.');
         }
-
-        return view('web.formulario_pedido', compact('carrito'));
+        $datos = session('checkout.datos', []);
+        return view('web.formulario_pedido', compact('carrito', 'datos'));
     }
 
-    public function realizar(Request $request)
+    /**
+     * Muestra la lista de pedidos para el panel de administración.
+     */
+    public function adminIndex()
     {
-        $carrito = session()->get('carrito', []);
+        $query = \App\Models\Pedido::query();
+        if (request()->filled('buscar')) {
+            $buscar = request('buscar');
+            $query->where(function($q) use ($buscar) {
+                $q->whereHas('user', function($u) use ($buscar) {
+                    $u->where('name', 'like', "%$buscar%")
+                      ->orWhere('email', 'like', "%$buscar%") ;
+                })
+                ->orWhere('email', 'like', "%$buscar%")
+                ->orWhere('estado', 'like', "%$buscar%")
+                ->orWhere('nombre', 'like', "%$buscar%") ;
+            });
+        }
+        $pedidos = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+        // Calcular métricas igual que en el index
+        $metricas = [
+            'totalProductos' => \App\Models\Producto::count(),
+            'disponibles' => \App\Models\Producto::where('cantidad', '>', 0)->count(),
+            'totalCategorias' => \App\Models\Categoria::count(),
+            'totalCatalogos' => \App\Models\Catalogo::count(),
+        ];
+        // Puedes agregar más variables si la vista las requiere
+        // Lógica de destacados igual que en el index público
+        // No existe la columna 'ventas', así que ordenamos por 'created_at' (los más recientes)
+        $masMasVendidos = \App\Models\Producto::with(['artista', 'categoria', 'catalogo'])
+            ->withAvg('resenas', 'puntuacion')
+            ->withCount('resenas')
+            ->orderByDesc('created_at')
+            ->take(10)
+            ->get();
 
-        $datos = $request->validate([
+        $mejorValorados = \App\Models\Producto::with(['artista', 'categoria', 'catalogo'])
+            ->withAvg('resenas', 'puntuacion')
+            ->withCount('resenas')
+            ->orderByDesc('resenas_avg_puntuacion')
+            ->take(10)
+            ->get();
+
+        $ofertasEspeciales = \App\Models\Producto::with(['artista', 'categoria', 'catalogo'])
+            ->withAvg('resenas', 'puntuacion')
+            ->withCount('resenas')
+            ->where('descuento', '>', 0)
+            ->orderByDesc('descuento')
+            ->take(10)
+            ->get();
+
+        $disponiblesAhora = \App\Models\Producto::with(['artista', 'categoria', 'catalogo'])
+            ->withAvg('resenas', 'puntuacion')
+            ->withCount('resenas')
+            ->where('cantidad', '>', 0)
+            ->orderByDesc('cantidad')
+            ->take(10)
+            ->get();
+
+        $productos = \App\Models\Producto::paginate(20);
+        $texto = request('texto', '');
+        return view('pedido.index', compact(
+            'pedidos', 'metricas',
+            'masMasVendidos', 'mejorValorados', 'ofertasEspeciales', 'disponiblesAhora', 'productos', 'texto'
+        ));
+    }
+
+    public function datosGuardar(Request $request)
+    {
+        $validated = $request->validate([
             'nombre' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:120'],
             'telefono' => ['required', 'string', 'max:30'],
-            'direccion' => ['required', 'string', 'max:255'],
-            'metodo_pago' => ['required', 'string', 'max:30'],
-            'comprobante_pago' => ['required_if:metodo_pago,nequi', 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'requiere_factura_electronica' => ['nullable', 'boolean'],
-            'tipo_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', Rule::in(['nit', 'cedula'])],
-            'numero_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', 'string', 'max:40'],
-            'razon_social' => ['required_if:requiere_factura_electronica,1', 'nullable', 'string', 'max:140'],
-            'correo_factura' => ['required_if:requiere_factura_electronica,1', 'nullable', 'email', 'max:120'],
         ]);
+        session(['checkout.datos' => $validated]);
+        return redirect()->route('pedido.entrega');
+    }
+
+    // Paso 2: Formulario de entrega
+    public function entregaForm(Request $request)
+    {
+        $carrito = collect(session()->get('carrito', []))
+            ->filter(function ($item) {
+                return (int) ($item['cantidad'] ?? 0) > 0;
+            })
+            ->all();
 
         if (empty($carrito)) {
-            return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de pago sin articulos en el carrito.');
+            return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de entrega sin artículos en el carrito.');
         }
 
-        DB::beginTransaction();
+        $datos = session('checkout.datos', []);
 
-        try {
-            $rutaComprobante = null;
-            if ($request->hasFile('comprobante_pago')) {
-                $rutaComprobante = $request->file('comprobante_pago')->store('comprobantes', 'public');
-            }
-
-            $total = 0;
-            foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
-            }
-
-            $requiereFactura = $request->boolean('requiere_factura_electronica');
-
-            $pedido = Pedido::create([
-                'user_id' => auth()->id(),
-                'total' => $total,
-                'estado' => 'pendiente',
-                'nombre' => $datos['nombre'],
-                'email' => $datos['email'],
-                'telefono' => $datos['telefono'],
-                'direccion' => $datos['direccion'],
-                'metodo_pago' => $datos['metodo_pago'],
-                'comprobante_pago' => $rutaComprobante,
-                'requiere_factura_electronica' => $requiereFactura,
-                'tipo_documento' => $requiereFactura ? ($datos['tipo_documento'] ?? null) : null,
-                'numero_documento' => $requiereFactura ? ($datos['numero_documento'] ?? null) : null,
-                'razon_social' => $requiereFactura ? ($datos['razon_social'] ?? null) : null,
-                'correo_factura' => $requiereFactura ? ($datos['correo_factura'] ?? null) : null,
-            ]);
-
-            foreach ($carrito as $productoId => $item) {
-                $productoExiste = Producto::whereKey($productoId)->exists();
-
-                if (!$productoExiste) {
-                    throw new \RuntimeException('Uno de los productos del carrito ya no existe.');
+                if (empty($carrito)) {
+                    return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de entrega sin artículos en el carrito.');
                 }
 
-                PedidoDetalle::create([
-                    'pedido_id' => $pedido->id,
-                    'producto_id' => $productoId,
-                    'cantidad' => $item['cantidad'],
-                    'precio' => $item['precio'],
+                $datos = session('checkout.datos', []);
+                if (empty($datos)) {
+                    return redirect()->route('pedido.datos');
+                }
+
+                $entrega = session('checkout.entrega', []);
+                return view('web.entrega_pedido', compact('carrito', 'datos', 'entrega'));
+            }
+
+            public function entregaGuardar(Request $request)
+            {
+                $validated = $request->validate([
+                    'direccion' => ['required', 'string', 'max:255'],
                 ]);
+                session(['checkout.entrega' => $validated]);
+                return redirect()->route('pedido.pago');
             }
 
-            session()->forget('carrito');
+            // Paso 3: Formulario de pago
+            public function pagoForm(Request $request)
+            {
+                $carrito = collect(session()->get('carrito', []))
+                    ->filter(function ($item) {
+                        return (int) ($item['cantidad'] ?? 0) > 0;
+                    })
+                    ->all();
 
-            DB::commit();
+                if (empty($carrito)) {
+                    return redirect()->route('carrito.mostrar')->with('error', 'No puedes acceder al formulario de pago sin artículos en el carrito.');
+                }
 
-            return redirect()
-                ->route('web.index')
-                ->with('success', 'Pedido confirmado con exito.')
-                ->with('mensaje', 'Tu pedido #' . $pedido->id . ' fue guardado y ya aparece en la seccion Mis pedidos.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            report($e);
+                $datos = session('checkout.datos', []);
+                $entrega = session('checkout.entrega', []);
+                if (empty($datos) || empty($entrega)) {
+                    return redirect()->route('pedido.datos');
+                }
 
-            $mensaje = app()->isLocal()
-                ? 'No se pudo completar la compra: ' . $e->getMessage()
-                : 'No se pudo completar la compra. Intenta nuevamente.';
+                $pago = session('checkout.pago', []);
+                return view('web.pago_pedido', compact('carrito', 'datos', 'entrega', 'pago'));
+            }
 
-            return redirect()->back()->withInput()->with('error', $mensaje);
-        }
-    }
+            public function pagoGuardar(Request $request)
+            {
+                $validated = $request->validate([
+                    'metodo_pago' => ['required', 'string', 'max:30'],
+                    'comprobante_pago' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+                    'requiere_factura_electronica' => ['nullable', 'boolean'],
+                    'tipo_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', Rule::in(['nit', 'cedula'])],
+                    'numero_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', 'string', 'max:40'],
+                    'razon_social' => ['required_if:requiere_factura_electronica,1', 'nullable', 'string', 'max:140'],
+                    'correo_factura' => ['required_if:requiere_factura_electronica,1', 'nullable', 'email', 'max:120'],
+                ]);
 
-    public function recibosFactura(Request $request)
-    {
-        $texto = trim((string) $request->input('texto'));
+                $rutaComprobante = null;
+                if ($request->hasFile('comprobante_pago')) {
+                    $rutaComprobante = $request->file('comprobante_pago')->store('comprobantes', 'public');
+                }
+                $validated['comprobante_pago'] = $rutaComprobante;
+                session(['checkout.pago' => $validated]);
 
-        $baseQuery = Pedido::where('user_id', auth()->id())
-            ->where('requiere_factura_electronica', true);
+                // Procesar el pedido completo
+                $carrito = session()->get('carrito', []);
+                $datos = session('checkout.datos', []);
+                $entrega = session('checkout.entrega', []);
+                $pago = session('checkout.pago', []);
 
-        $query = Pedido::with('detalles.producto')
-            ->where('user_id', auth()->id())
-            ->where('requiere_factura_electronica', true)
-            ->orderByDesc('id');
+                if (empty($carrito) || empty($datos) || empty($entrega) || empty($pago)) {
+                    return redirect()->route('pedido.datos')->with('error', 'Faltan datos para completar el pedido.');
+                }
 
-        if ($texto !== '') {
-            $query->where(function ($q) use ($texto) {
-                $q->where('id', 'like', "%{$texto}%")
-                    ->orWhere('numero_documento', 'like', "%{$texto}%")
-                    ->orWhere('razon_social', 'like', "%{$texto}%");
-            });
-        }
+                DB::beginTransaction();
+                try {
+                    $total = 0;
+                    foreach ($carrito as $item) {
+                        $total += $item['precio'] * $item['cantidad'];
+                    }
 
-        $registros = $query->paginate(10);
+                    $requiereFactura = $pago['requiere_factura_electronica'] ?? false;
 
-        $resumen = [
-            'totalRecibos' => (clone $baseQuery)->count(),
-            'montoFacturado' => (float) ((clone $baseQuery)->sum('total') ?? 0),
-        ];
+                    $pedido = Pedido::create([
+                        'user_id' => auth()->id(),
+                        'total' => $total,
+                        'estado' => 'pendiente',
+                        'nombre' => $datos['nombre'],
+                        'email' => $datos['email'],
+                        'telefono' => $datos['telefono'],
+                        'direccion' => $entrega['direccion'],
+                        'metodo_pago' => $pago['metodo_pago'],
+                        'comprobante_pago' => $pago['comprobante_pago'] ?? null,
+                        'requiere_factura_electronica' => $requiereFactura,
+                        'tipo_documento' => $requiereFactura ? ($pago['tipo_documento'] ?? null) : null,
+                        'numero_documento' => $requiereFactura ? ($pago['numero_documento'] ?? null) : null,
+                        'razon_social' => $requiereFactura ? ($pago['razon_social'] ?? null) : null,
+                        'correo_factura' => $requiereFactura ? ($pago['correo_factura'] ?? null) : null,
+                    ]);
 
-        return view('web.recibos_factura', [
-            'registros' => $registros,
-            'texto' => $texto,
-            'resumen' => $resumen,
-        ]);
-    }
+                    $subtotal = 0;
+                    $impuestos = 0;
+                    foreach ($carrito as $productoId => $item) {
+                        $productoExiste = Producto::whereKey($productoId)->exists();
+                        if (!$productoExiste) {
+                            throw new \RuntimeException('Uno de los productos del carrito ya no existe.');
+                        }
+                        PedidoDetalle::create([
+                            'pedido_id' => $pedido->id,
+                            'producto_id' => $productoId,
+                            'cantidad' => $item['cantidad'],
+                            'precio' => $item['precio'],
+                        ]);
+                        $subtotal += $item['precio'] * $item['cantidad'];
+                        // Si tienes lógica de impuestos por producto, cámbiala aquí
+                    }
+                    // Suponiendo impuestos fijos del 19% (ajusta según tu lógica real)
+                    $impuestos = round($subtotal * 0.19, 2);
+                    $totalFactura = $subtotal + $impuestos;
 
-    public function verReciboFactura($id)
-    {
-        $query = Pedido::with('detalles.producto')
-            ->where('id', $id)
-            ->where('requiere_factura_electronica', true);
+                    // Generar número de factura (puedes mejorar la lógica)
+                    $ultimoNumero = Factura::max('id') ?? 0;
+                    $numeroFactura = 'F' . str_pad($ultimoNumero + 1, 6, '0', STR_PAD_LEFT);
 
-        if (!auth()->user()->can('pedido-list')) {
-            $query->where('user_id', auth()->id());
-        }
+                    Factura::create([
+                        'pedido_id' => $pedido->id,
+                        'user_id' => $pedido->user_id,
+                        'numero_factura' => $numeroFactura,
+                        'fecha_emision' => now(),
+                        'estado_pedido' => $pedido->estado,
+                        'subtotal' => $subtotal,
+                        'impuestos' => $impuestos,
+                        'total' => $totalFactura,
+                        'cliente_nombre' => $pedido->nombre,
+                        'cliente_email' => $pedido->email,
+                        'cliente_direccion' => $pedido->direccion,
+                        'cliente_identificacion' => $pedido->numero_documento ?? $pedido->email,
+                    ]);
 
-        $pedido = $query->firstOrFail();
+                    // Limpiar sesión de checkout y carrito
+                    session()->forget(['carrito', 'checkout.datos', 'checkout.entrega', 'checkout.pago']);
 
-        return view('web.recibo_factura_detalle', compact('pedido'));
-    }
-
-    public function adminFacturasIndex(Request $request)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para gestionar facturas.');
-        }
-
-        $texto = trim((string) $request->input('texto'));
-
-        $query = Pedido::with('user')
-            ->where('requiere_factura_electronica', true)
-            ->orderByDesc('id');
-
-        if ($texto !== '') {
-            $query->where(function ($q) use ($texto) {
-                $q->where('id', 'like', "%{$texto}%")
-                    ->orWhere('numero_documento', 'like', "%{$texto}%")
-                    ->orWhere('razon_social', 'like', "%{$texto}%")
-                    ->orWhere('correo_factura', 'like', "%{$texto}%")
-                    ->orWhereHas('user', function ($u) use ($texto) {
-                        $u->where('name', 'like', "%{$texto}%")
-                            ->orWhere('email', 'like', "%{$texto}%");
-                    });
-            });
-        }
-
-        $registros = $query->paginate(12);
-
-        return view('admin.facturas.index', compact('registros', 'texto'));
-    }
-
-    public function adminFacturasCreate()
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para crear facturas.');
-        }
-
-        $usuarios = User::orderBy('name')->get([
-            'id',
-            'name',
-            'email',
-            'telefono',
-            'documento_identidad',
-            'direccion',
-        ]);
-
-        return view('admin.facturas.create', compact('usuarios'));
-    }
-
-    public function adminFacturasStore(Request $request)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para crear facturas.');
-        }
-
-        $datos = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-            'nombre' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:120'],
-            'telefono' => ['required', 'string', 'max:30'],
-            'direccion' => ['required', 'string', 'max:255'],
-            'metodo_pago' => ['required', 'string', 'max:30'],
-            'total' => ['required', 'numeric', 'min:0'],
-            'estado' => ['required', Rule::in(['pendiente', 'enviado', 'entregado', 'cancelado', 'anulado'])],
-            'tipo_documento' => ['required', Rule::in(['nit', 'cedula'])],
-            'numero_documento' => ['required', 'string', 'max:40'],
-            'razon_social' => ['required', 'string', 'max:140'],
-            'correo_factura' => ['required', 'email', 'max:120'],
-        ]);
-
-        Pedido::create([
-            'user_id' => $datos['user_id'],
-            'total' => $datos['total'],
-            'estado' => $datos['estado'],
-            'nombre' => $datos['nombre'],
-            'email' => $datos['email'],
-            'telefono' => $datos['telefono'],
-            'direccion' => $datos['direccion'],
-            'metodo_pago' => $datos['metodo_pago'],
-            'requiere_factura_electronica' => true,
-            'tipo_documento' => $datos['tipo_documento'],
-            'numero_documento' => $datos['numero_documento'],
-            'razon_social' => $datos['razon_social'],
-            'correo_factura' => $datos['correo_factura'],
-        ]);
-
-        return redirect()->route('admin.facturas.index')->with('mensaje', 'Factura creada correctamente.');
-    }
-
-    public function adminFacturasEdit($id)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para editar facturas.');
-        }
-
-        $registro = Pedido::where('requiere_factura_electronica', true)->findOrFail($id);
-        $usuarios = User::orderBy('name')->get(['id', 'name', 'email']);
-
-        return view('admin.facturas.edit', compact('registro', 'usuarios'));
-    }
-
-    public function adminFacturasUpdate(Request $request, $id)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para editar facturas.');
-        }
-
-        $registro = Pedido::where('requiere_factura_electronica', true)->findOrFail($id);
-
-        $datos = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-            'nombre' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:120'],
-            'telefono' => ['required', 'string', 'max:30'],
-            'direccion' => ['required', 'string', 'max:255'],
-            'metodo_pago' => ['required', 'string', 'max:30'],
-            'total' => ['required', 'numeric', 'min:0'],
-            'estado' => ['required', Rule::in(['pendiente', 'enviado', 'entregado', 'cancelado', 'anulado'])],
-            'tipo_documento' => ['required', Rule::in(['nit', 'cedula'])],
-            'numero_documento' => ['required', 'string', 'max:40'],
-            'razon_social' => ['required', 'string', 'max:140'],
-            'correo_factura' => ['required', 'email', 'max:120'],
-        ]);
-
-        $registro->update([
-            'user_id' => $datos['user_id'],
-            'total' => $datos['total'],
-            'estado' => $datos['estado'],
-            'nombre' => $datos['nombre'],
-            'email' => $datos['email'],
-            'telefono' => $datos['telefono'],
-            'direccion' => $datos['direccion'],
-            'metodo_pago' => $datos['metodo_pago'],
-            'requiere_factura_electronica' => true,
-            'tipo_documento' => $datos['tipo_documento'],
-            'numero_documento' => $datos['numero_documento'],
-            'razon_social' => $datos['razon_social'],
-            'correo_factura' => $datos['correo_factura'],
-        ]);
-
-        return redirect()->route('admin.facturas.index')->with('mensaje', 'Factura actualizada correctamente.');
-    }
-
-    public function adminFacturasDestroy($id)
-    {
-        if (!auth()->user()->can('pedido-list')) {
-            abort(403, 'No tienes permisos para eliminar facturas.');
-        }
-
-        $registro = Pedido::where('requiere_factura_electronica', true)->findOrFail($id);
-        $registro->delete();
-
-        return redirect()->route('admin.facturas.index')->with('mensaje', 'Factura eliminada correctamente.');
-    }
-
-    public function cambiarEstado(Request $request, $id)
-    {
-        $pedido = Pedido::findOrFail($id);
-        $estadoNuevo = $request->input('estado');
-
-        $estadosPermitidos = ['enviado', 'anulado', 'cancelado'];
-
-        if (!in_array($estadoNuevo, $estadosPermitidos)) {
-            abort(403, 'Estado no válido');
-        }
-
-        if (in_array($estadoNuevo, ['enviado', 'anulado'])) {
-            if (!auth()->user()->can('pedido-anulate')) {
-                abort(403, 'No tiene permiso para cambiar a "enviado" o "anulado"');
+                    DB::commit();
+                    return redirect()->route('web.index')->with('success', 'Pedido confirmado con éxito.')->with('mensaje', 'Tu pedido #' . $pedido->id . ' fue guardado y ya aparece en la sección Mis pedidos.');
+                } catch (\Throwable $e) {
+                    DB::rollBack();
+                    report($e);
+                    $mensaje = app()->isLocal() ? 'No se pudo completar la compra: ' . $e->getMessage() : 'No se pudo completar la compra. Intenta nuevamente.';
+                    return redirect()->back()->withInput()->with('error', $mensaje);
+                }
             }
         }
-
-        if ($estadoNuevo === 'cancelado') {
-            if (!auth()->user()->can('pedido-cancel')) {
-                abort(403, 'No tiene permiso para cancelar pedidos');
-            }
-        }
-
-        $pedido->estado = $estadoNuevo;
-        $pedido->save();
-
-        return redirect()->back()->with('mensaje', 'El estado del pedido fue actualizado a "' . ucfirst($estadoNuevo) . '"');
-    }
-}

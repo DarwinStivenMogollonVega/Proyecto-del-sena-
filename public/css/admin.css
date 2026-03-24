@@ -1,0 +1,209 @@
+/* Modal de eliminación de artista: vista completa y destacada */
+#modal-eliminar-artista .modal-dialog {
+    max-width: 540px;
+    width: 95vw;
+    margin: 2.5rem auto;
+}
+#modal-eliminar-artista .modal-content {
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    padding: 2.2rem 2.2rem 1.5rem 2.2rem;
+}
+#modal-eliminar-artista .modal-title {
+    color: #b91c1c;
+    font-size: 2rem;
+    font-weight: bold;
+}
+#modal-eliminar-artista .modal-body {
+    font-size: 1.13rem;
+}
+#modal-eliminar-artista .alert-warning {
+    font-size: 1em;
+    margin-bottom: 1.5rem;
+}
+#modal-eliminar-artista .btn {
+    font-size: 1.1rem;
+    border-radius: .6rem;
+    padding: 0.7rem 2.2rem;
+}
+.modal .btn-danger, .modal .btn-secondary, .modal .btn {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+/* Forzar visibilidad de botones en modales de confirmación */
+.modal .btn-danger, .modal .btn-secondary, .modal .btn {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+/* Oculta forzadamente el backdrop de Bootstrap para evitar bloqueo visual */
+.modal-backdrop { display: none !important; }
+/* Fix Bootstrap modal always on top and interactive */
+.modal.show {
+    z-index: 1060 !important;
+}
+.modal.show .modal-dialog,
+.modal.show .modal-content {
+    pointer-events: auto !important;
+}
+/* === Estilo visual moderno para tabla de facturas (panel admin) === */
+.dz-admin-table-card {
+    border-radius: 1.1rem;
+    background: #181f2a;
+    border: 1px solid #232a3b;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+}
+.dz-admin-table-card .card-header {
+    background: transparent;
+    border-bottom: none;
+    padding: 1.3rem 1.7rem 0.7rem 1.7rem;
+}
+.dz-admin-table-card .form-control {
+    background: #232a3b;
+    color: #fff;
+    border: 1px solid #313a4d;
+    min-width: 260px;
+    border-radius: .7rem;
+    padding: 1rem 1.2rem;
+    box-shadow: none;
+}
+.dz-admin-table-card .btn-secondary {
+    border-radius: .5rem;
+    padding: .6rem 1.3rem;
+    font-weight: 500;
+    background: #6c757d;
+    color: #fff;
+    border: none;
+}
+.dz-admin-table-card .btn-primary {
+    border-radius: .5rem;
+    padding: .6rem 1.3rem;
+    font-weight: 500;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+}
+.dz-admin-table-card .table {
+    font-size: 1rem;
+    background: transparent;
+    color: #fff;
+}
+.dz-admin-table-card .table th, .dz-admin-table-card .table td {
+    border-color: #232a3b;
+}
+.dz-admin-table-card .badge {
+    background: #6d4b1b;
+    color: #ffbe5b;
+    font-weight: 600;
+    font-size: .97em;
+    padding: .48em 1.1em;
+    box-shadow: 0 1px 4px #0001;
+    border-radius: 0.7em;
+}
+.dz-admin-table-card .btn-outline-primary {
+    color: #2563eb;
+    border: 1.5px solid #2563eb;
+    background: transparent;
+    border-radius: .5rem;
+    font-weight: 500;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.dz-admin-table-card .btn-outline-primary:hover {
+    background: #2563eb;
+    color: #fff;
+}
+@media (max-width: 991.98px) {
+    .dz-admin-table-card .form-control {
+        min-width: 120px;
+        padding: 0.7rem 0.8rem;
+    }
+    .dz-admin-table-card .card-header {
+        padding: 1rem 0.7rem 0.5rem 0.7rem;
+    }
+}
+html[data-theme='dark'] .dz-admin-table-card {
+    background: #181f2a;
+    border-color: #232a3b;
+}
+html[data-theme='dark'] .dz-admin-table-card .form-control {
+    background: #232a3b;
+    color: #fff;
+    border-color: #313a4d;
+}
+html[data-theme='dark'] .dz-admin-table-card .table {
+    color: #fff;
+}
+/* Sidebar y submenús admin visual igual a capturas */
+.dz-admin-sidebar .nav-treeview {
+    background: #232a3b;
+    border-radius: 0.8rem;
+    margin: 0.25rem 0.2rem 0.5rem 0.7rem;
+    padding: 0.4rem 0.2rem 0.5rem 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.dz-admin-sidebar .nav-treeview .nav-item {
+    margin-bottom: 0.3rem;
+}
+.dz-admin-sidebar .nav-treeview .nav-link {
+    background: #232a3b;
+    border-radius: 0.7rem;
+    margin-bottom: 0.2rem;
+    padding: 0.65rem 1.1rem;
+    color: #e3e8f7;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition: background 0.15s, color 0.15s;
+}
+.dz-admin-sidebar .nav-treeview .nav-link.active, 
+.dz-admin-sidebar .nav-treeview .nav-link:focus, 
+.dz-admin-sidebar .nav-treeview .nav-link:hover {
+    background: #2d3650;
+    color: #fff;
+}
+.dz-admin-sidebar .nav-treeview .nav-icon {
+    font-size: 1.15rem;
+    margin-right: 0.5rem;
+    color: #a6b1d6;
+}
+.dz-admin-sidebar .nav-treeview .nav-link.active .nav-icon,
+.dz-admin-sidebar .nav-treeview .nav-link:focus .nav-icon,
+.dz-admin-sidebar .nav-treeview .nav-link:hover .nav-icon {
+    color: #fff;
+}
+.dz-admin-sidebar .nav-header {
+    color: #8a97b8;
+    font-size: 0.93rem;
+    font-weight: 700;
+    margin: 1.1rem 0 0.4rem 0.7rem;
+    letter-spacing: 0.03em;
+}
+.dz-admin-sidebar .nav-link {
+    border-radius: 0.7rem;
+    margin-bottom: 0.2rem;
+    padding: 0.7rem 1.1rem;
+    color: #e3e8f7;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition: background 0.15s, color 0.15s;
+}
+.dz-admin-sidebar .nav-link.active, 
+.dz-admin-sidebar .nav-link:focus, 
+.dz-admin-sidebar .nav-link:hover {
+    background: #2d3650;
+    color: #fff;
+}
+.dz-admin-sidebar .nav-icon {
+    font-size: 1.18rem;
+    margin-right: 0.5rem;
+    color: #a6b1d6;
+}
+.dz-admin-sidebar .nav-link.active .nav-icon,
+.dz-admin-sidebar .nav-link:focus .nav-icon,
+.dz-admin-sidebar .nav-link:hover .nav-icon {
+    color: #fff;
+}

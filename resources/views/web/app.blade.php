@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="{{ asset('css/index-section.css') }}">
 
     @stack('estilos')
+    <link rel="stylesheet" href="{{ asset('css/nav-fix.css') }}">
 </head>
 <body>
     @include('web.partials.nav')
@@ -34,7 +35,7 @@
         @include('web.partials.header')
     @endif
 
-    <main class="dz-main-content">
+    <main class="dz-main-content" style="padding-top:0; margin-top:0;">
         @yield('contenido')
     </main>
 

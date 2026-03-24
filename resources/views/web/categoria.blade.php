@@ -28,36 +28,36 @@
     </section>
     <!-- Separador visual -->
     <hr class="d-none d-md-block mb-4">
-</div>
 
-<form method="GET" action="{{ route('web.categoria.show', $categoria->id) }}">
-    <div class="container px-4 px-lg-5 mt-4">
-        <div class="categoria-filter p-3 p-md-4">
-            <div class="row">
-                <div class="col-12 col-md-8 mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="searchInput" placeholder="Buscar productos..."
-                            aria-label="Buscar productos" name="search" value="{{ request('search') }}">
-                        <button class="btn btn-outline-dark" type="submit" id="searchButton">
-                            <i class="bi bi-search"></i> Buscar
-                        </button>
-                    </div>
+    <div class="row g-3 mt-2 mb-4">
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $productos->count() }}</strong><span>Productos</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $productos->where('cantidad', '>', 0)->count() }}</strong><span>Disponibles</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>1</strong><span>Categoría</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $productos->unique('catalogo_id')->count() }}</strong><span>Catálogos</span></div></div>
+    </div>
+
+    <form method="GET" action="{{ route('web.categoria.show', $categoria->id) }}" class="search-panel p-3 p-md-4 mt-4">
+        <div class="row align-items-end g-3">
+            <div class="col-md-8">
+                <label class="form-label fw-semibold" for="searchInput">Buscar por nombre</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Ejemplo: Rock Clasico" name="search" value="{{ request('search') }}">
                 </div>
-
-                <div class="col-12 col-md-4 mb-3">
-                    <div class="input-group">
-                        <label class="input-group-text" for="sortSelect">Ordenar por:</label>
-                        <select class="form-select" id="sortSelect" name="sort" onchange="this.form.submit()">
-                            <option value="">Seleccionar...</option>
-                            <option value="priceAsc" {{ request('sort') == 'priceAsc' ? 'selected' : '' }}>Precio: menor a mayor</option>
-                            <option value="priceDesc" {{ request('sort') == 'priceDesc' ? 'selected' : '' }}>Precio: mayor a menor</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold" for="sortSelect">Ordenar resultados</label>
+                <div class="input-group">
+                    <select class="form-select" id="sortSelect" name="sort" onchange="this.form.submit()">
+                        <option value="">Orden predeterminado</option>
+                        <option value="priceAsc" {{ request('sort') == 'priceAsc' ? 'selected' : '' }}>Precio: menor a mayor</option>
+                        <option value="priceDesc" {{ request('sort') == 'priceDesc' ? 'selected' : '' }}>Precio: mayor a menor</option>
+                    </select>
+                    <button class="btn btn-dark" type="submit">Aplicar</button>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4 categoria-title">Productos de {{ $categoria->nombre }}</h2>

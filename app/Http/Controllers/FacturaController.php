@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Factura;
@@ -10,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class FacturaController extends Controller
 {
+    /**
+     * Muestra el formulario de edición de una factura en el panel admin
+     */
+    public function adminEdit($id)
+    {
+        $registro = \App\Models\Factura::with('user')->findOrFail($id);
+        $usuarios = \App\Models\User::all();
+        return view('admin.facturas.edit', compact('registro', 'usuarios'));
+    }
     public function index(Request $request)
     {
         $texto = trim((string) $request->input('texto'));
@@ -120,5 +128,27 @@ class FacturaController extends Controller
 
             return $factura->fresh(['pedido.detalles.producto', 'pedido.user']);
         });
+    }
+
+    /**
+     * Vista de administración de facturas con estilo panel admin
+     */
+    public function adminFacturasIndex(Request $request)
+    {
+        $texto = trim((string) $request->input('texto'));
+        $query = Factura::with('user')->orderByDesc('id');
+        if ($texto !== '') {
+            $query->where(function ($q) use ($texto) {
+                $q->where('id', 'like', "%{$texto}%")
+                    ->orWhere('razon_social', 'like', "%{$texto}%")
+                    ->orWhere('correo_factura', 'like', "%{$texto}%")
+                    ->orWhere('numero_documento', 'like', "%{$texto}%")
+                    ->orWhere('nombre', 'like', "%{$texto}%")
+                    ->orWhere('email', 'like', "%{$texto}%")
+                    ->orWhere('estado', 'like', "%{$texto}%");
+            });
+        }
+        $registros = $query->paginate(15)->withQueryString();
+        return view('admin.facturas.index', compact('registros', 'texto'));
     }
 }

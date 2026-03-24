@@ -4,6 +4,7 @@
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/perfil-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
 @section('contenido')
@@ -15,7 +16,7 @@
                 <p class="mb-0 text-white-50">Gestiona tus datos personales y seguridad de acceso desde una vista individual para tu cuenta.</p>
             </div>
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                <a href="{{ route('cliente.dashboard') }}" class="btn btn-light"><i class="bi bi-bar-chart-line me-1"></i> Mi dashboard</a>
+                <a href="{{ route('dashboard') }}" class="btn btn-light"><i class="bi bi-bar-chart-line me-1"></i> dashboard</a>
             </div>
         </div>
     </section>
