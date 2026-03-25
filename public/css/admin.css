@@ -1,4 +1,7 @@
-/* Modal de eliminación de artista: vista completa y destacada */
+
+/* =========================
+     MODAL DE ELIMINACIÓN ARTISTA
+     ========================= */
 #modal-eliminar-artista .modal-dialog {
     max-width: 540px;
     width: 95vw;
@@ -31,15 +34,9 @@
     visibility: visible !important;
     opacity: 1 !important;
 }
-/* Forzar visibilidad de botones en modales de confirmación */
-.modal .btn-danger, .modal .btn-secondary, .modal .btn {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+.modal-backdrop {
+    display: none !important;
 }
-/* Oculta forzadamente el backdrop de Bootstrap para evitar bloqueo visual */
-.modal-backdrop { display: none !important; }
-/* Fix Bootstrap modal always on top and interactive */
 .modal.show {
     z-index: 1060 !important;
 }
@@ -47,7 +44,10 @@
 .modal.show .modal-content {
     pointer-events: auto !important;
 }
-/* === Estilo visual moderno para tabla de facturas (panel admin) === */
+
+/* =========================
+     TABLA DE FACTURAS (ADMIN)
+     ========================= */
 .dz-admin-table-card {
     border-radius: 1.1rem;
     background: #181f2a;
@@ -134,7 +134,10 @@ html[data-theme='dark'] .dz-admin-table-card .form-control {
 html[data-theme='dark'] .dz-admin-table-card .table {
     color: #fff;
 }
-/* Sidebar y submenús admin visual igual a capturas */
+
+/* =========================
+     SIDEBAR Y SUBMENÚS ADMIN
+     ========================= */
 .dz-admin-sidebar .nav-treeview {
     background: #232a3b;
     border-radius: 0.8rem;
@@ -157,8 +160,8 @@ html[data-theme='dark'] .dz-admin-table-card .table {
     gap: 0.7rem;
     transition: background 0.15s, color 0.15s;
 }
-.dz-admin-sidebar .nav-treeview .nav-link.active, 
-.dz-admin-sidebar .nav-treeview .nav-link:focus, 
+.dz-admin-sidebar .nav-treeview .nav-link.active,
+.dz-admin-sidebar .nav-treeview .nav-link:focus,
 .dz-admin-sidebar .nav-treeview .nav-link:hover {
     background: #2d3650;
     color: #fff;
@@ -191,8 +194,8 @@ html[data-theme='dark'] .dz-admin-table-card .table {
     gap: 0.7rem;
     transition: background 0.15s, color 0.15s;
 }
-.dz-admin-sidebar .nav-link.active, 
-.dz-admin-sidebar .nav-link:focus, 
+.dz-admin-sidebar .nav-link.active,
+.dz-admin-sidebar .nav-link:focus,
 .dz-admin-sidebar .nav-link:hover {
     background: #2d3650;
     color: #fff;

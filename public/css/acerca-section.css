@@ -1,4 +1,90 @@
-/* acerca-section.css: Estilos personalizados para la vista Acerca */
+/* acerca-section.css: Estilos personalizados para la vista Acerca con soporte de temas */
+
+/* =====================
+     Variables de color base para la sección Acerca
+     ===================== */
+:root {
+    /* Colores por defecto (root) */
+    --acerca-text-main: #2d2d2d;
+    --acerca-text-heading: #7c2d12;
+    --acerca-text-subtle: #475569;
+    --acerca-text-highlight: #b45309;
+    --acerca-bg-card: #fff8f3;
+    --acerca-bg-block: #f3e9e0;
+}
+
+html[data-theme='dark'], .dark {
+    --acerca-text-main: #f3e9e0;
+    --acerca-text-heading: #fbbf24;
+    --acerca-text-subtle: #cbd5e1;
+    --acerca-text-highlight: #f59e0b;
+    --acerca-bg-card: #23272e;
+    --acerca-bg-block: #18181b;
+}
+
+html[data-theme='light'], .light {
+    --acerca-text-main: #23272e;
+    --acerca-text-heading: #b45309;
+    --acerca-text-subtle: #475569;
+    --acerca-text-highlight: #b45309;
+    --acerca-bg-card: #fff8f3;
+    --acerca-bg-block: #f3e9e0;
+}
+
+/* =====================
+     Estilos de texto para la sección Acerca
+     ===================== */
+.about-hero,
+.about-hero h1,
+.about-hero p,
+.about-card,
+.about-card h5,
+.about-card p,
+.about-block,
+.about-block h4,
+.about-block p,
+.about-highlight {
+    color: var(--acerca-text-main);
+}
+.about-hero h1,
+.about-card h5,
+.about-block h4 {
+    color: var(--acerca-text-heading);
+}
+.about-card p,
+.about-block p {
+    color: var(--acerca-text-subtle);
+}
+.about-highlight {
+    color: var(--acerca-text-highlight);
+    background: rgba(245, 158, 11, 0.13);
+}
+
+/* Fondos adaptados por tema */
+.about-card {
+    background: var(--acerca-bg-card);
+}
+.about-block {
+    background: var(--acerca-bg-block);
+}
+
+/* Ajuste para contraste en dark mode */
+html[data-theme='dark'] .about-card, .dark .about-card {
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+    border: 1px solid #3a2415;
+}
+html[data-theme='dark'] .about-block, .dark .about-block {
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+}
+
+/* Ajuste para contraste en light mode */
+html[data-theme='light'] .about-card, .light .about-card {
+    border: 1px solid #e5e7eb;
+}
+
+/* =====================
+     Fin sistema de temas para Acerca
+     ===================== */
 /* Estilos de logos importados del index-section.css */
 .store-hero-brand {
     display: flex;

@@ -1,3 +1,38 @@
+/* =====================
+     Variables de color base para texto accesible (nav)
+     ===================== */
+:root {
+    --dz-text-main: #2d2d2d;
+    --dz-text-heading: #7c2d12;
+    --dz-text-subtle: #475569;
+}
+html[data-theme='dark'], .dark {
+    --dz-text-main: #f3e9e0;
+    --dz-text-heading: #fbbf24;
+    --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+    --dz-text-main: #23272e;
+    --dz-text-heading: #b45309;
+    --dz-text-subtle: #475569;
+}
+
+/* =====================
+     Estilos de texto accesible para nav
+     ===================== */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn,
+.navbar .cart-cta-btn {
+    color: var(--dz-text-main) !important;
+}
+.navbar .nav-link.active,
+.navbar .nav-cta-btn.active {
+    color: var(--dz-text-heading) !important;
+}
+/* =====================
+     Fin sistema de temas para nav
+     ===================== */
 /* Unificar color de íconos y texto de botones de carrito y oscuro con el navbar */
 /* --- NUEVO ESTILO NAVBAR CLARO Y OSCURO --- */
 .navbar .nav-link,

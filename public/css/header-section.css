@@ -1,36 +1,79 @@
-/* Tamaño de logos en header */
-.logo-dis-music {
-    width: 434px;
-    min-width: 233px;
-    max-width: 650px;
-    height: auto;
-    object-fit: contain;
+/* =====================
+   Variables de color base para texto accesible (header)
+   ===================== */
+:root {
+  --dz-text-main: #2d2d2d;
+  --dz-text-heading: #7c2d12;
+  --dz-text-subtle: #475569;
 }
-@media (max-width: 600px) {
-    .logo-dis-music {
-        width: 278px;
-        min-width: 137px;
-    }
+html[data-theme='dark'], .dark {
+  --dz-text-main: #f3e9e0;
+  --dz-text-heading: #fbbf24;
+  --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+  --dz-text-main: #23272e;
+  --dz-text-heading: #b45309;
+  --dz-text-subtle: #475569;
 }
 
-/* Visibilidad según modo */
+/* =====================
+   Estilos de texto accesible para header
+   ===================== */
+.dz-header-title {
+  color: var(--dz-text-heading);
+}
+/* =====================
+   Fin sistema de temas para header
+   ===================== */
+/* =============================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL HEADER
+   ============================================= */
+:root {
+  --dz-logo-width: 434px;
+  --dz-logo-min-width: 233px;
+  --dz-logo-max-width: 650px;
+  --dz-logo-width-mobile: 278px;
+  --dz-logo-min-width-mobile: 137px;
+}
+
+/* =============================================
+   LOGO HEADER: TAMAÑO Y RESPONSIVIDAD
+   ============================================= */
+.logo-dis-music {
+  width: var(--dz-logo-width);
+  min-width: var(--dz-logo-min-width);
+  max-width: var(--dz-logo-max-width);
+  height: auto;
+  object-fit: contain;
+}
+@media (max-width: 600px) {
+  .logo-dis-music {
+    width: var(--dz-logo-width-mobile);
+    min-width: var(--dz-logo-min-width-mobile);
+  }
+}
+
+/* =============================================
+   VISIBILIDAD SEGÚN MODO (CLARO/OSCURO)
+   ============================================= */
 .logo-dis-music.light { display: block !important; }
 .logo-dis-music.dark { display: none !important; }
 html[data-theme='dark'] .logo-dis-music.light { display: none !important; }
 html[data-theme='dark'] .logo-dis-music.dark { display: block !important; }
 
-/* Centrar logo del header */
-.dz-header-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* =============================================
+   CENTRADO DE LOGO Y TÍTULO EN HEADER
+   ============================================= */
+.dz-header-logo,
+.dz-header-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dz-header-title {
+  text-align: center;
+  width: 100%;
 }
 
-/* Centrar el texto del título junto al logo */
-.dz-header-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-}
+/* Fin de archivo optimizado */

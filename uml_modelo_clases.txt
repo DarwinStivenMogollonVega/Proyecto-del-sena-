@@ -1,0 +1,44 @@
+
+UML - Modelo de Clases (Formato Texto, según diagrama)
+
+Entidades principales y relaciones:
+
+- **Usuario**
+	- Puede tener uno o varios **Roles** (N:M)
+	- Puede tener uno o varios **Permisos** (N:M, a través de roles o directos)
+	- Puede realizar uno o varios **Trabajos en Cola** (1:N)
+	- Puede registrar **Modelos** (1:N)
+	- Puede tener **Tokens de Restablecimiento de Contraseña** (1:N)
+
+- **Rol**
+	- Puede tener uno o varios **Permisos** (N:M)
+	- Se asigna a uno o varios **Usuarios** (N:M)
+
+- **Permiso**
+	- Se asigna a uno o varios **Roles** (N:M)
+	- Se asigna a uno o varios **Usuarios** (N:M)
+
+- **Trabajos en Cola**
+	- Relacionados con **Usuarios** (1:N)
+	- Pueden registrar **Trabajos Fallidos**
+
+- **Modelos**
+	- Registrados por **Usuarios** (1:N)
+	- Pueden tener **Permisos** (N:M)
+	- Incluyen subtipos: **Modelos Biblioteca**, **Modelos Talleres**
+
+- **Ingresos Talleres**
+	- Relacionados con **Modelos Talleres** (1:N)
+	- Relacionados con **Sesiones** (1:N)
+
+- **Sesiones**
+	- Relacionadas con **Ingresos Talleres** (N:1)
+
+- **Caché del Sistema**, **Bloqueos Cache**, **Migraciones**
+	- Entidades técnicas relacionadas con la infraestructura y el estado del sistema.
+
+Notas:
+- Las relaciones N:M indican tablas intermedias (pivot) para roles, permisos y modelos.
+- El sistema gestiona trabajos en cola y fallidos para tareas asíncronas.
+- Los modelos pueden representar diferentes dominios (biblioteca, talleres).
+- El usuario es el eje central de autenticación, permisos y operaciones.

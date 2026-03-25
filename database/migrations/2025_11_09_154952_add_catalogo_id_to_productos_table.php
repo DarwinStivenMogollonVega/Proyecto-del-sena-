@@ -9,9 +9,9 @@
         public function up(): void
         {
             Schema::table('productos', function (Blueprint $table) {
-                $table->foreignId('catalogo_id')      
+                $table->foreignId('catalogo_id')
                     ->nullable()
-                    ->constrained('catalogos')     
+                    ->constrained('catalogos')
                     ->onDelete('set null');
             });
         }
@@ -19,8 +19,8 @@
         public function down(): void
         {
             Schema::table('productos', function (Blueprint $table) {
-                $table->dropForeign(['catalogo_id']); 
-                $table->dropColumn('catalogo_id');   
+                $table->dropForeign(['catalogo_id']);
+                $table->dropColumn('catalogo_id');
             });
         }
     };

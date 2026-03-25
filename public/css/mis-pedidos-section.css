@@ -1,3 +1,39 @@
+/* =====================
+     Variables de color base para texto accesible (mis pedidos)
+     ===================== */
+:root {
+    --dz-text-main: #2d2d2d;
+    --dz-text-heading: #7c2d12;
+    --dz-text-subtle: #475569;
+}
+html[data-theme='dark'], .dark {
+    --dz-text-main: #f3e9e0;
+    --dz-text-heading: #fbbf24;
+    --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+    --dz-text-main: #23272e;
+    --dz-text-heading: #b45309;
+    --dz-text-subtle: #475569;
+}
+
+/* =====================
+     Estilos de texto accesible para mis pedidos
+     ===================== */
+.orders-hero,
+.orders-hero h1,
+.orders-hero .subtitle {
+    color: var(--dz-text-main);
+}
+.orders-hero h1 {
+    color: var(--dz-text-heading);
+}
+.orders-hero .subtitle {
+    color: var(--dz-text-subtle);
+}
+/* =====================
+     Fin sistema de temas para mis pedidos
+     ===================== */
 /* mis-pedidos-section.css: Migración de estilos desde mis_pedidos.blade.php */
 
 .orders-page {

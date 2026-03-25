@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('producto_resenas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('resenas_producto', function (Blueprint $table) {
+            $table->id('resena_producto_id');
             $table->foreignId('producto_id')->constrained('productos')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('usuario_id')->constrained('usuarios')->cascadeOnDelete();
             $table->unsignedTinyInteger('puntuacion');
             $table->text('comentario')->nullable();
             $table->timestamps();
 
-            $table->unique(['producto_id', 'user_id']);
+            $table->unique(['producto_id', 'usuario_id']);
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('producto_resenas');
+        Schema::dropIfExists('resenas_producto');
     }
 };

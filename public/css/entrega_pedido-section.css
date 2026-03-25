@@ -1,63 +1,105 @@
-/* Estilos para el stepper y fondo en la vista de entrega */
-/* Fondo semitransparente para mejor contraste */
-.checkout-steps-bg {
-    background: rgba(30, 30, 30, 0.7); /* por defecto oscuro, override abajo */
-    padding: 2.2rem 0 1.7rem 0;
-    border-radius: 1.5rem;
-    margin-bottom: 2.5rem;
-    transition: background 0.2s;
+/* =====================================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL ENTREGA PEDIDO
+   ===================================================== */
+
+/* =====================
+   Variables de color base para texto accesible (entrega pedido)
+   ===================== */
+:root {
+  --dz-text-main: #2d2d2d;
+  --dz-text-heading: #7c2d12;
+  --dz-text-subtle: #475569;
 }
-html[data-theme='light'] .checkout-steps-bg {
-    background: rgba(255, 255, 255, 0.7);
+html[data-theme='dark'], .dark {
+  --dz-text-main: #f3e9e0;
+  --dz-text-heading: #fbbf24;
+  --dz-text-subtle: #cbd5e1;
 }
-html[data-theme='dark'] .checkout-steps-bg {
-    background: rgba(30, 30, 30, 0.7);
+html[data-theme='light'], .light {
+  --dz-text-main: #23272e;
+  --dz-text-heading: #b45309;
+  --dz-text-subtle: #475569;
 }
 
+/* =====================
+   Estilos de texto accesible para entrega pedido
+   ===================== */
+.checkout-steps-bg,
+.stepper-label {
+  color: var(--dz-text-main);
+}
+.stepper-label.active {
+  color: var(--dz-text-heading);
+}
+.stepper-label.completed {
+  color: var(--dz-text-subtle);
+}
+/* =====================
+   Fin sistema de temas para entrega pedido
+   ===================== */
+
+/* =====================================================
+   STEPPER Y FONDO
+   ===================================================== */
+.checkout-steps-bg {
+  background: var(--dz-stepper-bg-light);
+  padding: var(--dz-stepper-padding);
+  border-radius: var(--dz-stepper-radius);
+  margin-bottom: var(--dz-stepper-margin);
+  transition: background 0.2s;
+}
+html[data-theme='dark'] .checkout-steps-bg {
+  background: var(--dz-stepper-bg-dark);
+}
 
 .checkout-steps { gap: 0.5rem; }
 .stepper-item { min-width: 80px; }
 .stepper-circle {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    color: #7c9a3c;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    margin: 0 auto;
-    border: 2px solid #e5e7eb;
-    transition: background 0.2s, border 0.2s;
+  width: var(--dz-stepper-circle-size);
+  height: var(--dz-stepper-circle-size);
+  border-radius: 50%;
+  background: var(--dz-stepper-circle-bg);
+  color: var(--dz-stepper-circle-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin: 0 auto;
+  border: 2px solid var(--dz-stepper-circle-bg);
+  transition: background 0.2s, border 0.2s;
 }
 .stepper-circle.active {
-    background: #7c9a3c;
-    color: #fff;
-    border-color: #7c9a3c;
+  background: var(--dz-stepper-circle-active-bg);
+  color: var(--dz-stepper-circle-active-color);
+  border-color: var(--dz-stepper-circle-active-bg);
 }
 .stepper-circle.completed {
-    background: #b6d7a8;
-    color: #7c9a3c;
-    border-color: #b6d7a8;
+  background: var(--dz-stepper-circle-completed-bg);
+  color: var(--dz-stepper-circle-color);
+  border-color: var(--dz-stepper-circle-completed-bg);
 }
 .stepper-label {
-    font-size: 0.98rem;
-    color: #888;
-    font-weight: 500;
+  font-size: 0.98rem;
+  color: var(--dz-stepper-label-color);
+  font-weight: 500;
 }
 .stepper-label.active {
-    color: #7c9a3c;
-    font-weight: 700;
+  color: var(--dz-stepper-label-active);
+  font-weight: 700;
 }
 .stepper-label.completed {
-    color: #7c9a3c;
+  color: var(--dz-stepper-label-completed);
 }
 .stepper-line {
-    height: 4px;
-    background: #e5e7eb;
-    border-radius: 2px;
-    min-width: 32px;
-    margin: 0 2px;
-    transition: background 0.2s;
+  height: 4px;
+  background: var(--dz-stepper-line-bg);
+  border-radius: 2px;
+  min-width: 32px;
+  margin: 0 2px;
+  transition: background 0.2s;
 }
 .stepper-line.completed {
-    background: #7c9a3c;
+  background: var(--dz-stepper-line-completed);
 }
+
+/* Fin de archivo optimizado */

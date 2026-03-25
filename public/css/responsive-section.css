@@ -1,3 +1,39 @@
+/* =====================
+   Variables de color base para texto accesible (responsive)
+   ===================== */
+:root {
+  --dz-text-main: #2d2d2d;
+  --dz-text-heading: #7c2d12;
+  --dz-text-subtle: #475569;
+}
+html[data-theme='dark'], .dark {
+  --dz-text-main: #f3e9e0;
+  --dz-text-heading: #fbbf24;
+  --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+  --dz-text-main: #23272e;
+  --dz-text-heading: #b45309;
+  --dz-text-subtle: #475569;
+}
+
+/* =====================
+   Estilos de texto accesible para responsive
+   ===================== */
+.responsive-hero,
+.responsive-hero h1,
+.responsive-hero .subtitle {
+  color: var(--dz-text-main);
+}
+.responsive-hero h1 {
+  color: var(--dz-text-heading);
+}
+.responsive-hero .subtitle {
+  color: var(--dz-text-subtle);
+}
+/* =====================
+   Fin sistema de temas para responsive
+   ===================== */
 /* === Tarjetas de producto modernas (catálogo y categoría) === */
 .dz-product-card {
   border-radius: 1.2rem;
@@ -90,16 +126,20 @@ html[data-theme='dark'] .dz-product-btn:hover {
 }
 /* Checkout stepper pegado al nav, fondo uniforme y sin espacios extra */
 .checkout-steps-bg {
-    background: linear-gradient(90deg, #fff7ed 0%, #f3e3d1 100%);
-    padding: 2.2rem 0 1.7rem 0;
-    border-radius: 1.5rem;
-    margin-bottom: 2.5rem;
-    transition: background 0.2s;
+  background: linear-gradient(90deg, #fff7ed 0%, #f3e3d1 100%);
+  padding: 2.2rem 0 1.7rem 0;
+  border-radius: 1.5rem;
+  margin-bottom: 2.5rem;
+  transition: background 0.2s;
 }
 html[data-theme='dark'] .checkout-steps-bg {
     background: linear-gradient(90deg, #232c3b 0%, #3d1e0a 100%);
 }
 @media (max-width: 991.98px) {
+  .dz-product-img { height: 180px; }
+  .dz-product-card { min-height: 340px; }
+  .dz-product-img { height: 180px; }
+  .dz-product-card { min-height: 340px; }
   .checkout-steps-bg {
     padding-top: 0.4rem !important;
     padding-bottom: 0.2rem !important;
@@ -238,8 +278,8 @@ html[data-theme='dark'] .logo-dark {
   .navbar-toggler { display: none; }
   .navbar-nav { flex-direction: row; gap: 1.5rem; }
   .nav-link, .btn { font-size: 1.15rem; padding: 0.9rem 1.5rem; }
-  .row { display: flex; flex-wrap: wrap; gap: 2rem; }
-  .col-md-4 { flex: 1 1 30%; max-width: 32%; min-width: 250px; }
+.row { display: flex; flex-wrap: wrap; gap: 2rem; }
+.col-md-4 { flex: 1 1 30%; max-width: 32%; min-width: 250px; }
   .navbar-collapse { text-align: left; }
   .navbar-toggler { display: block; }
   .navbar-nav { flex-direction: column; }

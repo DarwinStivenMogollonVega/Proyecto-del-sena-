@@ -3,68 +3,76 @@
 Este proyecto está basado en Laravel y utiliza tecnologías modernas para el desarrollo web. A continuación se listan los requerimientos principales para instalar y ejecutar el proyecto correctamente.
 
 ## Requisitos del sistema
-- **PHP**: ^8.2
-- **Node.js**: Recomendado v18+ (para Vite y Tailwind)
-- **Composer**: Última versión
-- **NPM**: Última versión
-- **Extensiones PHP**: openssl, pdo, mbstring, tokenizer, xml, ctype, json, bcmath, fileinfo
-- **Base de datos**: MySQL, MariaDB, SQLite o compatible
 
-## Dependencias de PHP (Composer)
-- laravel/framework ^12.0
-- barryvdh/laravel-dompdf ^3.1
-- maatwebsite/excel ^3.1
-- spatie/laravel-permission ^6.16
-- laravel/tinker ^2.10.1
+# Requerimientos del Sistema
 
-### Dependencias de desarrollo (Composer)
-- fakerphp/faker ^1.23
-- laravel/pail ^1.2.2
-- laravel/pint ^1.13
-- laravel/sail ^1.41
-- mockery/mockery ^1.6
-- nunomaduro/collision ^8.6
-- phpunit/phpunit ^11.5.3
+## Requerimientos Funcionales
 
-## Dependencias de Node.js (NPM)
-- vite ^6.0.11
-- tailwindcss ^4.0.0
-- @tailwindcss/vite ^4.0.0
-- axios ^1.7.4
-- concurrently ^9.0.1
-- laravel-vite-plugin ^1.2.0
+**RF1. Navegación y Descubrimiento**
+- El usuario puede navegar por categorías y catálogos para encontrar discos según estilo, colección o preferencia personal.
+- El sistema permite búsqueda y ordenamiento de productos por precio.
+- Sección de "Deseados" para guardar productos de interés.
+- Visualización de productos destacados y novedades en la página de inicio.
 
-## Instalación
-1. Clona el repositorio y accede a la carpeta del proyecto.
-2. Copia el archivo `.env.example` a `.env` y configura tus variables de entorno.
-3. Instala las dependencias de PHP:
-   ```bash
-   composer install
-   ```
-4. Instala las dependencias de Node.js:
-   ```bash
-   npm install
-   ```
-5. Genera la clave de la aplicación:
-   ```bash
-   php artisan key:generate
-   ```
-6. Ejecuta las migraciones y seeders:
-   ```bash
-   php artisan migrate --seed
-   ```
-7. Inicia el servidor de desarrollo y Vite:
-   ```bash
-   npm run dev
-   php artisan serve
-   ```
+**RF2. Proceso de Compra**
+- El usuario puede agregar productos al carrito, modificar cantidades y eliminar productos antes de finalizar la compra.
+- Flujo de compra guiado: agregar al carrito, completar datos de entrega, seleccionar método de pago y confirmar pedido.
+- El usuario puede consultar el historial de sus compras y ver el estado de sus pedidos.
 
-## Scripts útiles
-- `npm run dev`: Compila los assets en modo desarrollo con Vite y Tailwind.
-- `npm run build`: Compila los assets para producción.
-- `composer dev`: Levanta servidor Laravel, escucha colas y ejecuta Vite en paralelo.
+**RF3. Gestión de Usuario**
+- Registro, inicio de sesión y edición de perfil de usuario.
+- Gestión de datos personales y cambio de contraseña.
+- Visualización y descarga de recibos de compra.
 
-## Notas adicionales
+**RF4. Panel de Soporte y Ayuda**
+- Sección de soporte con guía de uso para cada funcionalidad principal de la tienda.
+- Explicación clara de cada sección: Inicio, Acerca, Deseados, Catálogo, Categorías, Carrito, Mis pedidos, Mi perfil.
+
+**RF5. Administración (solo para usuarios autorizados)**
+- Panel de control para gestión de productos, categorías, catálogos y pedidos.
+- Sistema de permisos basado en roles.
+- Gestión de clientes y análisis de actividad.
+- Gestión de inventario y movimientos de stock.
+- Visualización de logs de actividad administrativa.
+
+**RF6. Facturación Electrónica**
+- Soporte para facturación electrónica en pedidos y descarga de comprobantes.
+
+**RF7. Reseñas de Productos**
+- Los usuarios pueden dejar reseñas y calificaciones en productos adquiridos.
+
+## Requerimientos No Funcionales
+
+**RNF1. Usabilidad**
+- Interfaz moderna, clara y responsiva, adaptada a dispositivos móviles y de escritorio.
+- Experiencia de usuario optimizada: navegación intuitiva, retroalimentación visual en acciones importantes.
+- Guía de uso accesible desde el menú principal.
+
+**RNF2. Rendimiento**
+- Carga rápida de páginas y recursos gracias a Vite y TailwindCSS.
+- Optimización de imágenes y assets para mejorar tiempos de respuesta.
+
+**RNF3. Seguridad**
+- Autenticación y autorización de usuarios.
+- Protección de datos personales y de transacciones.
+- Uso de roles y permisos para restringir el acceso a funciones administrativas.
+
+**RNF4. Mantenibilidad y Escalabilidad**
+- Código estructurado en base a buenas prácticas de Laravel.
+- Uso de migraciones y seeders para gestión de base de datos.
+- Modularidad en componentes y vistas.
+
+**RNF5. Compatibilidad**
+- Soporte para los principales navegadores modernos.
+- Funcionalidad garantizada en modo claro y oscuro.
+
+**RNF6. Documentación y Soporte**
+- Documentación de instalación y uso en REQUERIMIENTOS.md y README.md.
+- Sección de soporte accesible para usuarios finales.
+
+---
+
+**Nota:** Estos requerimientos han sido extraídos y sintetizados a partir de los archivos de vistas, guías de usuario y documentación del proyecto. Para detalles técnicos, consulta los archivos `composer.json`, `package.json` y la documentación oficial de Laravel.
 - El proyecto utiliza Vite y TailwindCSS para el frontend.
 - Incluye soporte para generación de PDFs y exportación a Excel.
 - El sistema de permisos está basado en Spatie Laravel Permission.

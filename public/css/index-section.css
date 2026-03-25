@@ -1,5 +1,62 @@
-/* index-section.css: Migración de estilos desde index.blade.php */
+/* =====================
+     Variables de color base para texto accesible (index)
+     ===================== */
+:root {
+    --dz-text-main: #2d2d2d;
+    --dz-text-heading: #7c2d12;
+    --dz-text-subtle: #475569;
+}
+html[data-theme='dark'], .dark {
+    --dz-text-main: #f3e9e0;
+    --dz-text-heading: #fbbf24;
+    --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+    --dz-text-main: #23272e;
+    --dz-text-heading: #b45309;
+    --dz-text-subtle: #475569;
+}
 
+/* =====================
+     Estilos de texto accesible para index
+     ===================== */
+.store-hero,
+.store-hero h1,
+.store-hero .hero-subtitle {
+    color: var(--dz-text-main);
+}
+.store-hero h1 {
+    color: var(--dz-text-heading);
+}
+.store-hero .hero-subtitle {
+    color: var(--dz-text-subtle);
+}
+/* =====================
+     Fin sistema de temas para index
+     ===================== */
+/* =====================================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL INDEX HERO
+   ===================================================== */
+:root {
+  --dz-hero-radius: 1.4rem;
+  --dz-hero-shadow: 0 24px 60px rgba(196, 99, 16, 0.16);
+  --dz-hero-bg-accent: rgba(196, 99, 16, 0.12);
+  --dz-hero-heading: #ff7a00;
+  --dz-hero-subtitle: #8a6a5c;
+  --dz-logo-width: 141px;
+  --dz-logo-min-width: 71px;
+  --dz-title-font: 'Sora', sans-serif;
+  --dz-title-size: 2.2rem;
+  --dz-title-weight: 700;
+}
+html[data-theme='dark'] {
+  --dz-hero-heading: #ff7a00;
+  --dz-hero-subtitle: #e5e7eb;
+}
+
+/* =====================================================
+   HERO PRINCIPAL Y MARCAS
+   ===================================================== */
 .store-hero {
     backdrop-filter: blur(12px);
     color: var(--dz-heading);
@@ -40,6 +97,10 @@ html[data-theme='dark'] .logo-dark {
 html[data-theme='dark'] .logo-light {
         filter: none;
 }
+
+/* =====================================================
+   RESPONSIVIDAD HERO Y TÍTULOS
+   ===================================================== */
 @media (max-width: 600px) {
     .logo {
         width: 141px;
@@ -50,6 +111,7 @@ html[data-theme='dark'] .logo-light {
         margin-left: 0.3rem;
     }
 }
+
 .hero-title {
     font-family: 'Sora', sans-serif;
     font-weight: 700;

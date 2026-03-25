@@ -1,26 +1,76 @@
-/* Mostrar solo el logo claro en modo claro y el oscuro en modo oscuro */
-.auth-brand-icon.light { display: block; }
-.auth-brand-icon.dark { display: none; }
-
-@media (prefers-color-scheme: dark) {
-  .auth-brand-icon.light { display: none !important; }
-  .auth-brand-icon.dark { display: block !important; }
+/* =====================
+   Variables de color base para texto accesible (login)
+   ===================== */
+:root {
+  --dz-text-main: #2d2d2d;
+  --dz-text-heading: #7c2d12;
+  --dz-text-subtle: #475569;
 }
-/* Estilos para la vista de login */
+html[data-theme='dark'], .dark {
+  --dz-text-main: #f3e9e0;
+  --dz-text-heading: #fbbf24;
+  --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+  --dz-text-main: #23272e;
+  --dz-text-heading: #b45309;
+  --dz-text-subtle: #475569;
+}
+
+/* =====================
+   Estilos de texto accesible para login
+   ===================== */
+.login-brand,
+.login-brand h1,
+.login-brand .subtitle {
+  color: var(--dz-text-main);
+}
+.login-brand h1 {
+  color: var(--dz-text-heading);
+}
+.login-brand .subtitle {
+  color: var(--dz-text-subtle);
+}
+/* =====================
+   Fin sistema de temas para login
+   ===================== */
+/* =====================================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL LOGIN
+   ===================================================== */
+:root {
+  --dz-login-logo-full-width: min(15rem, 62vw);
+  --dz-login-logo-full-height: 4.2rem;
+  --dz-login-logo-icon-width: 3.4rem;
+  --dz-login-logo-icon-height: 3.4rem;
+  --dz-login-logo-icon-width-mobile: 4rem;
+  --dz-login-logo-icon-height-mobile: 4rem;
+}
+
+/* =====================================================
+   VISIBILIDAD DE LOGOS SEGÚN MODO
+   ===================================================== */
+.auth-brand-icon.light { display: block !important; }
+.auth-brand-icon.dark { display: none !important; }
+html[data-theme='dark'] .auth-brand-icon.light { display: none !important; }
+html[data-theme='dark'] .auth-brand-icon.dark { display: block !important; }
+
+/* =====================================================
+   ESTILOS DE LOGOS LOGIN
+   ===================================================== */
 .login-brand .auth-brand-mark-full {
-  width: min(15rem, 62vw);
-  height: 4.2rem;
+  width: var(--dz-login-logo-full-width);
+  height: var(--dz-login-logo-full-height);
   padding: 0.28rem 0.4rem;
 }
-
 .login-brand .auth-brand-mark-icon {
-  width: 3.4rem;
-  height: 3.4rem;
+  width: var(--dz-login-logo-icon-width);
+  height: var(--dz-login-logo-icon-height);
 }
-
 @media (max-width: 575.98px) {
   .login-brand .auth-brand-mark-icon {
-    width: 4rem;
-    height: 4rem;
+    width: var(--dz-login-logo-icon-width-mobile);
+    height: var(--dz-login-logo-icon-height-mobile);
   }
 }
+
+/* Fin de archivo optimizado */

@@ -1,43 +1,99 @@
-/* Centrado y ancho máximo del bloque principal del formulario de pedido */
+/* =====================
+   Variables de color base para texto accesible (formulario pedido responsive)
+   ===================== */
+:root {
+  --dz-text-main: #2d2d2d;
+  --dz-text-heading: #7c2d12;
+  --dz-text-subtle: #475569;
+}
+html[data-theme='dark'], .dark {
+  --dz-text-main: #f3e9e0;
+  --dz-text-heading: #fbbf24;
+  --dz-text-subtle: #cbd5e1;
+}
+html[data-theme='light'], .light {
+  --dz-text-main: #23272e;
+  --dz-text-heading: #b45309;
+  --dz-text-subtle: #475569;
+}
+
+/* =====================
+   Estilos de texto accesible para formulario pedido responsive
+   ===================== */
+.checkout-hero,
+.checkout-hero h2,
+.checkout-hero p {
+  color: var(--dz-text-main);
+}
+.checkout-hero h2 {
+  color: var(--dz-text-heading);
+}
+.checkout-hero p {
+  color: var(--dz-text-subtle);
+}
+/* =====================
+   Fin sistema de temas para formulario pedido responsive
+   ===================== */
+/* =====================================================
+   VARIABLES Y CONFIGURACIÓN GLOBAL FORMULARIO PEDIDO
+   ===================================================== */
+:root {
+  --dz-form-max-width: 950px;
+  --dz-form-max-width-md: 98vw;
+  --dz-form-max-width-sm: 100vw;
+  --dz-form-padding-md: 1rem;
+  --dz-form-padding-sm: 0.5rem;
+  --dz-form-radius: 10px;
+  --dz-form-radius-sm: 8px;
+  --dz-form-gap: 0.5rem;
+  --dz-form-margin-bottom: 1.2rem;
+  --dz-form-title-size: 1.15rem;
+  --dz-form-text-size: 0.98rem;
+}
+
+/* =====================================================
+   CENTRADO Y ANCHO DEL FORMULARIO
+   ===================================================== */
 .formulario-pedido-wrap > .container {
-    max-width: 950px;
-    margin-left: auto;
-    margin-right: auto;
+  max-width: var(--dz-form-max-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 .checkout-hero, .checkout-card {
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media (max-width: 1200px) {
-    .formulario-pedido-wrap > .container { max-width: 98vw; }
+  .formulario-pedido-wrap > .container { max-width: var(--dz-form-max-width-md); }
+  .formulario-pedido-wrap .container { padding-left: var(--dz-form-padding-md) !important; padding-right: var(--dz-form-padding-md) !important; }
 }
 @media (max-width: 991.98px) {
-    .formulario-pedido-wrap > .container { max-width: 100vw; }
-}
-/* Stepper y bloques principales */
-.checkout-steps-bg, .checkout-steps-bg .container, .checkout-steps {
-    width: 100% !important;
-    min-width: 0 !important;
-    overflow-x: auto;
-    box-sizing: border-box;
-}
-.checkout-steps {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-.stepper-item { min-width: 70px; }
-@media (max-width: 1200px) {
-    .formulario-pedido-wrap .container { padding-left: 1rem !important; padding-right: 1rem !important; }
-}
-@media (max-width: 991.98px) {
-    .formulario-pedido-wrap .container { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
-    .checkout-hero { text-align: center; }
-    .checkout-card { border-radius: 10px !important; }
+  .formulario-pedido-wrap > .container { max-width: var(--dz-form-max-width-sm); }
+  .formulario-pedido-wrap .container { padding-left: var(--dz-form-padding-sm) !important; padding-right: var(--dz-form-padding-sm) !important; }
+  .checkout-hero { text-align: center; }
+  .checkout-card { border-radius: var(--dz-form-radius) !important; }
 }
 @media (max-width: 767.98px) {
-    .formulario-pedido-wrap .row { flex-direction: column !important; }
-    .formulario-pedido-wrap .col-12, .formulario-pedido-wrap .col-lg-10 { max-width: 100%; flex: 0 0 100%; }
-    .checkout-card { margin-bottom: 1.2rem !important; border-radius: 8px !important; }
-    .checkout-hero h2 { font-size: 1.15rem; }
-    .checkout-hero p { font-size: 0.98rem; }
+  .formulario-pedido-wrap .row { flex-direction: column !important; }
+  .formulario-pedido-wrap .col-12, .formulario-pedido-wrap .col-lg-10 { max-width: 100%; flex: 0 0 100%; }
+  .checkout-card { margin-bottom: var(--dz-form-margin-bottom) !important; border-radius: var(--dz-form-radius-sm) !important; }
+  .checkout-hero h2 { font-size: var(--dz-form-title-size); }
+  .checkout-hero p { font-size: var(--dz-form-text-size); }
 }
+
+/* =====================================================
+   STEPPER Y BLOQUES PRINCIPALES
+   ===================================================== */
+.checkout-steps-bg, .checkout-steps-bg .container, .checkout-steps {
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+.checkout-steps {
+  flex-wrap: wrap;
+  gap: var(--dz-form-gap);
+}
+.stepper-item { min-width: 70px; }
+
+/* Fin de archivo optimizado */

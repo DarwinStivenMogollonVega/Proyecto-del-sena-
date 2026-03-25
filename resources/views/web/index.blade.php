@@ -66,7 +66,101 @@
         </div>
     </form>
 
-    <!-- Sección de carouseles por categorías eliminada para mostrar solo el grid vertical de productos -->
+    <section id="productos" class="mt-5">
+        @foreach ([
+            ['title' => 'Los mas vendidos', 'icon' => 'bi-fire', 'items' => $masMasVendidos],
+            ['title' => 'Los mejor valorados', 'icon' => 'bi-star-fill', 'items' => $mejorValorados],
+            ['title' => 'Ofertas especiales', 'icon' => 'bi-tag', 'items' => $ofertasEspeciales],
+            ['title' => 'Disponibles ahora', 'icon' => 'bi-check2-circle', 'items' => $disponiblesAhora],
+        ] as $section)
+            @if($section['items']->isNotEmpty())
+                <div class="product-section">
+                    <div class="section-title">
+                        <i class="bi {{ $section['icon'] }} icon"></i>
+                        <h3>{{ $section['title'] }}</h3>
+                        <span class="section-badge">{{ $section['items']->count() }} productos</span>
+                    </div>
+                    <div class="product-carousel" data-carousel>
+                        <div class="carousel-actions" aria-hidden="false">
+                            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Anterior">
+                                <i class="bi bi-arrow-left"></i>
+                            </button>
+                            <button type="button" class="carousel-btn" data-carousel-next aria-label="Siguiente">
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="product-carousel-track" data-carousel-track>
+                        @foreach ($section['items'] as $producto)
+                            <div class="product-carousel-item">
+                                @php
+                                    $stock  = (int) ($producto->cantidad ?? 0);
+                                    $rating = round((float) ($producto->resenas_avg_puntuacion ?? 0), 1);
+                                    $rCount = (int) ($producto->resenas_count ?? 0);
+                                @endphp
+                                <article class="all-product-card">
+                                    <div class="all-product-cover">
+                                        @if($producto->imagen)
+                                            <img src="{{ asset('uploads/productos/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
+                                        @else
+                                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
+                                        @endif
+                                        @if ($stock >= 50)
+                                            <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
+                                        @elseif ($stock > 0)
+                                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
+                                        @else
+                                            <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
+                                        @endif
+                                    </div>
+                                    <div class="all-product-body">
+                                        <p class="all-product-name" title="{{ $producto->nombre }}">{{ $producto->nombre }}</p>
+                                        <p class="all-product-artist">{{ $producto->artista?->nombre ?? 'Artista no especificado' }}</p>
+                                        @if ($stock >= 50)
+                                            <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
+                                        @elseif ($stock > 0)
+                                            <span class="all-product-discount"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
+                                        @else
+                                            <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
+                                        @endif
+                                        <div class="all-product-meta">
+                                            @if($producto->categoria)
+                                                <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i>{{ $producto->categoria->nombre }}</span>
+                                            @endif
+                                            @if($producto->catalogo)
+                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ $producto->catalogo->nombre }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="all-product-inline-stats">
+                                            <span><i class="bi bi-star-fill text-warning me-1"></i>{{ number_format($rating, 1) }}</span>
+                                            <span><i class="bi bi-chat-left-text me-1"></i>{{ $rCount }}</span>
+                                            <span><i class="bi bi-box-seam me-1"></i>{{ $stock }}</span>
+                                        </div>
+                                        <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                                <i class="bi bi-heart"></i>
+                                            </button>
+                                        </form>
+                                        <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
+                                            <i class="bi bi-eye"></i> ver
+                                        </a>
+                                    </div>
+                                </article>
+                            </div>
+                        @endforeach
+                        </div>
+                        <div class="product-carousel-progress" data-carousel-progress aria-hidden="true"></div>
+                    </div>
+                </div>
+            @endif
+        @endforeach
+
+        @if($masMasVendidos->isEmpty() && $mejorValorados->isEmpty() && $ofertasEspeciales->isEmpty() && $disponiblesAhora->isEmpty())
+            <div class="text-center py-5 border rounded-4 bg-light-subtle">
+                <p class="text-muted mb-0">No se encontraron productos con esos filtros.</p>
+            </div>
+        @endif
+    </section>
 
     <section class="all-products-section">
         <div class="all-products-head d-flex align-items-center" style="gap:0.7rem;">

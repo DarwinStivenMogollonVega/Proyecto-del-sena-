@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('artistas', function (Blueprint $table) {
-            $table->id();
+            $table->id('artista_id');
             $table->string('nombre', 120);
-            $table->string('slug', 140)->unique();
+            $table->string('identificador_unico', 140)->unique();
             $table->string('foto', 120)->nullable();
             $table->text('biografia')->nullable();
             $table->timestamps();
