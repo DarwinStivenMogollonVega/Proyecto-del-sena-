@@ -95,67 +95,58 @@
                                     $rating = round((float) ($producto->resenas_avg_puntuacion ?? 0), 1);
                                     $rCount = (int) ($producto->resenas_count ?? 0);
                                 ?>
-                                <article class="all-product-card">
-                                    <div class="all-product-cover">
+                                <div class="product-card">
+                                    
+                                    <div class="pc-thumb">
                                         <?php if($producto->imagen): ?>
                                             <img src="<?php echo e(asset('uploads/productos/' . $producto->imagen)); ?>" alt="<?php echo e($producto->nombre); ?>">
                                         <?php else: ?>
                                             <img src="<?php echo e(asset('img/no-image.jpg')); ?>" alt="Sin imagen">
                                         <?php endif; ?>
                                         <?php if($stock >= 50): ?>
-                                            <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
+                                            <span class="pc-badge badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                         <?php elseif($stock > 0): ?>
-                                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
+                                            <span class="pc-badge badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
                                         <?php else: ?>
-                                            <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
+                                            <span class="pc-badge badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                         <?php endif; ?>
                                     </div>
-                                    <div class="all-product-body">
-                                        <p class="all-product-name" title="<?php echo e($producto->nombre); ?>"><?php echo e($producto->nombre); ?></p>
-                                        <p class="all-product-artist"><?php echo e($producto->artista?->nombre ?? 'Artista no especificado'); ?></p>
-                                        <?php if($stock >= 50): ?>
-                                            <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
-                                        <?php elseif($stock > 0): ?>
-                                            <span class="all-product-discount"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
-                                        <?php else: ?>
-                                            <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
-                                        <?php endif; ?>
-                                        <div class="all-product-meta">
+
+                                    
+                                    <div class="pc-body">
+                                        <p class="pc-name" title="<?php echo e($producto->nombre); ?>"><?php echo e($producto->nombre); ?></p>
+                                        <p class="pc-artist"><i class="bi bi-person-fill me-1"></i><?php echo e($producto->artista?->nombre ?? 'Artista N/D'); ?></p>
+
+                                        <div class="pc-chips">
                                             <?php if($producto->categoria): ?>
-                                                <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i><?php echo e($producto->categoria->nombre); ?></span>
+                                                <span class="pc-chip" title="<?php echo e($producto->categoria->nombre); ?>"><i class="bi bi-tags-fill"></i><?php echo e($producto->categoria->nombre); ?></span>
                                             <?php endif; ?>
                                             <?php if($producto->catalogo): ?>
-                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i><?php echo e($producto->catalogo->nombre); ?></span>
+                                                <span class="pc-chip" title="<?php echo e($producto->catalogo->nombre); ?>"><i class="bi bi-journal-bookmark-fill"></i><?php echo e($producto->catalogo->nombre); ?></span>
                                             <?php endif; ?>
                                         </div>
-                                        <div class="all-product-inline-stats">
-                                            <span><i class="bi bi-star-fill text-warning me-1"></i><?php echo e(number_format($rating, 1)); ?></span>
-                                            <span><i class="bi bi-chat-left-text me-1"></i><?php echo e($rCount); ?></span>
-                                            <span><i class="bi bi-box-seam me-1"></i><?php echo e($stock); ?></span>
+
+                                        <div class="pc-stats">
+                                            <span class="pc-stat"><i class="bi bi-star-fill"></i><?php echo e(number_format($rating, 1)); ?></span>
+                                            <span class="pc-stat"><i class="bi bi-chat-square-text"></i><?php echo e($rCount); ?></span>
+                                            <span class="pc-stat"><i class="bi bi-box-seam"></i><?php echo e($stock); ?></span>
+                                            <?php if($producto->anio_lanzamiento): ?>
+                                                <span class="pc-stat"><i class="bi bi-calendar3"></i><?php echo e($producto->anio_lanzamiento); ?></span>
+                                            <?php endif; ?>
                                         </div>
-                                        <?php
-                                            $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
-                                        ?>
-                                        <?php if($inWishlist): ?>
-                                            <form action="<?php echo e(route('web.wishlist.remove', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                                <?php echo csrf_field(); ?>
-                                                <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                                    <i class="bi bi-heart-fill text-danger"></i>
-                                                </button>
-                                            </form>
-                                        <?php else: ?>
-                                            <form action="<?php echo e(route('web.wishlist.add', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                                <?php echo csrf_field(); ?>
-                                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                                    <i class="bi bi-heart"></i>
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
-                                        <a href="<?php echo e(route('web.show', $producto->getKey())); ?>" class="all-product-cta" title="Ver producto">
-                                            <i class="bi bi-eye"></i> ver
-                                        </a>
+
+                                        <div class="pc-footer">
+                                            <span class="pc-price">$<?php echo e(number_format($producto->precio, 2)); ?></span>
+                                             <form action="<?php echo e(route('web.wishlist.add', $producto->id)); ?>" method="POST" class="d-inline ms-2">
+                                            <?php echo csrf_field(); ?>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm pc-wishlist-btn" title="Agregar a deseados">
+                                                <i class="bi bi-heart"></i> 
+                                            </button>
+                                        </form>
+                                            <a href="<?php echo e(route('web.show', $producto->id)); ?>" class="pc-btn"><i class="bi bi-eye me-1"></i>Ver</a>
+                                        </div>
                                     </div>
-                                </article>
+                                </div>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
@@ -173,11 +164,10 @@
     </section>
 
     <section class="all-products-section">
-        <div class="all-products-head d-flex align-items-center" style="gap:0.7rem;">
-            <h4 class="mb-0 d-flex align-items-center"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Todos los productos
-                <span class="section-badge ms-2"><?php echo e($productos->total()); ?> registrados</span>
-            </h4>
-        </div><br>
+        <div class="all-products-head">
+            <h4><i class="bi bi-grid-3x3-gap-fill me-2"></i>Todos los productos</h4>
+            <span class="section-badge"><?php echo e($productos->total()); ?> registrados</span>
+        </div>
 
         <?php if($productos->count()): ?>
             <div class="all-products-grid">
@@ -241,27 +231,16 @@
                                 <span><i class="bi bi-box-seam me-1"></i><?php echo e($stockAll); ?></span>
                             </div>
 
-                            <?php
-                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
-                            ?>
-                            <?php if($inWishlist): ?>
-                                <form action="<?php echo e(route('web.wishlist.remove', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                        <i class="bi bi-heart-fill text-danger"></i>
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                                <form action="<?php echo e(route('web.wishlist.add', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                        <i class="bi bi-heart"></i>
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                            <a href="<?php echo e(route('web.show', $producto->getKey())); ?>" class="all-product-cta" title="Ver producto">
-                                <i class="bi bi-eye"></i> ver
+                            <a href="<?php echo e(route('web.show', $producto->id)); ?>" class="all-product-cta">
+                                <i class="bi bi-cart-plus"></i>
+                                Ver producto
                             </a>
+                            <form action="<?php echo e(route('web.wishlist.add', $producto->id)); ?>" method="POST" class="d-inline ms-2">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="all-product-cta all-product-wishlist-btn" title="Agregar a deseados">
+                                    <i class="bi bi-heart"></i> Deseados
+                                </button>
+                            </form>
                         </div>
                     </article>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -446,4 +425,4 @@
 </script>
 <?php $__env->stopPush(); ?>
 
-<?php echo $__env->make('web.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('web.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/laravelapp/resources/views/web/index.blade.php ENDPATH**/ ?>

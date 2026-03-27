@@ -15,4 +15,4 @@
 
 <?php $__env->startPush('styles'); ?>
 <link rel="stylesheet" href="<?php echo e(asset('css/header-section.css')); ?>">
-<?php $__env->stopPush(); ?><?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/partials/header.blade.php ENDPATH**/ ?>
+<?php $__env->stopPush(); ?><?php /**PATH /var/www/laravelapp/resources/views/web/partials/header.blade.php ENDPATH**/ ?>

@@ -12,7 +12,6 @@
     $miPerfilActive = request()->routeIs('perfil.edit') || request()->routeIs('perfil.update');
 ?>
 
-
 <nav class="navbar navbar-expand-lg navbar-dark dz-nav">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand fw-bold dz-brand" href="<?php echo e(route('web.index')); ?>">
@@ -49,12 +48,12 @@
                     <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
                         <?php $__currentLoopData = $catalogos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $catalogo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li>
-                                    <a class="dropdown-item" href="<?php echo e(route('web.catalogo.show', $catalogo->getKey())); ?>"><?php echo e($catalogo->nombre); ?></a>
-                                </li>
-                                <?php if(!$loop->last): ?>
-                                    <li><hr class="dropdown-divider" /></li>
-                                <?php endif; ?>
+                            <li>
+                                <a class="dropdown-item" href="<?php echo e(route('web.catalogo.show', $catalogo->id)); ?>"><?php echo e($catalogo->nombre); ?></a>
+                            </li>
+                            <?php if(!$loop->last): ?>
+                                <li><hr class="dropdown-divider" /></li>
+                            <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </li>
@@ -64,7 +63,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategoria">
                         <?php $__currentLoopData = $categorias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li>
-                                <a class="dropdown-item" href="<?php echo e(route('web.categoria.show', $categoria->getKey())); ?>"><?php echo e($categoria->nombre); ?></a>
+                                <a class="dropdown-item" href="<?php echo e(route('web.categoria.show', $categoria->id)); ?>"><?php echo e($categoria->nombre); ?></a>
                             </li>
                             <?php if(!$loop->last): ?>
                                 <li><hr class="dropdown-divider" /></li>
@@ -89,6 +88,9 @@
                             <?php endif; ?>
 
                             <li><h6 class="dropdown-header text-uppercase small fw-bold">Cliente</h6></li>
+                            <li>
+                                <a class="dropdown-item <?php echo e($dashboardClienteActive ? 'user-route-active' : ''); ?>" href="<?php echo e(route('cliente.dashboard')); ?>" aria-current="<?php echo e($dashboardClienteActive ? 'page' : 'false'); ?>"><i class="bi bi-bar-chart-line me-2"></i>Mi dashboard</a>
+                            </li>
                             <li>
                                 <?php if(auth()->user()->can('pedido-list')): ?>
                                     <a class="dropdown-item" href="<?php echo e(route('admin.pedidos')); ?>"><i class="bi bi-receipt me-2"></i>Pedidos administrador</a>
@@ -116,14 +118,14 @@
                 </li>
             </ul>
 
-            <a href="<?php echo e(route('carrito.mostrar')); ?>" class="btn cart-cta-btn nav-cta-text">
+            <a href="<?php echo e(route('carrito.mostrar')); ?>" class="btn cart-cta-btn">
                 <span class="cart-cta-icon">
                     <i class="bi bi-cart-fill"></i>
                 </span>
                 <span class="cart-cta-text">Carrito</span>
                 <span class="badge rounded-pill cart-count-badge"><?php echo e(session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0); ?></span>
             </a>
-            <button type="button" class="btn ms-2 theme-switch-btn nav-cta-text" data-theme-toggle>
+            <button type="button" class="btn ms-2 theme-switch-btn" data-theme-toggle>
                 <span class="theme-switch-icon">
                     <i class="bi bi-moon-stars-fill"></i>
                 </span>
@@ -132,4 +134,4 @@
         </div>
     </div>
 </nav>
-<?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/partials/nav.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/laravelapp/resources/views/web/partials/nav.blade.php ENDPATH**/ ?>

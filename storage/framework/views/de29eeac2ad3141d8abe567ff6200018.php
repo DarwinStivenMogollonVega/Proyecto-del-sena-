@@ -26,7 +26,6 @@
         <link rel="stylesheet" href="<?php echo e(asset('css/index-section.css')); ?>">
 
     <?php echo $__env->yieldPushContent('estilos'); ?>
-    <link rel="stylesheet" href="<?php echo e(asset('css/nav-fix.css')); ?>">
 </head>
 <body>
     <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
@@ -35,7 +34,7 @@
         <?php echo $__env->make('web.partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php endif; ?>
 
-    <main class="dz-main-content" style="padding-top:0; margin-top:0;">
+    <main class="dz-main-content">
         <?php echo $__env->yieldContent('contenido'); ?>
     </main>
 
@@ -190,4 +189,4 @@
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
-<?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/app.blade.php ENDPATH**/ ?>
+<?php /**PATH /var/www/laravelapp/resources/views/web/app.blade.php ENDPATH**/ ?>
