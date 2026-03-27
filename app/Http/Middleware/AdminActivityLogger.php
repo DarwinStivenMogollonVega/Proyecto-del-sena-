@@ -19,12 +19,12 @@ class AdminActivityLogger
 
         if (auth()->check() && $this->shouldLog($request, $routeName)) {
             AdminActivityLog::create([
-                'user_id' => auth()->id(),
-                'method' => $request->method(),
-                'route_name' => $routeName,
+                'usuario_id' => auth()->id(),
+                'metodo' => $request->method(),
+                'nombre_ruta' => $routeName,
                 'url' => $request->fullUrl(),
-                'ip_address' => $request->ip(),
-                'user_agent' => substr((string) $request->userAgent(), 0, 255),
+                'direccion_ip' => $request->ip(),
+                'agente_usuario' => substr((string) $request->userAgent(), 0, 255),
             ]);
         }
 

@@ -33,9 +33,37 @@ class PerfilController extends Controller
                 unlink(public_path('uploads/avatars/' . $registro->avatar));
             }
             $file     = $request->file('avatar');
-            $filename = time() . '_' . $registro->id . '.' . $file->getClientOriginalExtension();
+            $filename = time() . '_' . $registro->getKey() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/avatars'), $filename);
             $registro->avatar = $filename;
+        }
+
+        // Remove avatar when requested and no new file uploaded
+        if (!$request->hasFile('avatar') && $request->input('remove_avatar') == '1') {
+            if ($registro->avatar && file_exists(public_path('uploads/avatars/' . $registro->avatar))) {
+                unlink(public_path('uploads/avatars/' . $registro->avatar));
+            }
+            $registro->avatar = null;
+        }
+
+        // If the client sent a cropped image (base64), save it (takes precedence over standard file)
+        $cropped = $request->input('avatar_cropped');
+        if ($cropped && is_string($cropped) && strpos($cropped, 'data:image') === 0) {
+            // remove existing file
+            if ($registro->avatar && file_exists(public_path('uploads/avatars/' . $registro->avatar))) {
+                unlink(public_path('uploads/avatars/' . $registro->avatar));
+            }
+            // parse base64
+            [$meta, $data] = explode(',', $cropped, 2) + [null, null];
+            $ext = 'jpg';
+            if (strpos($meta, 'image/png') !== false) $ext = 'png';
+            if (strpos($meta, 'image/webp') !== false) $ext = 'webp';
+            $decoded = base64_decode($data);
+            if ($decoded !== false) {
+                $filename = time() . '_' . $registro->getKey() . '_crop.' . $ext;
+                file_put_contents(public_path('uploads/avatars/' . $filename), $decoded);
+                $registro->avatar = $filename;
+            }
         }
 
         if ($request->filled('password')) {
@@ -43,6 +71,6 @@ class PerfilController extends Controller
         }
         $registro->save();
 
-        return redirect()->route('perfil.edit')->with('mensaje', 'Datos actualizados correctamente.');
+        return redirect()->route('perfil.edit')->with('success', 'Perfil actualizado correctamente.');
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id('factura_id');
             $table->foreignId('pedido_id')->unique()->constrained('pedidos')->onDelete('cascade');
-            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('usuario_id')->constrained('usuarios', 'usuario_id')->onDelete('cascade');
             $table->string('numero_factura', 40)->nullable()->unique();
             $table->timestamp('fecha_emision');
             $table->string('estado_pedido', 30)->default('pendiente');

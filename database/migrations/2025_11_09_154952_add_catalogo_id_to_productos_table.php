@@ -8,12 +8,14 @@
     {
         public function up(): void
         {
-            Schema::table('productos', function (Blueprint $table) {
-                $table->foreignId('catalogo_id')
-                    ->nullable()
-                    ->constrained('catalogos')
-                    ->onDelete('set null');
-            });
+            if (!Schema::hasColumn('productos', 'catalogo_id')) {
+                Schema::table('productos', function (Blueprint $table) {
+                    $table->foreignId('catalogo_id')
+                        ->nullable()
+                        ->constrained('catalogos', 'catalogo_id')
+                        ->onDelete('set null');
+                });
+            }
         }
 
         public function down(): void

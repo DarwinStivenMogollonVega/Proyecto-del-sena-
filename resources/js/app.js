@@ -1,4 +1,12 @@
 import './bootstrap';
+import initStatisticsRealtime from './statistics';
+
+// Initialize realtime listener (only in admin pages you can conditionally call it)
+try {
+    initStatisticsRealtime();
+} catch (e) {
+    // ignore when Echo not configured
+}
 
 // Modo oscuro/claro: alternar y guardar preferencia
 window.toggleTheme = function() {

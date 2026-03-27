@@ -12,17 +12,27 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form action="{{ isset($registro)?route('roles.update', $registro->id) : route('roles.store')}}"
-                            method="POST" id="formRegistroUsuario">
+                        <form action="{{ isset($registro)?route('roles.update', $registro->getKey()) : route('roles.store')}}"
+                            method="POST" id="formRegistroRole" novalidate>
                             @csrf
                             @if(isset($registro))
                             @method('PUT')
+                            @endif
+                            @if ($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="name" class="form-label">Nombre</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        id="name" name="name" value="{{old('name', $registro->name ??'')}}" required>
+                                        id="name" name="name" value="{{old('name', $registro->name ??'')}}" minlength="3" pattern="^(?!.*\d).+$" title="Este campo no puede contener números." required>
                                     @error('name')
                                     <small class="text-danger">{{$message}}</small>
                                     @enderror
@@ -31,14 +41,18 @@
                                     <label class="form-label">Permisos:</label><br>
                                     @foreach($permissions as $permission)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="permissions[]"
-                                            value="{{ $permission->name }}" id="permiso_{{ $permission->id }}"
-                                            {{ isset($registro) && $registro->hasPermissionTo($permission->name) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="permiso_{{ $permission->id }}">
+                                        <input class="form-check-input @error('permissions') is-invalid @enderror" type="checkbox" name="permissions[]"
+                                            value="{{ $permission->name }}" id="permiso_{{ $permission->getKey() }}"
+                                            {{ in_array($permission->name, old('permissions', isset($registro) ? $registro->permissions->pluck('name')->toArray() : []), true) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="permiso_{{ $permission->getKey() }}">
                                             {{ ucfirst($permission->name) }}
                                         </label>
                                     </div>
                                     @endforeach
+                                    @error('permissions')
+                                        <small class="text-danger d-block mt-1">{{$message}}</small>
+                                    @enderror
+                                    <small id="permissions_client_error" class="text-danger d-block mt-1 d-none">Debes seleccionar al menos un permiso.</small>
                                 </div>
                             </div>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -67,5 +81,33 @@
 document.getElementById('mnuSeguridad').classList.add('menu-open');
 document.getElementById('itemRole').classList.add('active');
 document.getElementById('mnuSeguridadLink')?.classList.add('active');
+</script>
+<script>
+    (() => {
+        const form = document.getElementById('formRegistroRole');
+        if (!form) return;
+
+        form.addEventListener('submit', (event) => {
+            const checkedPermissions = form.querySelectorAll('input[name="permissions[]"]:checked').length;
+            if (checkedPermissions === 0) {
+                event.preventDefault();
+                event.stopPropagation();
+                const permissionInputs = form.querySelectorAll('input[name="permissions[]"]');
+                permissionInputs.forEach((input) => input.classList.add('is-invalid'));
+                document.getElementById('permissions_client_error')?.classList.remove('d-none');
+            }
+        });
+
+        const permissionInputs = form.querySelectorAll('input[name="permissions[]"]');
+        permissionInputs.forEach((input) => {
+            input.addEventListener('change', () => {
+                const selected = form.querySelectorAll('input[name="permissions[]"]:checked').length;
+                if (selected > 0) {
+                    permissionInputs.forEach((checkbox) => checkbox.classList.remove('is-invalid'));
+                    document.getElementById('permissions_client_error')?.classList.add('d-none');
+                }
+            });
+        });
+    })();
 </script>
 @endpush

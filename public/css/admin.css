@@ -1,4 +1,41 @@
 
+/* Admin theme variables (light default) — used by admin views */
+:root {
+    --adm-surface: #2d3650;
+    --adm-surface-soft: #2d3650;
+    --adm-border: #e6edf6;
+    --adm-text: #0f172a;
+    --adm-muted: #607086;
+    --adm-heading: #0b1220;
+    --adm-accent: #2563eb;
+    --adm-secondary: #6c757d;
+    --adm-danger: #b91c1c;
+    --adm-badge-bg: #6d4b1b;
+    --adm-badge-text: #ffbe5b;
+    --adm-sidebar-panel: rgba(0,0,0,0.04);
+    --adm-sidebar-text: rgba(0, 0, 0, 0.95);
+    --adm-sidebar-muted: #8a97b8;
+    --adm-sidebar-icon: #a6b1d6;
+}
+
+html[data-theme='dark'] {
+    --adm-surface: #181f2a;
+    --adm-surface-soft: #232a3b;
+    --adm-border: #232a3b;
+    --adm-text: #ffffff;
+    --adm-muted: #a6b8d0;
+    --adm-heading: #f8fafc;
+    --adm-accent: #2563eb;
+    --adm-secondary: #6c757d;
+    --adm-danger: #b91c1c;
+    --adm-badge-bg: rgba(109,75,27,0.18);
+    --adm-badge-text: #ffbe5b;
+    --adm-sidebar-panel: rgba(255,255,255,0.03);
+    --adm-sidebar-text: rgba(227,232,247,0.9);
+    --adm-sidebar-muted: #8a97b8;
+    --adm-sidebar-icon: #a6b1d6;
+}
+
 /* =========================
      MODAL DE ELIMINACIÓN ARTISTA
      ========================= */
@@ -13,7 +50,7 @@
     padding: 2.2rem 2.2rem 1.5rem 2.2rem;
 }
 #modal-eliminar-artista .modal-title {
-    color: #b91c1c;
+    color: var(--adm-danger);
     font-size: 2rem;
     font-weight: bold;
 }
@@ -50,8 +87,8 @@
      ========================= */
 .dz-admin-table-card {
     border-radius: 1.1rem;
-    background: #181f2a;
-    border: 1px solid #232a3b;
+    background: var(--adm-surface);
+    border: 1px solid var(--adm-border);
     box-shadow: 0 8px 32px rgba(0,0,0,.18);
 }
 .dz-admin-table-card .card-header {
@@ -60,9 +97,9 @@
     padding: 1.3rem 1.7rem 0.7rem 1.7rem;
 }
 .dz-admin-table-card .form-control {
-    background: #232a3b;
-    color: #fff;
-    border: 1px solid #313a4d;
+    background: var(--adm-surface-soft);
+    color: var(--adm-text);
+    border: 1px solid var(--adm-border);
     min-width: 260px;
     border-radius: .7rem;
     padding: 1rem 1.2rem;
@@ -72,45 +109,50 @@
     border-radius: .5rem;
     padding: .6rem 1.3rem;
     font-weight: 500;
-    background: #6c757d;
-    color: #fff;
+    background: var(--adm-secondary);
+    color: var(--adm-text);
     border: none;
 }
 .dz-admin-table-card .btn-primary {
     border-radius: .5rem;
     padding: .6rem 1.3rem;
     font-weight: 500;
-    background: #2563eb;
+    background: var(--adm-accent);
     color: #fff;
     border: none;
 }
 .dz-admin-table-card .table {
     font-size: 1rem;
     background: transparent;
-    color: #fff;
+    color: var(--adm-text);
 }
 .dz-admin-table-card .table th, .dz-admin-table-card .table td {
-    border-color: #232a3b;
+    border-color: var(--adm-border);
 }
 .dz-admin-table-card .badge {
-    background: #6d4b1b;
-    color: #ffbe5b;
+    background: var(--adm-badge-bg);
+    color: var(--adm-badge-text);
     font-weight: 600;
     font-size: .97em;
     padding: .48em 1.1em;
     box-shadow: 0 1px 4px #0001;
     border-radius: 0.7em;
 }
+/* Estados de pedidos: estilos específicos (antes estaban inline en la vista) */
+.badge-pendiente  { background: rgba(245,158,11,.15); color: #d97706; }
+.badge-enviado    { background: rgba(16,185,129,.15);  color: #059669; }
+.badge-entregado  { background: rgba(29,78,216,.15);   color: #1d4ed8; }
+.badge-cancelado, .badge-anulado { background: rgba(239,68,68,.15);   color: #dc2626; }
 .dz-admin-table-card .btn-outline-primary {
-    color: #2563eb;
-    border: 1.5px solid #2563eb;
+    color: var(--adm-accent);
+    border: 1.5px solid var(--adm-accent);
     background: transparent;
     border-radius: .5rem;
     font-weight: 500;
     transition: background 0.18s, color 0.18s, border 0.18s;
 }
 .dz-admin-table-card .btn-outline-primary:hover {
-    background: #2563eb;
+    background: var(--adm-accent);
     color: #fff;
 }
 @media (max-width: 991.98px) {
@@ -139,7 +181,7 @@ html[data-theme='dark'] .dz-admin-table-card .table {
      SIDEBAR Y SUBMENÚS ADMIN
      ========================= */
 .dz-admin-sidebar .nav-treeview {
-    background: #232a3b;
+    background: var(--adm-surface-soft);
     border-radius: 0.8rem;
     margin: 0.25rem 0.2rem 0.5rem 0.7rem;
     padding: 0.4rem 0.2rem 0.5rem 0.5rem;
@@ -149,11 +191,11 @@ html[data-theme='dark'] .dz-admin-table-card .table {
     margin-bottom: 0.3rem;
 }
 .dz-admin-sidebar .nav-treeview .nav-link {
-    background: #232a3b;
+    background: var(--adm-surface-soft);
     border-radius: 0.7rem;
     margin-bottom: 0.2rem;
     padding: 0.65rem 1.1rem;
-    color: #e3e8f7;
+    color: var(--adm-sidebar-text);
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -163,21 +205,21 @@ html[data-theme='dark'] .dz-admin-table-card .table {
 .dz-admin-sidebar .nav-treeview .nav-link.active,
 .dz-admin-sidebar .nav-treeview .nav-link:focus,
 .dz-admin-sidebar .nav-treeview .nav-link:hover {
-    background: #2d3650;
-    color: #fff;
+    background: var(--adm-sidebar-active-bg, #2d3650);
+    color: var(--adm-sidebar-active-text, #fff);
 }
 .dz-admin-sidebar .nav-treeview .nav-icon {
     font-size: 1.15rem;
     margin-right: 0.5rem;
-    color: #a6b1d6;
+    color: var(--adm-sidebar-icon);
 }
 .dz-admin-sidebar .nav-treeview .nav-link.active .nav-icon,
 .dz-admin-sidebar .nav-treeview .nav-link:focus .nav-icon,
 .dz-admin-sidebar .nav-treeview .nav-link:hover .nav-icon {
-    color: #fff;
+    color: var(--adm-sidebar-active-text, #fff);
 }
 .dz-admin-sidebar .nav-header {
-    color: #8a97b8;
+    color: var(--adm-sidebar-muted);
     font-size: 0.93rem;
     font-weight: 700;
     margin: 1.1rem 0 0.4rem 0.7rem;
@@ -187,7 +229,7 @@ html[data-theme='dark'] .dz-admin-table-card .table {
     border-radius: 0.7rem;
     margin-bottom: 0.2rem;
     padding: 0.7rem 1.1rem;
-    color: #e3e8f7;
+    color: var(--adm-sidebar-text);
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -197,16 +239,16 @@ html[data-theme='dark'] .dz-admin-table-card .table {
 .dz-admin-sidebar .nav-link.active,
 .dz-admin-sidebar .nav-link:focus,
 .dz-admin-sidebar .nav-link:hover {
-    background: #2d3650;
-    color: #fff;
+    background: var(--adm-sidebar-active-bg, #2d3650);
+    color: var(--adm-sidebar-active-text, #fff);
 }
 .dz-admin-sidebar .nav-icon {
     font-size: 1.18rem;
     margin-right: 0.5rem;
-    color: #a6b1d6;
+    color: var(--adm-sidebar-icon);
 }
 .dz-admin-sidebar .nav-link.active .nav-icon,
 .dz-admin-sidebar .nav-link:focus .nav-icon,
 .dz-admin-sidebar .nav-link:hover .nav-icon {
-    color: #fff;
+    color: var(--adm-sidebar-active-text, #fff);
 }

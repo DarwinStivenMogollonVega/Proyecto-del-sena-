@@ -40,7 +40,7 @@
             <td>
                 <div class="block">
                     <strong>Pedido asociado</strong><br>
-                    Pedido ID: #{{ $factura->pedido->id }}<br>
+                    Pedido ID: #{{ $factura->pedido->getKey() }}<br>
                     Fecha pedido: {{ $factura->pedido->created_at->format('d/m/Y H:i') }}<br>
                     Estado: {{ ucfirst($factura->estado_pedido) }}
                 </div>

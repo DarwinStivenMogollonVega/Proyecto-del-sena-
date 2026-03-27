@@ -1,46 +1,7 @@
 @extends('autenticacion.app')
 @push('estilos')
-<style>
-  .register-brand .auth-brand-mark-full {
-    width: min(15rem, 62vw);
-    height: 4.2rem;
-    padding: 0.28rem 0.4rem;
-  }
-  .register-brand .auth-brand-mark-icon {
-    width: 3.4rem;
-    height: 3.4rem;
-  }
-  @media (max-width: 575.98px) {
-    .register-brand .auth-brand-mark-icon {
-      width: 4rem;
-      height: 4rem;
-    }
-  }
-
-  /* Modo oscuro inspirado en perfil */
-  html[data-theme='dark'] .auth-shell {
-    background: radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.15), transparent 30%), radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.14), transparent 28%), linear-gradient(180deg, rgba(31, 41, 55, 0.65), rgba(17, 24, 39, 0));
-  }
-  html[data-theme='dark'] .auth-card {
-    background: #111827;
-    border-color: #334155;
-    box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
-  }
-  html[data-theme='dark'] .auth-form-panel {
-    background: transparent;
-  }
-  html[data-theme='dark'] .auth-summary-panel {
-    background: linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
-    color: #fff;
-  }
-  html[data-theme='dark'] .summary-title,
-  html[data-theme='dark'] .summary-copy,
-  html[data-theme='dark'] .summary-pill strong,
-  html[data-theme='dark'] .summary-pill span,
-  html[data-theme='dark'] .summary-list li {
-    color: #fff !important;
-  }
-</style>
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/registro.css') }}">
 @endpush
 @section('titulo', 'DisMusic - Registro')
 @section('contenido')
@@ -50,10 +11,8 @@
       <a href="{{ route('web.index') }}" class="auth-brand register-brand mb-4">
         <span class="auth-brand-mark auth-brand-mark-full">
           <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
-          <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
         </span>
         <span class="auth-brand-mark auth-brand-mark-icon">
-          <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
           <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
         </span>
       </a>
@@ -66,11 +25,21 @@
           {{ session('error') }}
         </div>
       @endif
+      @if($errors->any())
+        <div class="alert alert-danger" role="alert">
+          <strong>Revisa los siguientes errores:</strong>
+          <ul class="mb-0 mt-2">
+            @foreach($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
       <form action="{{ route('registro.store') }}" method="post" class="mt-4">
         @csrf
         <div class="input-group mb-3">
           <div class="form-floating">
-            <input id="registerName" type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre" required />
+            <input id="registerName" type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre" minlength="3" maxlength="100" pattern="^(?!.*\d).+$" title="El nombre no puede contener números." required />
             <label for="registerName">Nombre</label>
           </div>
           <div class="input-group-text"><span class="bi bi-person"></span></div>
@@ -78,7 +47,7 @@
         @error('name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         <div class="input-group mb-3">
           <div class="form-floating">
-            <input id="registerEmail" type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="correo@ejemplo.com" required />
+            <input id="registerEmail" type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="correo@ejemplo.com" maxlength="100" required />
             <label for="registerEmail">Correo electrónico</label>
           </div>
           <div class="input-group-text"><span class="bi bi-envelope"></span></div>
@@ -86,7 +55,7 @@
         @error('email')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         <div class="input-group mb-2">
           <div class="form-floating">
-            <input id="registerPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña" required />
+            <input id="registerPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contraseña" minlength="8" required />
             <label for="registerPassword">Contraseña</label>
           </div>
           <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -94,7 +63,7 @@
         @error('password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         <div class="input-group mb-2">
           <div class="form-floating">
-            <input id="registerPasswordConfirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Confirmar contraseña" required />
+            <input id="registerPasswordConfirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Confirmar contraseña" minlength="8" required />
             <label for="registerPasswordConfirmation">Confirmar contraseña</label>
           </div>
           <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
@@ -141,5 +110,35 @@
   </aside>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+(() => {
+  const nameInput = document.getElementById('registerName');
+  const passwordInput = document.getElementById('registerPassword');
+  const confirmationInput = document.getElementById('registerPasswordConfirmation');
+
+  nameInput?.addEventListener('input', function () {
+    if (/\d/.test(this.value)) {
+      this.classList.add('is-invalid');
+    } else {
+      this.classList.remove('is-invalid');
+    }
+  });
+
+  const validatePasswords = () => {
+    if (!passwordInput || !confirmationInput) return;
+    if (confirmationInput.value.length > 0 && passwordInput.value !== confirmationInput.value) {
+      confirmationInput.classList.add('is-invalid');
+    } else {
+      confirmationInput.classList.remove('is-invalid');
+    }
+  };
+
+  passwordInput?.addEventListener('input', validatePasswords);
+  confirmationInput?.addEventListener('input', validatePasswords);
+})();
+</script>
+@endpush
 
       

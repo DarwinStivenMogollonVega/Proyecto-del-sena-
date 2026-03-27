@@ -12,12 +12,12 @@ class CarritoController extends Controller
         $cantidad = $request->cantidad ?? 1;
 
         $carrito = session()->get('carrito', []);
-        if (isset($carrito[$producto->id])) {
+        if (isset($carrito[$producto->getKey()])) {
             // Ya existe en el carrito, solo aumenta la cantidad
-            $carrito[$producto->id]['cantidad'] += $cantidad;
+            $carrito[$producto->getKey()]['cantidad'] += $cantidad;
         } else {
             // No existe, lo agregamos
-            $carrito[$producto->id] = [
+            $carrito[$producto->getKey()] = [
                 'codigo' => $producto->codigo,
                 'nombre' => $producto->nombre,
                 'precio' => $producto->precio,

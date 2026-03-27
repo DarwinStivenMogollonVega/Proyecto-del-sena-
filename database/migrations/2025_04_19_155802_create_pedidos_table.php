@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Usuario que hizo el pedido
+            $table->foreignId('usuario_id')->constrained('usuarios', 'usuario_id')->onDelete('cascade'); // Usuario que hizo el pedido
             $table->decimal('total', 10, 2); // Total del pedido
             $table->string('estado', 20)->default('pendiente'); // Estado del pedido
             $table->timestamps();

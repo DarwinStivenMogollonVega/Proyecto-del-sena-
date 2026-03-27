@@ -73,6 +73,15 @@ Route::post('/deseados/agregar/{id}', function($id) {
     return redirect()->back()->with('success', 'Producto agregado a la lista de deseados');
 })->name('web.wishlist.add');
 
+Route::post('/deseados/quitar/{id}', function($id) {
+    $wishlist = session('wishlist', []);
+    if (isset($wishlist[$id])) {
+        unset($wishlist[$id]);
+        session(['wishlist' => $wishlist]);
+    }
+    return redirect()->back()->with('success', 'Producto eliminado de la lista de deseados');
+})->name('web.wishlist.remove');
+
 // 🔹 Rutas protegidas (solo usuarios autenticados)
 Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::resource('usuarios', UserController::class);
@@ -83,6 +92,9 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::resource('categoria', CategoriaController::class);
     Route::resource('catalogo', CatalogoController::class); // ✅ NUEVO: rutas del catálogo
     Route::resource('artistas', ArtistaController::class)->except(['show']);
+    Route::post('/artistas/check-identifier', [ArtistaController::class, 'checkIdentifier'])->name('artistas.checkIdentifier');
+    // Ruta explícita para ver detalles de un artista (la resource excluye 'show')
+    Route::get('/artistas/{id}', [ArtistaController::class, 'show'])->name('artistas.show');
 
 
     // Flujo multi-paso del pedido
@@ -115,6 +127,7 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::post('/admin/inventario/{id}/movimiento', [InventarioController::class, 'moverStock'])->name('inventario.movimiento');
 
     Route::get('/admin/seguridad', [SeguridadController::class, 'index'])->name('admin.seguridad.index');
+    Route::get('/admin/seguridad/crear', [SeguridadController::class, 'create'])->name('admin.seguridad.create');
     Route::get('/admin/guia-soporte', function () {
         return view('plantilla.guia');
     })->name('admin.guia');
@@ -131,16 +144,30 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
             return redirect()->route('cliente.dashboard');
         }
 
-        return view('dashboard', app(AdminAnalyticsService::class)->dashboardData());
+        $data = app(AdminAnalyticsService::class)->dashboardData();
+
+        // Cargar una vista reducida del gestor de clientes para el dashboard
+        $textoClientes = '';
+        $clientesQuery = User::query()
+            ->whereHas('roles', fn ($q) => $q->where('name', 'cliente'))
+            ->withCount('pedidos')
+            ->orderByDesc((new User())->getKeyName());
+
+        $registrosClientes = $clientesQuery->limit(10)->get();
+
+        $data['registrosClientes'] = $registrosClientes;
+        $data['textoClientes'] = $textoClientes;
+
+        return view('dashboard', $data);
     })->name('dashboard');
 
     Route::get('/dashboard-cliente', function () {
         $userId = auth()->id();
 
-        $pedidosBase = Pedido::where('user_id', $userId);
+        $pedidosBase = Pedido::where('usuario_id', $userId);
         $detallesBase = PedidoDetalle::query()
             ->join('pedidos', 'pedidos.id', '=', 'pedido_detalles.pedido_id')
-            ->where('pedidos.user_id', $userId);
+            ->where('pedidos.usuario_id', $userId);
 
         $totalPedidos = (clone $pedidosBase)->count();
         $gastoTotal = (float) ((clone $pedidosBase)->sum('total') ?? 0);
@@ -151,7 +178,7 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
 
         $totalUnidadesCompradas = (int) ((clone $detallesBase)->sum('pedido_detalles.cantidad') ?? 0);
 
-        $ultimosPedidos = Pedido::where('user_id', $userId)
+        $ultimosPedidos = Pedido::where('usuario_id', $userId)
             ->latest('id')
             ->limit(5)
             ->get();
@@ -212,6 +239,10 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::get('/perfil', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
 });
+
+    // Telemetry endpoint (authenticated users)
+    use App\Http\Controllers\TelemetryController;
+    Route::post('/telemetry', [TelemetryController::class, 'store'])->name('telemetry.store')->middleware('auth');
 
 // 🔹 Rutas de autenticación (solo para invitados)
 Route::middleware('guest')->group(function(){

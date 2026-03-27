@@ -41,10 +41,11 @@ class CategoriaController extends Controller
     public function store(CategoriaRequest $request)
     {
         $this->authorize('categoria-create'); 
+        $validated = $request->validated();
 
         $registro = new Categoria();
-        $registro->nombre = $request->input('name');
-        $registro->descripcion = $request->input('description');
+        $registro->nombre = $validated['name'];
+        $registro->descripcion = $validated['description'] ?? null;
         $registro->save();
           
         return redirect()->route('categoria.index')
@@ -68,10 +69,11 @@ class CategoriaController extends Controller
     public function update(CategoriaRequest $request, $id)
     {
         $this->authorize('categoria-edit');
+        $validated = $request->validated();
 
         $registro = Categoria::findOrFail($id);
-        $registro->nombre = $request->input('name');
-        $registro->descripcion = $request->input('description');
+        $registro->nombre = $validated['name'];
+        $registro->descripcion = $validated['description'] ?? null;
         $registro->save();
 
         return redirect()->route('categoria.index')

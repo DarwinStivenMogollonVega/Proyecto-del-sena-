@@ -3,18 +3,37 @@
    ===================== */
 :root {
   --dz-text-main: #2d2d2d;
-  --dz-text-heading: #7c2d12;
+  --dz-text-heading: #f3e9e0;
   --dz-text-subtle: #475569;
+  --dz-nav-link: var(--dz-text-heading);
+  --dz-nav-link-dark: var(--dz-text-heading);
 }
 html[data-theme='dark'], .dark {
   --dz-text-main: #f3e9e0;
-  --dz-text-heading: #fbbf24;
+  --dz-text-heading: #f3e9e0;
   --dz-text-subtle: #cbd5e1;
+  --dz-nav-link: var(--dz-text-heading);
 }
 html[data-theme='light'], .light {
   --dz-text-main: #23272e;
-  --dz-text-heading: #b45309;
+  --dz-text-heading: #23272e;
   --dz-text-subtle: #475569;
+  --dz-nav-link: var(--dz-text-heading);
+}
+/* Unificar color de enlaces del navbar para modo claro y oscuro */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn,
+.navbar .cart-cta-btn,
+.navbar .nav-cta-text {
+  color: var(--dz-nav-link) !important;
+}
+html[data-theme='dark'] .navbar .nav-link,
+html[data-theme='dark'] .navbar .nav-cta-btn,
+html[data-theme='dark'] .navbar .dropdown-cta-btn,
+html[data-theme='dark'] .navbar .cart-cta-btn,
+html[data-theme='dark'] .navbar .nav-cta-text {
+  color: var(--dz-nav-link) !important;
 }
 
 /* =====================

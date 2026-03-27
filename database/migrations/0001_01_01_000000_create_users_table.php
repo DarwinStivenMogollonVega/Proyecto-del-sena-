@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('usuarios', function (Blueprint $table) {
+            // Usar `usuario_id` como clave primaria para compatibilidad con el resto del código
             $table->id('usuario_id');
-            $table->string('nombre');
-            $table->string('correo_electronico')->unique();
-            $table->timestamp('correo_verificado_en')->nullable();
-            $table->string('contrasena');
-            $table->string('token_recordar', 100)->nullable();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
-        });
+    });
 
         Schema::create('tokens_restablecer_contrasena', function (Blueprint $table) {
             $table->string('correo_electronico')->primary();

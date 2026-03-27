@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -36,15 +37,13 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $this->authorize('rol-create'); 
-        $request->validate([
-            'name' => 'required|unique:roles,name',
-            'permissions' => 'required|array',
-        ]);
-        $registro = Role::create(['name' => $request->name]);
-        $registro->syncPermissions($request->permissions);
+        $this->authorize('rol-create');
+        $validated = $request->validated();
+
+        $registro = Role::create(['name' => $validated['name']]);
+        $registro->syncPermissions($validated['permissions']);
         return redirect()->route('roles.index')->with('mensaje', 'Rol '.$registro->name. ' creado correctamente.');
     }
 
@@ -70,17 +69,14 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RoleRequest $request, string $id)
     {
-        $this->authorize('rol-edit'); 
+        $this->authorize('rol-edit');
         $registro=Role::findOrFail($id);
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $registro->id,
-            'permissions' => 'required|array',
-        ]);
+        $validated = $request->validated();
 
-        $registro->update(['name' => $request->name]);
-        $registro->syncPermissions($request->permissions);
+        $registro->update(['name' => $validated['name']]);
+        $registro->syncPermissions($validated['permissions']);
         return redirect()->route('roles.index')->with('mensaje', 'Registro '.$registro->name. '  actualizado correctamente');
     }
 

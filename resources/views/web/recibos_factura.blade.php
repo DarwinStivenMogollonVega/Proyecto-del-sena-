@@ -4,15 +4,16 @@
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/recibos-factura-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 invoice-page">
-    <section class="invoice-hero">
+    <section class="invoice-hero" @if(!empty($heroImage)) style="--invoice-hero-image: url('{{ $heroImage }}')" @endif>
         <div class="row align-items-center">
             <div class="col-lg-8">
                 <h1 class="h2 fw-bold mb-1">Historial de facturas</h1>
-                <p class="mb-0 text-white-50">Consulta todas tus facturas generadas automaticamente desde Mis pedidos y abre cada documento para descargar PDF.</p>
+                <p class="mb-0">Consulta todas tus facturas generadas automaticamente desde Mis pedidos y abre cada documento para descargar PDF.</p>
             </div>
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                 <a href="{{ route('perfil.pedidos') }}" class="btn btn-light">
@@ -69,7 +70,7 @@
                         @forelse($registros as $reg)
                             <tr>
                                 <td>{{ $reg->numero_factura }}</td>
-                                <td>#{{ $reg->pedido->id }}</td>
+                                <td>#{{ $reg->pedido->getKey() }}</td>
                                 <td>{{ $reg->fecha_emision->format('d/m/Y H:i') }}</td>
                                 <td>{{ ucfirst($reg->estado_pedido) }}</td>
                                 <td>
@@ -78,7 +79,7 @@
                                 </td>
                                 <td class="text-end">${{ number_format($reg->total, 2) }}</td>
                                 <td>
-                                    <a href="{{ route('perfil.facturas.show', $reg->id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('perfil.facturas.show', $reg->getKey()) }}" class="btn btn-sm btn-primary">
                                         <i class="bi bi-file-earmark-text me-1"></i> Ver factura
                                     </a>
                                 </td>

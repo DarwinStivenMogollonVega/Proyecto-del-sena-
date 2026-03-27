@@ -40,12 +40,12 @@ class Producto extends Model
 
     public function artista()
     {
-        return $this->belongsTo(Artista::class);
+        return $this->belongsTo(Artista::class, 'artista_id', 'artista_id');
     }
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class);
+        return $this->belongsTo(Proveedor::class, 'proveedor_id', 'proveedor_id');
     }
 
     public function resenas()

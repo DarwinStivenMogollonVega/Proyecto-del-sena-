@@ -105,7 +105,7 @@ class WebController extends Controller
         $promedio = (float) ($producto->resenas->avg('puntuacion') ?? 0);
         $totalResenas = (int) $producto->resenas->count();
         $miResena = auth()->check()
-            ? $producto->resenas->firstWhere('user_id', auth()->id())
+            ? $producto->resenas->firstWhere('usuario_id', auth()->id())
             : null;
 
         return view('web.item', compact('producto', 'promedio', 'totalResenas', 'miResena'));
@@ -120,10 +120,9 @@ class WebController extends Controller
             'comentario' => ['nullable', 'string', 'max:600'],
         ]);
 
-        ProductoResena::updateOrCreate(
-            [
-                'producto_id' => $producto->id,
-                'user_id' => auth()->id(),
+        ProductoResena::updateOrCreate([
+                'producto_id' => $producto->getKey(),
+                'usuario_id' => auth()->id(),
             ],
             [
                 'puntuacion' => $datos['puntuacion'],
@@ -132,7 +131,7 @@ class WebController extends Controller
         );
 
         return redirect()
-            ->route('web.show', $producto->id)
+            ->route('web.show', $producto->getKey())
             ->with('mensaje', 'Gracias, tu calificacion fue registrada.');
     }
 }

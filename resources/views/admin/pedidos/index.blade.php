@@ -1,12 +1,7 @@
 @extends('plantilla.app')
 
 @push('estilos')
-<style>
-.badge-pendiente  { background: rgba(245,158,11,.15); color: #d97706; }
-.badge-enviado    { background: rgba(16,185,129,.15);  color: #059669; }
-.badge-entregado  { background: rgba(29,78,216,.15);   color: #1d4ed8; }
-.badge-cancelado, .badge-anulado { background: rgba(239,68,68,.15);   color: #dc2626; }
-</style>
+<!-- Badge styles moved to public/css/admin.css -->
 @endpush
 
 @section('contenido')
@@ -49,7 +44,7 @@
 					<tbody>
 						@forelse($pedidos as $pedido)
 						<tr>
-							<td class="px-3 fw-semibold">{{ $pedido->id }}</td>
+							<td class="px-3 fw-semibold">{{ $pedido->getKey() }}</td>
 							<td>
 								<div class="fw-semibold">{{ $pedido->user->name ?? $pedido->nombre ?? 'N/A' }}</div>
 							</td>

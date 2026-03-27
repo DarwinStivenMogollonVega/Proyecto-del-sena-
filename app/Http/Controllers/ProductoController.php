@@ -53,19 +53,20 @@ class ProductoController extends Controller
     public function store(ProductoRequest $request)
     {
         $this->authorize('producto-create'); 
+        $validated = $request->validated();
 
         $registro = new Producto();
-        $registro->codigo       = $request->input('codigo');
-        $registro->nombre       = $request->input('nombre');
-        $registro->precio       = $request->input('precio');
-        $registro->cantidad       = $request->input('cantidad');
-        $registro->categoria_id = $request->input('categoria_id');
-        $registro->catalogo_id  = $request->input('catalogo_id'); // <- agregado
-        $registro->proveedor_id = $request->input('proveedor_id');
-        $registro->artista_id  = $request->input('artista_id');
-        $registro->anio_lanzamiento  = $request->input('anio_lanzamiento');
-        $registro->descripcion  = $request->input('descripcion');
-        $registro->lista_canciones  = $this->parseListaCanciones($request->input('lista_canciones'));
+        $registro->codigo = $validated['codigo'];
+        $registro->nombre = $validated['nombre'];
+        $registro->precio = $validated['precio'];
+        $registro->cantidad = $validated['cantidad'];
+        $registro->categoria_id = $validated['categoria_id'];
+        $registro->catalogo_id = $validated['catalogo_id'] ?? null;
+        $registro->proveedor_id = $validated['proveedor_id'] ?? null;
+        $registro->artista_id = $validated['artista_id'] ?? null;
+        $registro->anio_lanzamiento = $validated['anio_lanzamiento'] ?? null;
+        $registro->descripcion = $validated['descripcion'] ?? null;
+        $registro->lista_canciones = $this->parseListaCanciones($validated['lista_canciones'] ?? null);
 
         $sufijo = strtolower(Str::random(2));
         $image = $request->file('imagen');
@@ -78,8 +79,8 @@ class ProductoController extends Controller
         $registro->save();
 
         InventarioMovimiento::create([
-            'producto_id' => $registro->id,
-            'user_id' => auth()->id(),
+            'producto_id' => $registro->getKey(),
+            'usuario_id' => auth()->id(),
             'tipo' => 'entrada',
             'cantidad' => (int) $registro->cantidad,
             'stock_anterior' => 0,
@@ -118,22 +119,23 @@ class ProductoController extends Controller
     public function update(ProductoRequest $request, $id)
     {
         $this->authorize('producto-edit'); 
+        $validated = $request->validated();
 
         $registro = Producto::findOrFail($id);
-        $registro->codigo       = $request->input('codigo');
-        $registro->nombre       = $request->input('nombre');
-        $registro->precio       = $request->input('precio');
-        $registro->cantidad       = $request->input('cantidad');
-        $registro->categoria_id = $request->input('categoria_id');
-        $registro->catalogo_id  = $request->input('catalogo_id'); // <- agregado
-        $registro->proveedor_id = $request->input('proveedor_id');
-        $registro->artista_id  = $request->input('artista_id');
-        $registro->anio_lanzamiento  = $request->input('anio_lanzamiento');
-        $registro->descripcion  = $request->input('descripcion');
-        $registro->lista_canciones  = $this->parseListaCanciones($request->input('lista_canciones'));
+        $registro->codigo = $validated['codigo'];
+        $registro->nombre = $validated['nombre'];
+        $registro->precio = $validated['precio'];
+        $registro->cantidad = $validated['cantidad'];
+        $registro->categoria_id = $validated['categoria_id'];
+        $registro->catalogo_id = $validated['catalogo_id'] ?? null;
+        $registro->proveedor_id = $validated['proveedor_id'] ?? null;
+        $registro->artista_id = $validated['artista_id'] ?? null;
+        $registro->anio_lanzamiento = $validated['anio_lanzamiento'] ?? null;
+        $registro->descripcion = $validated['descripcion'] ?? null;
+        $registro->lista_canciones = $this->parseListaCanciones($validated['lista_canciones'] ?? null);
 
         $stockAnterior = (int) $registro->getOriginal('cantidad');
-        $stockNuevo = (int) $request->input('cantidad');
+        $stockNuevo = (int) $validated['cantidad'];
 
         $sufijo = strtolower(Str::random(2));
         $image = $request->file('imagen');
@@ -153,8 +155,8 @@ class ProductoController extends Controller
 
         if ($stockAnterior !== $stockNuevo) {
             InventarioMovimiento::create([
-                'producto_id' => $registro->id,
-                'user_id' => auth()->id(),
+                'producto_id' => $registro->getKey(),
+                'usuario_id' => auth()->id(),
                 'tipo' => 'ajuste',
                 'cantidad' => abs($stockNuevo - $stockAnterior),
                 'stock_anterior' => $stockAnterior,

@@ -40,12 +40,21 @@
                                                 <strong>{{ $producto->nombre }}</strong>
                                                 <div class="small text-muted">{{ $producto->codigo }}</div>
                                             </td>
-                                            <td>{{ $producto->artista->nombre ?? 'Sin artista' }}</td>
+                                            <td>
+                                                @if($producto->artista)
+                                                    {{ $producto->artista->nombre }}
+                                                @elseif($producto->artista_id)
+                                                    <span class="text-muted">Sin artista (ID: {{ $producto->artista_id }})</span>
+                                                    <a href="{{ route('productos.edit', $producto->getKey()) }}" class="btn btn-sm btn-outline-secondary ms-2">Asignar</a>
+                                                @else
+                                                    Sin artista
+                                                @endif
+                                            </td>
                                             <td>
                                                 <span class="badge {{ $producto->cantidad <= 5 ? 'bg-danger' : 'bg-success' }}">{{ $producto->cantidad }}</span>
                                             </td>
                                             <td>
-                                                <form action="{{ route('inventario.movimiento', $producto->id) }}" method="post" class="row g-2">
+                                                <form action="{{ route('inventario.movimiento', $producto->getKey()) }}" method="post" class="row g-2">
                                                     @csrf
                                                     <div class="col-md-3">
                                                         <select name="tipo" class="form-select form-select-sm" required>

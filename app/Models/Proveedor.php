@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Proveedor extends Model
 {
     protected $table = 'proveedores';
+    protected $primaryKey = 'proveedor_id';
 
     protected $fillable = [
         'nombre',
@@ -24,6 +25,11 @@ class Proveedor extends Model
 
     public function productos()
     {
-        return $this->hasMany(Producto::class);
+        return $this->hasMany(Producto::class, 'proveedor_id', 'proveedor_id');
+    }
+
+    public function getIdAttribute()
+    {
+        return $this->{$this->getKeyName()};
     }
 }

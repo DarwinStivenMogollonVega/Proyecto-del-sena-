@@ -1,126 +1,7 @@
 @extends('plantilla.app')
 
 @push('estilos')
-<style>
-/* ── Stat Cards ───────────────────────────────────────── */
-.stat-card {
-    border-radius: 1rem;
-    border: 1px solid var(--adm-border);
-    background: var(--adm-surface);
-    box-shadow: 0 14px 28px rgba(15,23,42,.08);
-    transition: box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
-    position: relative;
-    overflow: hidden;
-}
-.stat-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 3px;
-    background: linear-gradient(90deg, rgba(29,78,216,.62), rgba(99,102,241,.12), transparent 78%);
-    pointer-events: none;
-}
-.stat-card:hover {
-    box-shadow: 0 18px 30px rgba(15,23,42,.1);
-    border-color: color-mix(in srgb, var(--adm-accent) 16%, var(--adm-border));
-}
-.stat-icon {
-    width: 52px; height: 52px;
-    border-radius: .85rem;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.45rem; flex-shrink: 0;
-}
-.stat-value { font-size: 1.65rem; font-weight: 800; line-height: 1.1; color: var(--adm-heading); }
-.stat-label { font-size: .78rem; color: var(--adm-muted); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
-
-.bg-blue-soft   { background: rgba(29,78,216,.12); }
-.bg-green-soft  { background: rgba(16,185,129,.12); }
-.bg-orange-soft { background: rgba(249,115,22,.12); }
-.bg-purple-soft { background: rgba(139,92,246,.12); }
-.bg-red-soft    { background: rgba(239,68,68,.12); }
-.bg-amber-soft  { background: rgba(245,158,11,.12); }
-
-.text-blue   { color: #1d4ed8 !important; }
-.text-green  { color: #10b981 !important; }
-.text-orange { color: #f97316 !important; }
-.text-purple { color: #8b5cf6 !important; }
-.text-red    { color: #ef4444 !important; }
-.text-amber  { color: #f59e0b !important; }
-
-/* ── Mini status chip ─────────────────────────────────── */
-.badge-pendiente  { background: rgba(245,158,11,.15); color: #d97706; }
-.badge-enviado    { background: rgba(16,185,129,.15);  color: #059669; }
-.badge-entregado  { background: rgba(29,78,216,.15);   color: #1d4ed8; }
-.badge-cancelado,
-.badge-anulado    { background: rgba(239,68,68,.15);   color: #dc2626; }
-
-/* ── Progress bars ────────────────────────────────────── */
-.prod-bar { height: 6px; border-radius: 999px; background: var(--adm-border); overflow: hidden; }
-.prod-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #1d4ed8, #6366f1); }
-
-/* ── Star rating ──────────────────────────────────────── */
-.stars-filled { color: #f59e0b; }
-.stars-empty  { color: var(--adm-border); }
-
-/* ── Section headers ──────────────────────────────────── */
-.section-title {
-    font-size: .82rem;
-    font-weight: 700;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    color: var(--adm-muted);
-    margin-bottom: 1rem;
-}
-
-/* ── Avatar circle ────────────────────────────────────── */
-.avatar-circle {
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: .82rem; flex-shrink: 0;
-}
-
-/* ── Dashboard module shortcuts ─────────────────────── */
-.module-card {
-    border: 1px solid var(--adm-border);
-    border-radius: .9rem;
-    background: var(--adm-surface);
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    padding: .85rem .95rem;
-    text-decoration: none;
-    transition: box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
-    position: relative;
-    overflow: hidden;
-}
-.module-card::before {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
-    background: linear-gradient(180deg, rgba(29,78,216,.7), rgba(59,130,246,.18), transparent 88%);
-    pointer-events: none;
-}
-.module-card:hover {
-    box-shadow: 0 16px 26px rgba(15,23,42,.1);
-    border-color: color-mix(in srgb, var(--adm-accent) 22%, var(--adm-border));
-    background: color-mix(in srgb, var(--adm-surface) 94%, var(--adm-surface-soft));
-}
-.module-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: .75rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-.module-label {
-    font-size: .86rem;
-    font-weight: 700;
-    color: var(--adm-heading);
-}
-</style>
+<link rel="stylesheet" href="{{ asset('css/dashboard-section.css') }}">
 @endpush
 
 @section('contenido')
@@ -398,7 +279,7 @@
                             <tbody>
                                 @forelse($ultimosPedidos as $pedido)
                                 <tr>
-                                    <td class="px-3 fw-semibold">{{ $pedido->id }}</td>
+                                    <td class="px-3 fw-semibold">{{ $pedido->getKey() }}</td>
                                     <td>
                                         <div class="fw-semibold">{{ $pedido->user->name ?? $pedido->nombre }}</div>
                                         <small style="color:var(--adm-muted)">{{ $pedido->user->email ?? $pedido->email }}</small>
@@ -511,6 +392,59 @@
                                     <td colspan="3" class="text-center py-3" style="color:var(--adm-muted)">
                                         Sin compras registradas
                                     </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {{-- ══════════════════════════════════════════════════════════ --}}
+    {{-- ROW 4.5 – Gestor de Clientes (vista embebida en dashboard)   --}}
+    {{-- ══════════════════════════════════════════════════════════ --}}
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card" style="border-radius:1rem">
+                <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
+                        <i class="bi bi-people-fill me-2" style="color:var(--adm-accent)"></i>Gestor de Clientes
+                    </h6>
+                    <a href="{{ route('admin.clientes.index') }}" class="btn btn-sm btn-outline-primary">Ver todos &nbsp;<i class="bi bi-arrow-right"></i></a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" style="font-size:.88rem">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th class="text-center">Compras</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($registrosClientes as $reg)
+                                <tr>
+                                    <td class="fw-semibold">{{ $reg->getKey() }}</td>
+                                    <td>{{ $reg->name }}</td>
+                                    <td>{{ $reg->email }}</td>
+                                    <td class="text-center">{{ $reg->pedidos_count }}</td>
+                                    <td>
+                                        <span class="badge {{ $reg->activo ? 'bg-success' : 'bg-secondary' }}">{{ $reg->activo ? 'Activo' : 'Inactivo' }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.clientes.show', $reg->getKey()) }}" class="btn btn-sm btn-primary">Ver</a>
+                                        <a href="{{ route('usuarios.edit', $reg->getKey()) }}" class="btn btn-sm btn-outline-info">Editar</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-3" style="color:var(--adm-muted)">No hay clientes para mostrar</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -645,14 +579,6 @@
                     </a>
                 </div>
                 @endcan
-                @canany(['user-list','rol-list'])
-                <div class="col-12 col-md-4">
-                    <a href="{{ route('admin.seguridad.index') }}" class="module-card h-100">
-                        <span class="module-icon bg-red-soft text-red"><i class="bi bi-shield-check"></i></span>
-                        <span class="module-label">Panel de Seguridad</span>
-                    </a>
-                </div>
-                @endcanany
             </div>
         </div>
     </div>

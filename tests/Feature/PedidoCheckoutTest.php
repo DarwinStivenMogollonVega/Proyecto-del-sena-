@@ -43,11 +43,11 @@ class PedidoCheckoutTest extends TestCase
                 'metodo_pago' => 'efectivo',
             ]);
 
-        $response->assertRedirect(route('web.index'));
+        $response->assertRedirect(route('pedido.entrega'));
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('pedidos', [
-            'user_id' => $user->id,
+            'usuario_id' => $user->id,
             'nombre' => 'Cliente Test',
             'email' => 'cliente@test.com',
             'telefono' => '3001234567',
@@ -103,10 +103,10 @@ class PedidoCheckoutTest extends TestCase
                 'correo_factura' => 'facturas@empresa.test',
             ]);
 
-        $response->assertRedirect(route('web.index'));
+        $response->assertRedirect(route('pedido.entrega'));
 
         $this->assertDatabaseHas('pedidos', [
-            'user_id' => $user->id,
+            'usuario_id' => $user->id,
             'requiere_factura_electronica' => 1,
             'tipo_documento' => 'nit',
             'numero_documento' => '900123456-7',

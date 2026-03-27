@@ -79,7 +79,7 @@
             <i class="bi bi-arrow-left me-1"></i> Volver a facturas
         </a>
         <div class="d-flex gap-2">
-            <a href="{{ route('perfil.facturas.pdf', $factura->id) }}" class="btn btn-dark">
+            <a href="{{ route('perfil.facturas.pdf', $factura->getKey()) }}" class="btn btn-dark">
                 <i class="bi bi-file-earmark-pdf me-1"></i> Descargar PDF
             </a>
             <button type="button" class="btn btn-outline-dark" onclick="window.print()">
@@ -113,7 +113,7 @@
                 <div class="col-md-6">
                     <div class="receipt-block h-100">
                         <h2 class="h6 fw-bold mb-2">Pedido asociado</h2>
-                        <div><strong>ID Pedido:</strong> #{{ $factura->pedido->id }}</div>
+                        <div><strong>ID Pedido:</strong> #{{ $factura->pedido->getKey() }}</div>
                         <div><strong>Fecha pedido:</strong> {{ $factura->pedido->created_at->format('d/m/Y H:i') }}</div>
                         <div><strong>Metodo de pago:</strong> {{ ucfirst($factura->pedido->metodo_pago ?: '-') }}</div>
                         <div><strong>Estado:</strong> {{ ucfirst($factura->estado_pedido) }}</div>

@@ -4,22 +4,29 @@
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/mis-pedidos-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 orders-page">
+
+    {{-- HERO --}}
     <section class="orders-hero">
         <div class="row align-items-center">
             <div class="col-lg-8">
                 <h1 class="h2 fw-bold mb-1">Mis pedidos</h1>
-                <p class="mb-0 text-white-50">Consulta tu historial, revisa el estado y explora el detalle completo de cada compra.</p>
+                <p class="mb-0">
+                    Consulta tu historial, revisa el estado y explora el detalle completo de cada compra.
+                </p>
             </div>
+
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                 <a href="{{ route('web.index') }}" class="btn btn-light quick-action">
                     <i class="bi bi-shop me-1"></i> Ir a la tienda
                 </a>
             </div>
         </div>
+
         <div class="d-flex flex-wrap gap-2 mt-3">
             <a href="{{ route('carrito.mostrar') }}" class="btn btn-outline-light btn-sm quick-action">
                 <i class="bi bi-cart-fill me-1"></i> Ver carrito
@@ -36,6 +43,7 @@
         </div>
     </section>
 
+    {{-- KPI --}}
     <section class="mt-4">
         <div class="row g-3">
             <div class="col-6 col-lg-3">
@@ -44,30 +52,35 @@
                     <div class="value">{{ $resumen['totalPedidos'] }}</div>
                 </div>
             </div>
+
             <div class="col-6 col-lg-3">
                 <div class="orders-card orders-kpi">
                     <div class="label">Gasto total</div>
                     <div class="value">${{ number_format($resumen['gastoTotal'], 2) }}</div>
                 </div>
             </div>
+
             <div class="col-6 col-lg-2">
                 <div class="orders-card orders-kpi">
                     <div class="label">Pendientes</div>
                     <div class="value">{{ $resumen['pendientes'] }}</div>
                 </div>
             </div>
+
             <div class="col-6 col-lg-2">
                 <div class="orders-card orders-kpi">
                     <div class="label">Enviados</div>
                     <div class="value">{{ $resumen['enviados'] }}</div>
                 </div>
             </div>
+
             <div class="col-6 col-lg-2">
                 <div class="orders-card orders-kpi">
                     <div class="label">Cancelados</div>
                     <div class="value">{{ $resumen['cancelados'] }}</div>
                 </div>
             </div>
+
             <div class="col-6 col-lg-2">
                 <div class="orders-card orders-kpi">
                     <div class="label">Facturas generadas</div>
@@ -77,20 +90,21 @@
         </div>
     </section>
 
+    {{-- TABLA --}}
     <section class="mt-4">
-        <div class="cart-shell mb-4 p-0" style="background: #23140e; border-radius: 16px; border: 1px solid #3a2417;">
+        <div class="cart-shell mb-4 p-0">
+
             <div class="cart-table-head p-4 pb-2">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="fs-4 fw-bold mb-0" style="color: #fff;">Tus pedidos</h3>
-                        <p class="mb-0" style="color: #c9a063;">Listado de tus compras realizadas en la tienda.</p>
-                    </div>
-                </div>
+                <h3 class="fs-4 fw-bold mb-0">Tus pedidos</h3>
+                <p class="mb-0">Listado de tus compras realizadas en la tienda.</p>
             </div>
+
             <div class="p-4 pt-0">
                 <div class="orders-table-wrap mt-3">
-                    <table class="table table-hover table-bordered orders-table mb-0" style="background: #1a0e07; color: #fff; border-radius: 12px; overflow: hidden;">
-                        <thead style="background: #2d180c; color: #c9a063;">
+
+                    <table class="table table-hover table-bordered orders-table mb-0">
+
+                        <thead>
                             <tr>
                                 <th style="width: 120px">Opciones</th>
                                 <th>ID</th>
@@ -103,43 +117,59 @@
                                 <th>Detalles</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @if(count($registros) <= 0)
-                                <tr style="background: #1a0e07;">
-                                    <td colspan="9" style="padding: 48px 0; border: none;">
-                                        <div class="d-flex flex-column align-items-center justify-content-center">
-                                            <span style="font-size: 3rem; color: #ff9900; line-height: 1;">
+                            @if($registros->isEmpty())
+
+                                {{-- EMPTY --}}
+                                <tr class="orders-empty-row">
+                                    <td colspan="9" class="orders-empty-cell">
+                                        <div class="orders-empty-box">
+                                            <span class="orders-empty-icon">
                                                 <i class="bi bi-cart-x"></i>
                                             </span>
-                                            <span class="mt-2" style="color: #fff; font-size: 1.15rem; font-weight: 500;">Tu carrito está vacío. Agrega productos para continuar.</span>
+                                            <span class="orders-empty-text">
+                                                Tu carrito está vacío. Agrega productos para continuar.
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
+
                             @else
+
                                 @foreach($registros as $reg)
+
                                     <tr>
                                         <td>
                                             @if(auth()->user()->can('pedido-cancel'))
-                                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modal-estado-{{ $reg->id }}">
+                                                <button class="btn btn-outline-warning btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modal-estado-{{ $reg->getKey() }}">
                                                     <i class="bi bi-arrow-repeat"></i>
                                                 </button>
                                             @else
                                                 <span class="text-muted small">Sin acciones</span>
                                             @endif
                                         </td>
-                                        <td>#{{ $reg->id }}</td>
+
+                                        <td>#{{ $reg->getKey() }}</td>
                                         <td>{{ $reg->created_at->format('d/m/Y') }}</td>
                                         <td>{{ ucfirst($reg->metodo_pago ?? 'N/A') }}</td>
+
                                         <td>
                                             @if($reg->comprobante_pago)
-                                                <a href="{{ asset('storage/' . $reg->comprobante_pago) }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                                <a href="{{ asset('storage/' . $reg->comprobante_pago) }}"
+                                                   target="_blank"
+                                                   class="btn btn-sm btn-outline-info">
                                                     Ver captura
                                                 </a>
                                             @else
                                                 <span class="text-muted small">Sin archivo</span>
                                             @endif
                                         </td>
+
                                         <td>${{ number_format($reg->total, 2) }}</td>
+
                                         <td>
                                             @php
                                                 $colores = [
@@ -149,77 +179,102 @@
                                                     'cancelado' => 'bg-secondary',
                                                 ];
                                             @endphp
-                                            <span class="badge status-pill {{ $colores[$reg->estado] ?? 'bg-dark' }}">{{ ucfirst($reg->estado) }}</span>
+
+                                            <span class="badge status-pill {{ $colores[$reg->estado] ?? 'bg-dark' }}">
+                                                {{ ucfirst($reg->estado) }}
+                                            </span>
                                         </td>
+
                                         <td>
                                             @if($reg->factura)
-                                                <a href="{{ route('perfil.facturas.show', $reg->factura->id) }}" class="btn btn-sm btn-outline-primary">
+                                                <a href="{{ route('perfil.facturas.show', $reg->factura->getKey()) }}"
+                                                   class="btn btn-sm btn-outline-primary">
                                                     Ver factura
                                                 </a>
                                             @else
-                                                <a href="{{ route('perfil.recibos.show', $reg->id) }}" class="btn btn-sm btn-primary">
+                                                <a href="{{ route('perfil.recibos.show', $reg->getKey()) }}"
+                                                   class="btn btn-sm btn-primary">
                                                     Generar factura
                                                 </a>
                                             @endif
                                         </td>
+
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-{{ $reg->id }}">
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#detallesCollapse-{{ $reg->getKey() }}">
                                                 Ver detalles
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr class="collapse" id="detalles-{{ $reg->id }}">
-                                        <td colspan="9">
-                                            <div class="detail-box mb-3">
-                                                <strong>Datos de contacto:</strong>
-                                                {{ $reg->nombre ?? '-' }} | {{ $reg->email ?? '-' }} | {{ $reg->telefono ?? '-' }}
-                                                <br>
-                                                <strong>Direccion:</strong> {{ $reg->direccion ?? '-' }}
-                                                @if($reg->requiere_factura_electronica)
-                                                <br>
-                                                <strong>Factura electronica:</strong>
-                                                {{ strtoupper($reg->tipo_documento ?? '-') }} {{ $reg->numero_documento ?? '-' }} | {{ $reg->razon_social ?? '-' }} | {{ $reg->correo_factura ?? '-' }}
-                                            @endif
-                                        </div>
-                                        <table class="table table-sm table-striped mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Producto</th>
-                                                    <th>Imagen</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Precio Unitario</th>
-                                                    <th>Subtotal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($reg->detalles as $detalle)
-                                                    <tr>
-                                                        <td>{{ $detalle->producto->nombre }}</td>
-                                                        <td>
-                                                            <img src="{{ asset('uploads/productos/' . $detalle->producto->imagen) }}" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;" alt="{{ $detalle->producto->nombre }}">
-                                                        </td>
-                                                        <td>{{ $detalle->cantidad }}</td>
-                                                        <td>${{ number_format($detalle->precio, 2) }}</td>
-                                                        <td>${{ number_format($detalle->cantidad * $detalle->precio, 2) }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                @if(auth()->user()->can('pedido-cancel'))
-                                    @include('pedido.state')
-                                @endif
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
 
-            <div class="mt-3">
-                {{ $registros->appends(['texto' => $texto])->links() }}
+                                    {{-- DETALLES --}}
+                                    <tr>
+                                        <td colspan="9">
+                                            <div class="collapse" id="detallesCollapse-{{ $reg->getKey() }}">
+
+                                                <div class="detail-box mb-3">
+                                                    <strong>Datos:</strong>
+                                                    {{ $reg->nombre }} | {{ $reg->email }} | {{ $reg->telefono }}
+
+                                                    <br>
+                                                    <strong>Dirección:</strong>
+                                                    {{ $reg->direccion }}
+                                                </div>
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm table-striped mb-0 orders-detail-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Producto</th>
+                                                                <th>Imagen</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Precio</th>
+                                                                <th>Subtotal</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            @foreach($reg->detalles as $detalle)
+                                                                <tr>
+                                                                    <td>{{ $detalle->producto->nombre }}</td>
+                                                                    <td>
+                                                                        <img src="{{ asset('uploads/productos/' . $detalle->producto->imagen) }}"
+                                                                             class="orders-img">
+                                                                    </td>
+                                                                    <td>{{ $detalle->cantidad }}</td>
+                                                                    <td>${{ number_format($detalle->precio, 2) }}</td>
+                                                                    <td>${{ number_format($detalle->cantidad * $detalle->precio, 2) }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    @if(auth()->user()->can('pedido-cancel'))
+                                        @include('pedido.state')
+                                    @endif
+
+                                @endforeach
+
+                            @endif
+                        </tbody>
+
+                    </table>
+                </div>
+
+                {{-- PAGINACIÓN --}}
+                <div class="mt-3">
+                    {{ $registros->appends(['texto' => $texto])->links() }}
+                </div>
+
             </div>
         </div>
     </section>
+
 </div>
 @endsection

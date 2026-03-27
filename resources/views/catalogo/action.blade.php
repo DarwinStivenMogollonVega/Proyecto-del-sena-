@@ -4,18 +4,28 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem; background:#fff;">
-                    <div class="card-header" style="background:transparent; border-bottom:1px solid #e5e7eb;">
-                        <h3 class="card-title" style="color:#222;">Catálogo</h3>
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px">
+                        <h3 class="card-title">Catálogo</h3>
                     </div>
 
                     <div class="card-body">
-                        <form action="{{ isset($registro) ? route('catalogo.update', $registro->id) : route('catalogo.store') }}" 
-                              method="POST" id="formRegistroCatalogo">
+                        <form action="{{ isset($registro) ? route('catalogo.update', $registro->getKey()) : route('catalogo.store') }}" 
+                              method="POST" id="formRegistroCatalogo" novalidate>
 
                             @csrf
                             @if(isset($registro))
                                 @method('PUT')
+                            @endif
+                            @if($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
 
                             <div class="row">
@@ -26,6 +36,8 @@
                                            id="nombre" 
                                            name="nombre" 
                                            value="{{ old('nombre', $registro->nombre ?? '') }}" 
+                                           minlength="3"
+                                           maxlength="150"
                                            required>
                                     @error('nombre')
                                         <small class="text-danger">{{ $message }}</small>
@@ -37,6 +49,7 @@
                                     <textarea name="descripcion" 
                                               class="form-control @error('descripcion') is-invalid @enderror" 
                                               id="descripcion" 
+                                              maxlength="1000"
                                               rows="4">{{ old('descripcion', $registro->descripcion ?? '') }}</textarea>
                                     @error('descripcion')
                                         <small class="text-danger">{{ $message }}</small>
@@ -52,7 +65,7 @@
                         </form>
                     </div>
 
-                    <div class="card-footer clearfix bg-white border-0"></div>
+                    <div class="card-footer clearfix"></div>
                 </div>
             </div>
         </div>
@@ -65,5 +78,20 @@
     document.getElementById('mnuCatalogo')?.classList.add('menu-open');
     document.getElementById('mnuCatalogoLink')?.classList.add('active');
     document.getElementById('itemCatalogo')?.classList.add('active');
+
+    (() => {
+        const form = document.getElementById('formRegistroCatalogo');
+        if (!form) return;
+
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.querySelectorAll('input, textarea').forEach((field) => {
+                    if (!field.checkValidity()) field.classList.add('is-invalid');
+                });
+            }
+        });
+    })();
 </script>
 @endpush

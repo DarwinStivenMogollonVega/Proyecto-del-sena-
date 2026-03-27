@@ -135,13 +135,25 @@
                                             <span><i class="bi bi-chat-left-text me-1"></i>{{ $rCount }}</span>
                                             <span><i class="bi bi-box-seam me-1"></i>{{ $stock }}</span>
                                         </div>
-                                        <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                                <i class="bi bi-heart"></i>
-                                            </button>
-                                        </form>
-                                        <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
+                                        @php
+                                            $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                                        @endphp
+                                        @if($inWishlist)
+                                            <form action="{{ route('web.wishlist.remove', $producto->getKey()) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
+                                                    <i class="bi bi-heart-fill text-danger"></i>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                                    <i class="bi bi-heart"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                        <a href="{{ route('web.show', $producto->getKey()) }}" class="all-product-cta" title="Ver producto">
                                             <i class="bi bi-eye"></i> ver
                                         </a>
                                     </div>
@@ -230,13 +242,25 @@
                                 <span><i class="bi bi-box-seam me-1"></i>{{ $stockAll }}</span>
                             </div>
 
-                            <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                    <i class="bi bi-heart"></i>
-                                </button>
-                            </form>
-                            <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
+                            @php
+                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                            @endphp
+                            @if($inWishlist)
+                                <form action="{{ route('web.wishlist.remove', $producto->getKey()) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
+                                        <i class="bi bi-heart-fill text-danger"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                        <i class="bi bi-heart"></i>
+                                    </button>
+                                </form>
+                            @endif
+                            <a href="{{ route('web.show', $producto->getKey()) }}" class="all-product-cta" title="Ver producto">
                                 <i class="bi bi-eye"></i> ver
                             </a>
                         </div>

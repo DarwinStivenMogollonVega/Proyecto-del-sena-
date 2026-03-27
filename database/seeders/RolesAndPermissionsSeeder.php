@@ -52,12 +52,22 @@ class RolesAndPermissionsSeeder extends Seeder
             ['email' => 'admin@prueba.com'],
             ['name' => 'Admin', 'password' => bcrypt('admin123456')]
         );
+        // Recargar desde la BD para garantizar que el PK esté presente
+        $adminUser = User::where('email', 'admin@prueba.com')->first();
+        if (!$adminUser || !$adminUser->getKey()) {
+            throw new \RuntimeException('No se pudo crear/recuperar el usuario admin; el id es nulo.');
+        }
         $adminUser->assignRole($adminRole);
 
         $clienteUser = User::firstOrCreate(
             ['email' => 'cliente@prueba.com'],
             ['name' => 'Cliente', 'password' => bcrypt('cliente123456')]
         );
+        // Recargar desde la BD para garantizar que el PK esté presente
+        $clienteUser = User::where('email', 'cliente@prueba.com')->first();
+        if (!$clienteUser || !$clienteUser->getKey()) {
+            throw new \RuntimeException('No se pudo crear/recuperar el usuario cliente; el id es nulo.');
+        }
         $clienteUser->assignRole($clienteRole);
     }
 }

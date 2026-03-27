@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('registros_actividad_admin', function (Blueprint $table) {
             $table->id('registro_actividad_admin_id');
-            $table->foreignId('usuario_id')->nullable()->constrained('usuarios')->nullOnDelete();
+            $table->foreignId('usuario_id')->nullable()->constrained('usuarios', 'usuario_id')->nullOnDelete();
             $table->string('metodo', 10);
             $table->string('nombre_ruta', 120)->nullable();
             $table->string('url', 255);

@@ -21,7 +21,7 @@ class ClienteGestionController extends Controller
                     ->orWhere('email', 'like', "%{$texto}%");
             })
             ->withCount('pedidos')
-            ->orderByDesc('id')
+            ->orderByDesc((new User())->getKeyName())
             ->paginate(12);
 
         return view('cliente_gestion.index', compact('registros', 'texto'));
@@ -33,15 +33,15 @@ class ClienteGestionController extends Controller
 
         $cliente = User::with('roles')->findOrFail($id);
 
-        $pedidos = Pedido::where('user_id', $cliente->id)
-            ->latest('id')
+        $pedidos = Pedido::where('usuario_id', $cliente->getKey())
+            ->latest((new Pedido())->getKeyName())
             ->paginate(10);
 
         $stats = [
-            'totalPedidos' => Pedido::where('user_id', $cliente->id)->count(),
-            'gastoTotal' => (float) (Pedido::where('user_id', $cliente->id)->sum('total') ?? 0),
-            'direccionesRegistradas' => Pedido::where('user_id', $cliente->id)->whereNotNull('direccion')->distinct('direccion')->count('direccion'),
-            'ultimaCompra' => Pedido::where('user_id', $cliente->id)->latest('id')->value('created_at'),
+            'totalPedidos' => Pedido::where('usuario_id', $cliente->getKey())->count(),
+            'gastoTotal' => (float) (Pedido::where('usuario_id', $cliente->getKey())->sum('total') ?? 0),
+            'direccionesRegistradas' => Pedido::where('usuario_id', $cliente->getKey())->whereNotNull('direccion')->distinct('direccion')->count('direccion'),
+            'ultimaCompra' => Pedido::where('usuario_id', $cliente->getKey())->latest((new Pedido())->getKeyName())->value('created_at'),
         ];
 
         return view('cliente_gestion.show', compact('cliente', 'pedidos', 'stats'));

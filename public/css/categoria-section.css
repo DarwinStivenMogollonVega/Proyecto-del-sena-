@@ -5,39 +5,58 @@
 /* =====================
    Variables de color base para texto accesible (categoría)
    ===================== */
+/* =====================
+   Variables globales y sistema de temas para categoría
+   ===================== */
+/* =====================
+   Variables globales para categoría (panel de control, coherencia visual)
+   ===================== */
 :root {
-  --dz-text-main: #2d2d2d;
-  --dz-text-heading: #7c2d12;
-  --dz-text-subtle: #475569;
+  --color-bg: #f8fafc;
+  --color-card: #fff;
+  --color-border: #e5e7eb;
+  --color-text: #23272e;
+  --color-heading: #1e293b;
+  --color-subtle: #64748b;
+  --color-primary: #2563eb;
+  --color-success: #22c55e;
 }
 html[data-theme='dark'], .dark {
-  --dz-text-main: #f3e9e0;
-  --dz-text-heading: #fbbf24;
-  --dz-text-subtle: #cbd5e1;
+  --color-bg: #181c23;
+  --color-card: #232c3b;
+  --color-border: #232c3b;
+  --color-text: #f1f5f9;
+  --color-heading: #f3f4f6;
+  --color-subtle: #94a3b8;
+  --color-primary: #60a5fa;
+  --color-success: #22d3ee;
 }
 html[data-theme='light'], .light {
-  --dz-text-main: #23272e;
-  --dz-text-heading: #b45309;
-  --dz-text-subtle: #475569;
+  --color-bg: #f8fafc;
+  --color-card: #fff;
+  --color-border: #e5e7eb;
+  --color-text: #23272e;
+  --color-heading: #1e293b;
+  --color-subtle: #64748b;
+  --color-primary: #2563eb;
+  --color-success: #22c55e;
 }
 
-/* =====================
-   Estilos de texto accesible para categoría
-   ===================== */
 .categoria-hero,
 .categoria-hero h1,
 .categoria-hero .hero-subtitle {
-  color: var(--dz-text-main);
+  color: var(--color-text);
 }
 .categoria-hero h1 {
-  color: var(--dz-text-heading);
+  color: var(--color-heading);
 }
 .categoria-hero .hero-subtitle {
-  color: var(--dz-text-subtle);
+  color: var(--color-subtle);
 }
-/* =====================
-   Fin sistema de temas para categoría
-   ===================== */
+.categoria-filter {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+}
 
 /* =====================================================
    HERO CATEGORÍA
@@ -105,3 +124,35 @@ html[data-theme='dark'] .logo-light { filter: none; }
 }
 
 /* Fin de archivo optimizado */
+/* Utilidades visuales unificadas para paneles */
+.panel-bg-light {
+  background: var(--color-card);
+}
+.panel-title-primary {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.panel-title-success {
+  color: var(--color-success);
+  font-weight: 600;
+}
+.panel-title-warning {
+  color: var(--color-warning, #f59e42);
+  font-weight: 600;
+}
+.panel-badge-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.panel-badge-success {
+  background: var(--color-success);
+  color: #fff;
+}
+.panel-badge-warning {
+  background: var(--color-warning, #f59e42);
+  color: #fff;
+}
+.panel-badge-muted {
+  background: var(--color-subtle);
+  color: #fff;
+}

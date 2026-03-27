@@ -19,8 +19,10 @@ class CatalogoController extends Controller
         $this->authorize('catalogo-list');
 
         $texto = $request->input('texto');
+        // Use the model primary key name in case the table uses a different PK (catalogo_id)
+        $pk = (new Catalogo())->getKeyName();
         $registros = Catalogo::where('nombre', 'like', "%{$texto}%")
-            ->orderBy('id', 'desc')
+            ->orderBy($pk, 'desc')
             ->paginate(3);
 
         return view('catalogo.index', compact('registros', 'texto'));
@@ -41,10 +43,11 @@ class CatalogoController extends Controller
     public function store(CatalogoRequest $request)
     {
         $this->authorize('catalogo-create');
+        $validated = $request->validated();
 
         $registro = new Catalogo();
-        $registro->nombre = $request->input('nombre');
-        $registro->descripcion = $request->input('descripcion');
+        $registro->nombre = $validated['nombre'];
+        $registro->descripcion = $validated['descripcion'] ?? null;
         $registro->save();
 
         return redirect()->route('catalogo.index')
@@ -68,10 +71,11 @@ class CatalogoController extends Controller
     public function update(CatalogoRequest $request, $id)
     {
         $this->authorize('catalogo-edit');
+        $validated = $request->validated();
 
         $registro = Catalogo::findOrFail($id);
-        $registro->nombre = $request->input('nombre');
-        $registro->descripcion = $request->input('descripcion');
+        $registro->nombre = $validated['nombre'];
+        $registro->descripcion = $validated['descripcion'] ?? null;
         $registro->save();
 
         return redirect()->route('catalogo.index')

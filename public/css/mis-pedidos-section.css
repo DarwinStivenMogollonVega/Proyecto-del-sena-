@@ -1,71 +1,244 @@
 /* =====================
-     Variables de color base para texto accesible (mis pedidos)
-     ===================== */
+   VARIABLES (SISTEMA GLOBAL)
+   ===================== */
 :root {
-    --dz-text-main: #2d2d2d;
-    --dz-text-heading: #7c2d12;
-    --dz-text-subtle: #475569;
+    --dz-surface: #fffaf6;
+    --dz-surface-soft: #f4f2ef;
+    --dz-border: #e6d7cc;
+    --dz-heading: #7c2d12;
+    --dz-accent: #b45309;
+    --dz-muted: #6b6b6b;
+    --dz-text: #2b2b2b;
+    --dz-card: #fff7f1;
+    --dz-hero-from: rgba(124,45,18,1);
+    --dz-hero-to: rgba(15,17,18,1);
 }
-html[data-theme='dark'], .dark {
-    --dz-text-main: #f3e9e0;
-    --dz-text-heading: #fbbf24;
-    --dz-text-subtle: #cbd5e1;
-}
-html[data-theme='light'], .light {
-    --dz-text-main: #23272e;
-    --dz-text-heading: #b45309;
-    --dz-text-subtle: #475569;
+
+html[data-theme='dark'] {
+    --dz-surface: #1a0e07;
+    --dz-surface-soft: #23140e;
+    --dz-border: #381f17;
+    --dz-heading: #f3d6c2;
+    --dz-accent: #ffbe5b;
+    --dz-muted: #c4b7ad;
+    --dz-text: #efe8e2;
+    --dz-card: #2b170f;
+    --dz-hero-from: rgba(124,45,18,0.95);
+    --dz-hero-to: rgba(17,10,8,0.95);
 }
 
 /* =====================
-     Estilos de texto accesible para mis pedidos
-     ===================== */
-.orders-hero,
-.orders-hero h1,
-.orders-hero .subtitle {
-    color: var(--dz-text-main);
-}
-.orders-hero h1 {
-    color: var(--dz-text-heading);
-}
-.orders-hero .subtitle {
-    color: var(--dz-text-subtle);
-}
-/* =====================
-     Fin sistema de temas para mis pedidos
-     ===================== */
-/* mis-pedidos-section.css: Migración de estilos desde mis_pedidos.blade.php */
-
+   BASE
+   ===================== */
 .orders-page {
-    background:
-        radial-gradient(circle at 8% 8%, rgba(245, 158, 11, 0.12), transparent 30%),
-        radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.09), transparent 28%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0));
+    background: linear-gradient(180deg, var(--dz-surface-soft), transparent);
     border-radius: 1rem;
     padding-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
+    color: var(--dz-text);
 }
+
+/* =====================
+   HERO
+   ===================== */
 .orders-hero {
     margin-top: 1.5rem;
     border-radius: 1rem;
-    color: #fff;
     padding: 2rem;
-    background:
-        radial-gradient(circle at 14% 20%, rgba(245, 158, 11, 0.35), transparent 42%),
-        radial-gradient(circle at 82% 15%, rgba(59, 130, 246, 0.2), transparent 35%),
-        linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
-    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.24);
-    position: relative;
-    overflow: hidden;
+    color: var(--dz-text);
+    background: #fff7f1;
 }
-.orders-hero::after {
-    content: '';
-    position: absolute;
-    width: 240px;
-    height: 240px;
-    right: -80px;
-    top: -90px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
+html[data-theme='dark'] .orders-hero {
+    background: #2b170f;
+}
+
+.orders-hero h1 {
+    color: var(--dz-heading);
+}
+
+.orders-hero p {
+    color: var(--dz-muted);
+}
+
+/* =====================
+   CARDS (KPI)
+   ===================== */
+.orders-card {
+    background: var(--dz-card);
+    border: 1px solid var(--dz-border);
+    border-radius: 0.8rem;
+}
+
+.orders-kpi {
+    padding: 1rem;
+    min-height: 110px;
+}
+
+.orders-kpi .label {
+    color: var(--dz-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.orders-kpi .value {
+    color: var(--dz-heading);
+    font-size: 1.45rem;
+    font-weight: 700;
+}
+
+/* =====================
+   TABLA CONTENEDOR
+   ===================== */
+.cart-shell {
+    background: var(--dz-card);
+    border: 1px solid var(--dz-border);
+    border-radius: 1rem;
+}
+
+.cart-table-head h3 {
+    color: var(--dz-heading);
+}
+
+.cart-table-head p {
+    color: var(--dz-muted);
+}
+
+/* =====================
+   TABLA PRINCIPAL
+   ===================== */
+.orders-table-wrap {
+    overflow-x: auto;
+}
+
+.orders-table {
+    background: transparent;
+}
+
+.orders-table th {
+    background: rgba(0,0,0,0.08);
+    color: var(--dz-accent);
+    border-color: var(--dz-border);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.orders-table td {
+    color: var(--dz-text);
+    vertical-align: middle;
+    border-color: var(--dz-border);
+}
+
+/* =====================
+   BADGES
+   ===================== */
+.status-pill {
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-weight: 600;
+}
+
+.status-pill.bg-warning {
+    background: linear-gradient(90deg,#f59e0b,#f97316);
+    color: #fff;
+}
+
+.status-pill.bg-success {
+    background: linear-gradient(90deg,#10b981,#059669);
+    color: #fff;
+}
+
+.status-pill.bg-danger {
+    background: linear-gradient(90deg,#ef4444,#dc2626);
+    color: #fff;
+}
+
+/* =====================
+   BOTONES
+   ===================== */
+.quick-action {
+    border-color: var(--dz-border);
+    color: var(--dz-heading);
+}
+
+/* =====================
+   EMPTY STATE
+   ===================== */
+.orders-empty-row {
+    background: transparent;
+}
+
+.orders-empty-cell {
+    padding: 48px 0;
+    border: none;
+}
+
+.orders-empty-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.orders-empty-icon {
+    font-size: 3rem;
+    color: var(--dz-accent);
+}
+
+.orders-empty-text {
+    margin-top: 0.5rem;
+    color: var(--dz-text);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* =====================
+   DETALLE PEDIDO
+   ===================== */
+.detail-box {
+    color: var(--dz-text);
+}
+
+/* TABLA DETALLE */
+.orders-detail-table th {
+    background: rgba(0,0,0,0.06);
+    color: var(--dz-accent);
+}
+
+.orders-detail-table td {
+    color: var(--dz-text);
+}
+
+/* IMAGEN PRODUCTO */
+.orders-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* =====================
+   SCROLLBAR
+   ===================== */
+.orders-table-wrap::-webkit-scrollbar {
+    height: 6px;
+}
+
+.orders-table-wrap::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 999px;
+}
+
+/* =====================
+   RESPONSIVE
+   ===================== */
+@media (max-width: 768px) {
+    .orders-table {
+        min-width: 650px;
+    }
+}
+
+@media (max-width: 576px) {
+    .orders-hero {
+        padding: 1.25rem;
+    }
 }

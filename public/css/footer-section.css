@@ -1,0 +1,94 @@
+:root {
+    --footer-bg: #f8f9fa;
+    --footer-text: #333;
+    --footer-title: #000;
+    --footer-link: #a04a00;
+    --footer-divider: #ddd;
+}
+
+/* MODO LIGHT */
+.light {
+    --footer-bg: #ffffff;
+    --footer-text: #222;
+    --footer-title: #000;
+    --footer-link: #a04a00;
+}
+
+/* MODO DARK */
+.dark {
+    --footer-bg: #121212;
+    --footer-text: #ccc;
+    --footer-title: #fff;
+    --footer-link: #ff8c42;
+    --footer-divider: #333;
+}
+
+/* =======================
+   FOOTER ESTILOS
+======================= */
+.footer-discmusic {
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    
+    margin-top: 80px; /* separación del contenido */
+    padding-top: 50px;
+    padding-bottom: 30px;
+
+    border-top: 3px solid var(--footer-link); /* línea superior */
+    
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.08); /* profundidad */
+}
+
+/* Línea divisoria más elegante */
+.footer-divider {
+    border-radius: 20px 20px 0 0;
+    margin: 80px 20px 0 20px;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--footer-divider),
+        transparent
+    );
+}
+.footer-discmusic::before {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--footer-link);
+    margin: 0 auto 20px auto;
+    border-radius: 2px;
+}
+
+.footer-title {
+    color: var(--footer-title);
+    font-weight: 700;
+}
+
+.footer-text {
+    font-size: 0.95rem;
+}
+
+.footer-links li {
+    margin-bottom: 6px;
+}
+
+.footer-links a {
+    color: var(--footer-link);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    opacity: 0.7;
+}
+
+.footer-divider {
+    border-color: var(--footer-divider);
+}
+
+.footer-copy {
+    font-size: 0.9rem;
+    margin-top: 10px;
+}

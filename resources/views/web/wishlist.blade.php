@@ -5,6 +5,7 @@
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/wishlist-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/index-section.css') }}">
 @endpush
 
 @section('contenido')
@@ -29,15 +30,37 @@
             <div class="row wishlist-list">
                 @foreach(session('wishlist') as $item)
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 wishlist-item-col">
-                        <div class="card wishlist-card h-100 shadow-sm">
-                            <img src="{{ asset('uploads/productos/' . ($item['imagen'] ?? 'no-image.jpg')) }}" class="card-img-top wishlist-img" alt="{{ $item['nombre'] }}">
-                            <div class="card-body text-center wishlist-card-body">
-                                <h5 class="fw-bolder wishlist-product-title">{{ $item['nombre'] }}</h5>
-                                <span class="d-block mb-2 wishlist-artist">{{ $item['artista'] ?? '' }}</span>
-                                <span class="badge bg-dark mb-2 wishlist-price">${{ number_format($item['precio'], 2) }}</span>
-                                <a href="{{ route('web.show', $item['id']) }}" class="btn btn-sm btn-outline-primary wishlist-view-btn">Ver producto</a>
+                        <article class="all-product-card">
+                            <div class="all-product-cover">
+                                @if(!empty($item['imagen']))
+                                    <img src="{{ asset('uploads/productos/' . $item['imagen']) }}" alt="{{ $item['nombre'] }}">
+                                @else
+                                    <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
+                                @endif
+                                <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                             </div>
-                        </div>
+                            <div class="all-product-body">
+                                <p class="all-product-name" title="{{ $item['nombre'] }}">{{ $item['nombre'] }}</p>
+                                <p class="all-product-artist">{{ $item['artista'] ?? '' }}</p>
+                                <div class="all-product-meta">
+                                    {{-- meta placeholders --}}
+                                </div>
+                                <div class="all-product-inline-stats">
+                                    <span><i class="bi bi-star-fill text-warning me-1"></i>0.0</span>
+                                    <span><i class="bi bi-chat-left-text me-1"></i>0</span>
+                                    <span><i class="bi bi-box-seam me-1"></i>{{ $item['cantidad'] ?? 0 }}</span>
+                                </div>
+                                <form action="{{ route('web.wishlist.remove', $item['id']) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
+                                        <i class="bi bi-heart-fill text-danger"></i>
+                                    </button>
+                                </form>
+                                <a href="{{ route('web.show', $item['id']) }}" class="all-product-cta" title="Ver producto">
+                                    <i class="bi bi-eye"></i> ver
+                                </a>
+                            </div>
+                        </article>
                     </div>
                 @endforeach
             </div>

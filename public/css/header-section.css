@@ -8,12 +8,12 @@
 }
 html[data-theme='dark'], .dark {
   --dz-text-main: #f3e9e0;
-  --dz-text-heading: #fbbf24;
+  --dz-text-heading: #f3e9e0;
   --dz-text-subtle: #cbd5e1;
 }
 html[data-theme='light'], .light {
   --dz-text-main: #23272e;
-  --dz-text-heading: #b45309;
+  --dz-text-heading: #23272e;
   --dz-text-subtle: #475569;
 }
 

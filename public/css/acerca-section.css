@@ -1,39 +1,54 @@
 /* acerca-section.css: Estilos personalizados para la vista Acerca con soporte de temas */
 
 /* =====================
-     Variables de color base para la sección Acerca
+     Variables globales y sistema de temas para Acerca (unificado)
      ===================== */
 :root {
-    /* Colores por defecto (root) */
-    --acerca-text-main: #2d2d2d;
-    --acerca-text-heading: #7c2d12;
-    --acerca-text-subtle: #475569;
-    --acerca-text-highlight: #b45309;
-    --acerca-bg-card: #fff8f3;
-    --acerca-bg-block: #f3e9e0;
+    --color-bg: #fff8f3;
+    --color-card: #fff;
+    --color-border: #e5e7eb;
+    --color-text: #2d2d2d;
+    --color-heading: #c46310; /* Naranja vibrante para headings y enlaces */
+    --color-subtle: #475569;
+    --color-primary: #c46310;
+    --color-nav-link: var(--color-heading);
 }
-
 html[data-theme='dark'], .dark {
-    --acerca-text-main: #f3e9e0;
-    --acerca-text-heading: #fbbf24;
-    --acerca-text-subtle: #cbd5e1;
-    --acerca-text-highlight: #f59e0b;
-    --acerca-bg-card: #23272e;
-    --acerca-bg-block: #18181b;
+    --color-bg: #23272e;
+    --color-card: #18181b;
+    --color-border: #3a2415;
+    --color-text: #f3e9e0;
+    --color-heading: #ffcc70; /* Amarillo dorado para headings y enlaces en dark */
+    --color-subtle: #cbd5e1;
+    --color-primary: #fdf0e4;
+    --color-nav-link: var(--color-heading);
 }
-
 html[data-theme='light'], .light {
-    --acerca-text-main: #23272e;
-    --acerca-text-heading: #b45309;
-    --acerca-text-subtle: #475569;
-    --acerca-text-highlight: #b45309;
-    --acerca-bg-card: #fff8f3;
-    --acerca-bg-block: #f3e9e0;
+    --color-bg: #fff8f3;
+    --color-card: #fff;
+    --color-border: #e5e7eb;
+    --color-text: #23272e;
+    --color-heading: #c46310; /* Naranja vibrante para headings y enlaces en light */
+    --color-subtle: #475569;
+    --color-primary: #fdf0e4;
+    --color-nav-link: var(--color-heading);
+}
+/* Unificar color de enlaces del navbar para modo claro y oscuro en acerca */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn,
+.navbar .cart-cta-btn,
+.navbar .nav-cta-text {
+    color: var(--color-nav-link) !important;
+}
+html[data-theme='dark'] .navbar .nav-link,
+html[data-theme='dark'] .navbar .nav-cta-btn,
+html[data-theme='dark'] .navbar .dropdown-cta-btn,
+html[data-theme='dark'] .navbar .cart-cta-btn,
+html[data-theme='dark'] .navbar .nav-cta-text {
+    color: var(--color-nav-link) !important;
 }
 
-/* =====================
-     Estilos de texto para la sección Acerca
-     ===================== */
 .about-hero,
 .about-hero h1,
 .about-hero p,
@@ -44,47 +59,61 @@ html[data-theme='light'], .light {
 .about-block h4,
 .about-block p,
 .about-highlight {
-    color: var(--acerca-text-main);
+    color: var(--color-text);
 }
 .about-hero h1,
 .about-card h5,
 .about-block h4 {
-    color: var(--acerca-text-heading);
+    color: var(--color-heading);
 }
 .about-card p,
 .about-block p {
-    color: var(--acerca-text-subtle);
+    color: var(--color-subtle);
 }
 .about-highlight {
-    color: var(--acerca-text-highlight);
+    color: var(--color-primary);
     background: rgba(245, 158, 11, 0.13);
 }
-
-/* Fondos adaptados por tema */
 .about-card {
-    background: var(--acerca-bg-card);
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
 }
 .about-block {
-    background: var(--acerca-bg-block);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
 }
-
-/* Ajuste para contraste en dark mode */
-html[data-theme='dark'] .about-card, .dark .about-card {
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
-    border: 1px solid #3a2415;
+/* Utilidades visuales unificadas para paneles */
+.panel-bg-light {
+    background: var(--color-card);
 }
-html[data-theme='dark'] .about-block, .dark .about-block {
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.22);
+.panel-title-primary {
+    color: var(--color-primary);
+    font-weight: 600;
 }
-
-/* Ajuste para contraste en light mode */
-html[data-theme='light'] .about-card, .light .about-card {
-    border: 1px solid #e5e7eb;
+.panel-title-success {
+    color: var(--color-success);
+    font-weight: 600;
 }
-
-/* =====================
-     Fin sistema de temas para Acerca
-     ===================== */
+.panel-title-warning {
+    color: var(--color-warning, #f59e42);
+    font-weight: 600;
+}
+.panel-badge-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+.panel-badge-success {
+    background: var(--color-success);
+    color: #fff;
+}
+.panel-badge-warning {
+    background: var(--color-warning, #f59e42);
+    color: #fff;
+}
+.panel-badge-muted {
+    background: var(--color-subtle);
+    color: #fff;
+}
 /* Estilos de logos importados del index-section.css */
 .store-hero-brand {
     display: flex;
@@ -169,11 +198,17 @@ html[data-theme='dark'] .logo-light {
 .about-hero h1 {
     font-size: 2.2rem;
     font-weight: 700;
+    color: #000000;
     margin-bottom: 0.7rem;
     letter-spacing: 0.03em;
 }
 .about-hero p {
     color: #475569;
+    margin-bottom: 0;
+    font-size: 1.15rem;
+}
+html[data-theme='dark'] .about-hero p {
+    color: #fdf0e4;
     margin-bottom: 0;
     font-size: 1.15rem;
 }
@@ -193,7 +228,7 @@ html[data-theme='dark'] .logo-light {
 }html[data-theme='dark'] .about-card {
     background: radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%), radial-gradient(circle at 85% 16%, rgba(184, 153, 144, 0.16), transparent 30%), linear-gradient(165deg, var(--dz-page-grad-1) 0%, var(--dz-page-grad-2) 45%, var(--dz-page-grad-3) 100%);
     background-attachment: fixed;
-     border: 1px solid #e5e7eb;
+    border: 1px solid #e5e7eb;
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
     padding: 1.3rem 1.25rem;
@@ -206,15 +241,23 @@ html[data-theme='dark'] .logo-light {
 .about-card h5 {
     font-weight: 700;
     margin-bottom: 0.7rem;
-    color: #212529;
+    color: #000000;
     font-size: 1.18rem;
-}html[data-theme='dark'].about-card h5 {
+}
+html[data-theme='dark'] .about-card h5 {
     font-weight: 700;
     margin-bottom: 0.7rem;
     font-size: 1.18rem;
+    color: #fdf0e4;
 }
 .about-card p {
     color: #475569;
+    line-height: 1.65;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+}
+html[data-theme='dark'] .about-card p {
+    color: #b89990;
     line-height: 1.65;
     margin-bottom: 0;
     font-size: 1.05rem;
@@ -233,17 +276,35 @@ html[data-theme='dark'] .logo-light {
 }
 .about-block h4 {
     font-weight: 700;
-    color: #fdf0e4;
+    color: #000000;
     margin-bottom: 1rem;
+}
+html[data-theme='dark'] .about-block h4 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fdf0e4;
 }
 .about-block p {
     color: #475569;
     font-size: 1.08rem;
     margin-bottom: 0.7rem;
 }
+html[data-theme='dark'] .about-block p {
+    color: #b89990;
+    font-size: 1.08rem;
+    margin-bottom: 0.7rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+  color: #475569;
+} 
+html[data-theme='dark'] .mb-2 {
+    color: #b89990;
+    margin-bottom: 0.7rem;
+}
 .about-highlight {
     background: rgba(245, 158, 11, 0.13);
-    color: #fff3e0;
+    color: #475569;
     border-radius: 0.7rem;
     padding: 0.9rem 1.2rem;
     font-weight: 600;
@@ -251,7 +312,16 @@ html[data-theme='dark'] .logo-light {
     margin-top: 1.2rem;
     box-shadow: 0 4px 12px rgba(196, 99, 16, 0.07);
 }
-
+html[data-theme='dark'] .about-highlight {
+    background: rgba(241, 146, 14, 0.18);
+    color: #fff3e0;
+    border-radius: 0.7rem;
+    padding: 0.9rem 1.2rem;
+    font-weight: 600;
+    font-size: 1.12rem;
+    margin-top: 1.2rem;
+    box-shadow: 0 4px 12px rgba(241, 146, 14, 0.09);
+}
 @media (max-width: 600px) {
     .about-hero img.logo-acerca {
         width: 141px;

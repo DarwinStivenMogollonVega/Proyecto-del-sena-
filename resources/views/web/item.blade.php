@@ -60,14 +60,14 @@
 
                     <form action="{{ route('carrito.agregar') }}" method="POST" class="d-flex flex-wrap gap-2 align-items-center">
                         @csrf
-                        <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                        <input type="hidden" name="producto_id" value="{{ $producto->getKey() }}">
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
                         <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
                         @php
                             $wishlist = session('wishlist', []);
-                            $inWishlist = in_array($producto->id, $wishlist);
+                            $inWishlist = in_array($producto->getKey(), $wishlist);
                         @endphp
-                        <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
                                 <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
@@ -85,7 +85,7 @@
                     <h3 class="h5 fw-bold mb-3">Califica este producto</h3>
 
                     @auth
-                        <form action="{{ route('web.resena.guardar', $producto->id) }}" method="POST">
+                        <form action="{{ route('web.resena.guardar', $producto->getKey()) }}" method="POST">
                             @csrf
 
                             <label class="form-label fw-semibold">Tu puntuacion</label>

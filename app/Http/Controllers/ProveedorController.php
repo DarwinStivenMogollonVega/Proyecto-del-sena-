@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proveedor;
+use App\Http\Requests\ProveedorRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class ProveedorController extends Controller
 
         $texto = trim((string) $request->input('texto'));
 
-        $query = Proveedor::withCount('productos')->orderByDesc('id');
+        $query = Proveedor::withCount('productos')->orderByDesc('proveedor_id');
 
         if ($texto !== '') {
             $query->where(function ($q) use ($texto) {
@@ -45,21 +46,11 @@ class ProveedorController extends Controller
         return view('proveedor.action');
     }
 
-    public function store(Request $request)
+    public function store(ProveedorRequest $request)
     {
         $this->authorize('proveedor-create');
 
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'contacto' => ['nullable', 'string', 'max:120'],
-            'telefono' => ['nullable', 'string', 'max:40'],
-            'email' => ['nullable', 'email', 'max:120'],
-            'direccion' => ['nullable', 'string', 'max:255'],
-            'descripcion' => ['nullable', 'string', 'max:1000'],
-            'activo' => ['nullable', 'boolean'],
-        ]);
-
-        $datos['activo'] = $request->boolean('activo', true);
+        $datos = $request->validated();
 
         $registro = Proveedor::create($datos);
 
@@ -76,23 +67,13 @@ class ProveedorController extends Controller
         return view('proveedor.action', compact('registro'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(ProveedorRequest $request, string $id)
     {
         $this->authorize('proveedor-edit');
 
         $registro = Proveedor::findOrFail($id);
 
-        $datos = $request->validate([
-            'nombre' => ['required', 'string', 'max:120'],
-            'contacto' => ['nullable', 'string', 'max:120'],
-            'telefono' => ['nullable', 'string', 'max:40'],
-            'email' => ['nullable', 'email', 'max:120'],
-            'direccion' => ['nullable', 'string', 'max:255'],
-            'descripcion' => ['nullable', 'string', 'max:1000'],
-            'activo' => ['nullable', 'boolean'],
-        ]);
-
-        $datos['activo'] = $request->boolean('activo');
+        $datos = $request->validated();
 
         $registro->update($datos);
 

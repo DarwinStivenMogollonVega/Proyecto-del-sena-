@@ -10,37 +10,47 @@
                         <h3 class="card-title">{{ isset($registro) ? 'Editar proveedor' : 'Nuevo proveedor' }}</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ isset($registro) ? route('proveedores.update', $registro->id) : route('proveedores.store') }}" method="POST">
+                        <form action="{{ isset($registro) ? route('proveedores.update', $registro->getKey()) : route('proveedores.store') }}" method="POST" id="formProveedor" novalidate>
                             @csrf
                             @if(isset($registro))
                             @method('PUT')
+                            @endif
+                            @if($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" id="nombre" name="nombre" class="form-control @error('nombre') is-invalid @enderror" value="{{ old('nombre', $registro->nombre ?? '') }}" required>
+                                    <input type="text" id="nombre" name="nombre" class="form-control @error('nombre') is-invalid @enderror" value="{{ old('nombre', $registro->nombre ?? '') }}" minlength="3" maxlength="120" required>
                                     @error('nombre') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="contacto" class="form-label">Contacto</label>
-                                    <input type="text" id="contacto" name="contacto" class="form-control @error('contacto') is-invalid @enderror" value="{{ old('contacto', $registro->contacto ?? '') }}">
+                                    <input type="text" id="contacto" name="contacto" class="form-control @error('contacto') is-invalid @enderror" value="{{ old('contacto', $registro->contacto ?? '') }}" minlength="3" maxlength="120">
                                     @error('contacto') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="telefono" class="form-label">Telefono</label>
-                                    <input type="text" id="telefono" name="telefono" class="form-control @error('telefono') is-invalid @enderror" value="{{ old('telefono', $registro->telefono ?? '') }}">
+                                    <input type="text" id="telefono" name="telefono" class="form-control @error('telefono') is-invalid @enderror" value="{{ old('telefono', $registro->telefono ?? '') }}" maxlength="40" pattern="^[0-9+\-\s()]+$">
                                     @error('telefono') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
 
                                 <div class="col-md-4 mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $registro->email ?? '') }}">
+                                    <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $registro->email ?? '') }}" maxlength="120">
                                     @error('email') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="direccion" class="form-label">Direccion</label>
-                                    <input type="text" id="direccion" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $registro->direccion ?? '') }}">
+                                    <input type="text" id="direccion" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $registro->direccion ?? '') }}" maxlength="255">
                                     @error('direccion') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                                 <div class="col-md-2 mb-3 d-flex align-items-center">
@@ -52,7 +62,7 @@
 
                                 <div class="col-md-12 mb-3">
                                     <label for="descripcion" class="form-label">Descripcion</label>
-                                    <textarea id="descripcion" name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" rows="4">{{ old('descripcion', $registro->descripcion ?? '') }}</textarea>
+                                    <textarea id="descripcion" name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" rows="4" maxlength="1000">{{ old('descripcion', $registro->descripcion ?? '') }}</textarea>
                                     @error('descripcion') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
@@ -75,5 +85,25 @@
     document.getElementById('mnuComercial')?.classList.add('menu-open');
     document.getElementById('mnuComercialLink')?.classList.add('active');
     document.getElementById('mnuProveedores')?.classList.add('active');
+
+    (() => {
+        const form = document.getElementById('formProveedor');
+        if (!form) return;
+
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.querySelectorAll('input, textarea').forEach((field) => {
+                    if (!field.checkValidity()) field.classList.add('is-invalid');
+                });
+            }
+        });
+
+        const telefono = document.getElementById('telefono');
+        telefono?.addEventListener('input', () => {
+            telefono.value = telefono.value.replace(/[^0-9+\-\s()]/g, '');
+        });
+    })();
 </script>
 @endpush

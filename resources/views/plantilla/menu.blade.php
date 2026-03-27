@@ -112,14 +112,7 @@
                         </li>
                         @endcan
 
-                        @canany(['rol-list', 'user-list'])
-                        <li class="nav-item">
-                            <a href="{{ route('admin.seguridad.index') }}" class="nav-link" id="mnuSeguridadPanel">
-                                <i class="nav-icon bi bi-shield-check"></i>
-                                <p>Panel de Seguridad</p>
-                            </a>
-                        </li>
-                        @endcanany
+                        {{-- Panel de Seguridad eliminado del menú --}}
                     </ul>
                 </li>
                 @endcanany
@@ -250,6 +243,9 @@
     </div>
     <!--end::Sidebar Wrapper-->
 </aside>
+
+<!-- Mobile backdrop for sidebar -->
+<div class="sidebar-mobile-backdrop d-md-none" id="sidebarBackdrop" aria-hidden="true"></div>
 
 @push('scripts')
 <script>

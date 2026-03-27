@@ -30,13 +30,13 @@
                                         <option value="">Seleccione...</option>
                                         @foreach($usuarios as $u)
                                             <option
-                                                value="{{ $u->id }}"
+                                                value="{{ $u->getKey() }}"
                                                 data-name="{{ $u->name }}"
                                                 data-email="{{ $u->email }}"
                                                 data-telefono="{{ $u->telefono ?? '' }}"
                                                 data-documento="{{ $u->documento_identidad ?? '' }}"
                                                 data-direccion="{{ $u->direccion ?? '' }}"
-                                                {{ old('user_id') == $u->id ? 'selected' : '' }}
+                                                {{ old('user_id') == $u->getKey() ? 'selected' : '' }}
                                             >
                                                 {{ $u->name }} ({{ $u->email }})
                                             </option>

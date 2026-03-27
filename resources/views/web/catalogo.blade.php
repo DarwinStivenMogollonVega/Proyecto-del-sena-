@@ -37,7 +37,7 @@
         <div class="col-6 col-md-3"><div class="metric-pill"><strong>1</strong><span>Catálogo</span></div></div>
     </div>
 
-<form method="GET" action="{{ route('web.catalogo.show', $catalogo->id) }}" class="search-panel p-3 p-md-4 mt-4">
+<form method="GET" action="{{ route('web.catalogo.show', $catalogo->getKey()) }}" class="search-panel p-3 p-md-4 mt-4">
     <div class="row align-items-end g-3">
         <div class="col-md-8">
             <label class="form-label fw-semibold" for="searchInput">Buscar por nombre</label>
@@ -115,13 +115,25 @@
                             <span><i class="bi bi-chat-left-text me-1"></i>{{ $reviewsAll }}</span>
                             <span><i class="bi bi-box-seam me-1"></i>{{ $stockAll }}</span>
                         </div>
-                        <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                <i class="bi bi-heart"></i>
-                            </button>
-                        </form>
-                        <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
+                        @php
+                            $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                        @endphp
+                        @if($inWishlist)
+                            <form action="{{ route('web.wishlist.remove', $producto->getKey()) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
+                                    <i class="bi bi-heart-fill text-danger"></i>
+                                </button>
+                            </form>
+                        @else
+                            <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                            </form>
+                        @endif
+                        <a href="{{ route('web.show', $producto->getKey()) }}" class="all-product-cta" title="Ver producto">
                             <i class="bi bi-eye"></i> ver
                         </a>
                     </div>

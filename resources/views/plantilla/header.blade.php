@@ -4,19 +4,23 @@
         <!--begin::Start Navbar Links-->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                <a class="nav-link d-none d-md-inline-block" data-lte-toggle="sidebar" href="#" role="button">
+                    <i class="bi bi-list"></i>
+                </a>
+                <!-- Mobile sidebar toggle (visible on small screens) -->
+                <a class="nav-link d-md-none" href="#" role="button" data-sidebar-toggle>
                     <i class="bi bi-list"></i>
                 </a>
             </li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('dashboard')}}" class="nav-link">Panel principal</a></li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('web.index')}}" class="nav-link">Tienda</a></li>
-            <li class="nav-item d-none d-md-block"><a href="{{ route('admin.guia') }}" class="nav-link">Soporte</a></li>
+            <li class="nav-item d-none d-md-block"><a href="{{ route('dashboard')}}" class="nav-link navbar-nav-link">Panel principal</a></li>
+            <li class="nav-item d-none d-md-block"><a href="{{ route('web.index')}}" class="nav-link navbar-nav-link">Tienda</a></li>
+            <li class="nav-item d-none d-md-block"><a href="{{ route('admin.guia') }}" class="nav-link navbar-nav-link">Soporte</a></li>
         </ul>
         <!--end::Start Navbar Links-->
         <!--begin::End Navbar Links-->
         <ul class="navbar-nav ms-auto">
             <li class="nav-item me-2">
-                <button type="button" class="btn admin-theme-toggle" data-theme-toggle>
+                <button type="button" class="btn nav-cta-btn admin-theme-toggle" data-theme-toggle>
                     <i class="bi bi-moon-stars-fill me-1"></i>
                     <span data-theme-label>Oscuro</span>
                 </button>
@@ -39,16 +43,108 @@
             @endphp
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle admin-profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="admin-profile-avatar" aria-hidden="true">{{ $adminInitial }}</span>
+                    @php $avatarPath = 'uploads/avatars/' . (Auth::user()->avatar ?? ''); @endphp
+                    @if(!empty(Auth::user()->avatar))
+                        <img src="{{ asset($avatarPath) }}" alt="Avatar" class="admin-profile-avatar-img" style="width:32px; height:32px; border-radius:50%; object-fit:cover; display:inline-block; vertical-align:middle;" />
+                    @else
+                        <span class="admin-profile-avatar" aria-hidden="true">{{ $adminInitial }}</span>
+                    @endif
                     <span class="admin-profile-meta d-none d-md-flex">
                         <span class="admin-profile-name">{{ $adminName }}</span>
                         <span class="admin-profile-role">Administrador</span>
                     </span>
                     <i class="bi bi-chevron-down admin-profile-caret" aria-hidden="true"></i>
                 </a>
+                @if(!empty(Auth::user()->avatar))
+                    <script>
+                        (function(){
+                            try {
+                                var avatarUrl = '{{ asset($avatarPath) }}';
+                                var btnSelector = '.admin-profile-btn';
+                                function createPreview() {
+                                    var preview = document.createElement('div');
+                                    preview.id = 'avatarHoverPreview';
+                                    preview.style.position = 'fixed';
+                                    preview.style.pointerEvents = 'none';
+                                    preview.style.zIndex = 9999;
+                                    preview.style.width = '56px';
+                                    preview.style.height = '56px';
+                                    preview.style.borderRadius = '50%';
+                                    preview.style.overflow = 'hidden';
+                                    preview.style.boxShadow = '0 6px 18px rgba(0,0,0,.25)';
+                                    preview.style.opacity = '0';
+                                    preview.style.transition = 'opacity 160ms ease, transform 160ms ease';
+                                    preview.style.transform = 'translate3d(0,0,0)';
+                                    preview.style.display = 'block';
+
+                                    var img = document.createElement('img');
+                                    img.src = avatarUrl;
+                                    img.alt = 'Avatar preview';
+                                    img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover'; display = 'block';
+                                    preview.appendChild(img);
+                                    document.body.appendChild(preview);
+                                    return preview;
+                                }
+
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var btn = document.querySelector(btnSelector);
+                                    if (!btn) return;
+                                    var preview = createPreview();
+                                    var move = function(e){
+                                        var x = e.clientX + 12; var y = e.clientY + 12;
+                                        var vw = window.innerWidth || document.documentElement.clientWidth;
+                                        var vh = window.innerHeight || document.documentElement.clientHeight;
+                                        var pw = preview.offsetWidth; var ph = preview.offsetHeight;
+                                        if (x + pw > vw) x = vw - pw - 8;
+                                        if (y + ph > vh) y = vh - ph - 8;
+                                        preview.style.left = x + 'px'; preview.style.top = y + 'px';
+                                    };
+
+                                    // Toggle 'adjust mode' on click: first click enables moving preview with the mouse,
+                                    // second click disables it. Prevent default to avoid opening the dropdown while adjusting.
+                                    var adjusting = false;
+                                    var enableAdjust = function(e){
+                                        adjusting = true;
+                                        preview.style.opacity = '1';
+                                        document.addEventListener('mousemove', move);
+                                        // prevent bootstrap dropdown from opening while adjusting
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    };
+                                    var disableAdjust = function(e){
+                                        adjusting = false;
+                                        preview.style.opacity = '0';
+                                        document.removeEventListener('mousemove', move);
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    };
+
+                                    btn.addEventListener('click', function(e){
+                                        try {
+                                            if (!adjusting) {
+                                                enableAdjust(e);
+                                            } else {
+                                                disableAdjust(e);
+                                            }
+                                        } catch (err) { console.debug('avatar adjust toggle failed', err); }
+                                    });
+
+                                    // Also clean up if user presses Escape while adjusting
+                                    document.addEventListener('keydown', function(e){ if (adjusting && e.key === 'Escape') { disableAdjust(e); } });
+                                });
+                            } catch (e) { console.debug('avatar hover preview init failed', e); }
+                        })();
+                    </script>
+                @endif
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                     <li class="user-header admin-user-header">
-                        <div class="admin-user-avatar-lg">{{ $adminInitial }}</div>
+                        <div class="admin-user-avatar-lg">
+                            @if(!empty(Auth::user()->avatar))
+                                <img src="{{ asset($avatarPath) }}" alt="Avatar" style="width:100%; height:100%; object-fit:cover; border-radius:999px;" />
+                            @else
+                                {{ $adminInitial }}
+                            @endif
+                        </div>
                         <p class="admin-user-title">{{ $adminName }}</p>
                         <p class="admin-user-email">{{ $adminEmail ?: 'Sin correo registrado' }}</p>
                         <div class="admin-user-badges">
@@ -71,8 +167,8 @@
                     </li>
 
                     <li class="user-footer">
-                        <a href="{{route('perfil.edit')}}" class="btn btn-default btn-flat admin-user-action">Perfil</a>
-                        <a href="#" onclick="document.getElementById('logout-form').submit();" class="btn btn-default btn-flat float-end admin-user-action admin-user-logout">Cerrar sesión</a>
+                        <a href="{{route('perfil.edit')}}" class="btn nav-cta-btn btn-default btn-flat admin-user-action">Perfil</a>
+                        <a href="#" onclick="document.getElementById('logout-form').submit();" class="btn nav-cta-btn btn-default btn-flat float-end admin-user-action admin-user-logout">Cerrar sesión</a>
                     </li>
                     <form action="{{route('logout')}}" id="logout-form" method="post" class="d-none">
                         @csrf

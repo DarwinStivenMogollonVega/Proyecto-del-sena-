@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -27,7 +26,7 @@ class UserController extends Controller
                         ->orWhere('email', 'like', "%{$texto}%");
                 });
             })
-            ->orderByDesc('id')
+            ->orderByDesc((new User())->getKeyName())
             ->paginate(10);
 
         return view('usuario.index', compact('registros','texto'));
@@ -48,15 +47,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $this->authorize('user-create'); 
+        $this->authorize('user-create');
+        $validated = $request->validated();
+
         $registro=new User();
-        $registro->name=$request->input('name');
-        $registro->email=$request->input('email');
-        $registro->password=Hash::make($request->input('password'));
-        $registro->activo=$request->input('activo');
+        $registro->name = $validated['name'];
+        $registro->email = $validated['email'];
+        $registro->password = bcrypt($validated['password']);
+        $registro->activo = $validated['activo'];
         $registro->save();
 
-        $registro->assignRole($request->input('role'));
+        $registro->assignRole($validated['role']);
         return redirect()->route('usuarios.index')->with('mensaje', 'Registro '.$registro->name. '  agregado correctamente');
     }
 
@@ -84,17 +85,19 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $this->authorize('user-edit'); 
+        $this->authorize('user-edit');
+        $validated = $request->validated();
+
         $registro=User::findOrFail($id);
-        $registro->name=$request->input('name');
-        $registro->email=$request->input('email');
-        if ($request->filled('password')) {
-            $registro->password=Hash::make($request->input('password'));
+        $registro->name = $validated['name'];
+        $registro->email = $validated['email'];
+        if (!empty($validated['password'])) {
+            $registro->password = bcrypt($validated['password']);
         }
-        $registro->activo=$request->input('activo');
+        $registro->activo = $validated['activo'];
         $registro->save();
 
-        $registro->syncRoles([$request->input('role')]);
+        $registro->syncRoles([$validated['role']]);
 
         return redirect()->route('usuarios.index')->with('mensaje', 'Registro '.$registro->name. '  actualizado correctamente');
     }

@@ -6,17 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdminActivityLog extends Model
 {
+    // Table uses Spanish naming conventions
+    protected $table = 'registros_actividad_admin';
+    protected $primaryKey = 'registro_actividad_admin_id';
+
     protected $fillable = [
-        'user_id',
-        'method',
-        'route_name',
+        'usuario_id',
+        'metodo',
+        'nombre_ruta',
         'url',
-        'ip_address',
-        'user_agent',
+        'direccion_ip',
+        'agente_usuario',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'usuario_id', 'usuario_id');
+    }
+
+    public function getIdAttribute()
+    {
+        return $this->{$this->getKeyName()};
     }
 }

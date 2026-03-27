@@ -24,9 +24,14 @@
         <p class="login-box-msg text-start mb-0">Accede a tus pedidos, carrito y perfil para continuar tu compra.</p>
       </div>
 
-      @if(session('error'))
-        <div class="alert alert-danger">
-          {{ session('error') }}
+      @if($errors->any())
+        <div class="alert alert-danger" role="alert">
+          <strong>Revisa los siguientes errores:</strong>
+          <ul class="mb-0 mt-2">
+            @foreach($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
         </div>
       @endif
 
@@ -41,19 +46,38 @@
         @csrf
         <div class="input-group mb-3">
           <div class="form-floating">
-            <input id="loginEmail" type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="correo@ejemplo.com" />
-            <label for="loginEmail">Correo electronico</label>
+            <input 
+              id="loginEmail"
+              type="email"
+              name="email"
+              value="{{ old('email') }}"
+              class="form-control @error('email') is-invalid @enderror"
+              placeholder="correo@ejemplo.com"
+              maxlength="100"
+              required
+            />
+              <label for="loginEmail">Correo electrónico</label>
           </div>
-          <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-        </div>
-
+        <div class="input-group-text">
+        <span class="bi bi-envelope"></span>
+      </div>
+    </div>
+      @error('email')
+        <div class="invalid-feedback d-block">{{ $message }}</div>
+      @enderror
+      <div id="emailError" class="text-danger small d-none">
+        Ingresa un correo electrónico válido.
+      </div>
         <div class="input-group mb-2">
           <div class="form-floating">
-            <input id="loginPassword" type="password" name="password" class="form-control" placeholder="Contrasena" />
+            <input id="loginPassword" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Contrasena" minlength="8" required />
             <label for="loginPassword">Contrasena</label>
           </div>
           <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
         </div>
+        @error('password')
+          <div class="invalid-feedback d-block">{{ $message }}</div>
+        @enderror
 
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
           <small class="auth-copy">Tu acceso esta protegido y vinculado a tus compras.</small>
@@ -110,4 +134,32 @@
   </aside>
 </div>
 @endsection
+<script>
+(() => {
+    const emailInput = document.getElementById("loginEmail");
+    const passwordInput = document.getElementById("loginPassword");
+    const error = document.getElementById("emailError");
+
+    emailInput?.addEventListener("input", function () {
+        const email = this.value;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (email.length > 0 && !regex.test(email)) {
+            this.classList.add("is-invalid");
+            error?.classList.remove("d-none");
+        } else {
+            this.classList.remove("is-invalid");
+            error?.classList.add("d-none");
+        }
+    });
+
+    passwordInput?.addEventListener("input", function () {
+        if (this.value.length > 0 && this.value.length < 8) {
+            this.classList.add("is-invalid");
+        } else {
+            this.classList.remove("is-invalid");
+        }
+    });
+})();
+</script>
 

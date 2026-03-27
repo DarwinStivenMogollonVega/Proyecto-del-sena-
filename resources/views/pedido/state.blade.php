@@ -1,11 +1,11 @@
-<div class="modal fade" id="modal-estado-{{$reg->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="modal-estado-{{$reg->getKey()}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog">
         <div class="modal-content bg-warning">
-            <form action="{{route('pedidos.cambiar.estado', $reg->id)}}" method="post">
+            <form action="{{route('pedidos.cambiar.estado', $reg->getKey())}}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="modal-header">
-                    <h4 class="modal-title">Cambiar estado del pedido # {{$reg->id}}</h4>
+                    <h4 class="modal-title">Cambiar estado del pedido # {{$reg->getKey()}}</h4>
                     </button>
                 </div>
                 <div class="modal-body">

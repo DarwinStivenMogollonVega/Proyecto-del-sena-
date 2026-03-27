@@ -1,79 +1,83 @@
 /* =====================
-     Variables de color base para texto accesible (nav)
+     Variables globales y sistema de temas para nav (unificado)
      ===================== */
 :root {
-    --dz-text-main: #2d2d2d;
-    --dz-text-heading: #7c2d12;
-    --dz-text-subtle: #475569;
+    --color-bg: #fff8f3;
+    --color-card: #fff;
+    --color-border: #e5e7eb;
+    --color-text: #2d2d2d;
+    --color-heading: #000000;
+    --color-subtle: #475569;
+    --color-primary: #c46310;
+    /* Variables de navbar (valores por defecto) */
+    --dz-navbar-bg: var(--color-card);
+    --dz-navbar-color: var(--color-text);
+    --dz-navbar-border: var(--color-border);
+    --dz-navbar-hover-bg: var(--color-primary);
+    --dz-navbar-hover-color: #ffffff;
 }
 html[data-theme='dark'], .dark {
-    --dz-text-main: #f3e9e0;
-    --dz-text-heading: #fbbf24;
-    --dz-text-subtle: #cbd5e1;
+    --color-bg: #23272e;
+    --color-card: #18181b;
+    --color-border: #3a2415;
+    --color-text: #f3e9e0;
+    --color-heading: #200c03;
+    --color-subtle: #cbd5e1;
+    --color-primary: #200c03;
 }
 html[data-theme='light'], .light {
-    --dz-text-main: #23272e;
-    --dz-text-heading: #b45309;
-    --dz-text-subtle: #475569;
+    --color-bg: #fff8f3;
+    --color-card: #fff;
+    --color-border: #e5e7eb;
+    --color-text: #23272e;
+    --color-heading: #200c03;
+    --color-subtle: #475569;
+    --color-primary: #200c03;
 }
 
-/* =====================
-     Estilos de texto accesible para nav
-     ===================== */
+/* Color base para todos los textos de botones y enlaces del navbar */
 .navbar .nav-link,
 .navbar .nav-cta-btn,
 .navbar .dropdown-cta-btn,
-.navbar .cart-cta-btn {
-    color: var(--dz-text-main) !important;
+.navbar .cart-cta-btn,
+.navbar .nav-cta-text {
+    color: var(--color-text) !important;
 }
 .navbar .nav-link.active,
-.navbar .nav-cta-btn.active {
-    color: var(--dz-text-heading) !important;
+.navbar .nav-cta-btn.active,
+.navbar .nav-cta-text.active {
+    color: var(--color-heading) !important;
 }
-/* =====================
-     Fin sistema de temas para nav
-     ===================== */
 /* Unificar color de íconos y texto de botones de carrito y oscuro con el navbar */
 /* --- NUEVO ESTILO NAVBAR CLARO Y OSCURO --- */
+/* Estilo visual para todos los botones y textos del navbar */
+/* Unificado: color y fondo usan variables de tema */
 .navbar .nav-link,
 .navbar .nav-cta-btn,
 .navbar .dropdown-cta-btn,
-.navbar .cart-cta-btn {
+.navbar .cart-cta-btn,
+.navbar .nav-cta-text {
     font-size: 1.05rem;
     padding: 0.55rem 1.2rem;
     border-radius: 0.6rem;
-    background: #ffffff;
-    color: #8a3c00 !important;
-    border: 1.5px solid #c46310;
+    background: var(--color-card);
+    color: var(--color-text) !important;
+    border: 1.5px solid var(--color-primary);
     font-weight: 700;
     text-shadow: none;
 }
+/* Hover para todos los botones y textos del navbar */
+/* Hover usa variables de tema */
 .navbar .nav-link:hover,
 .navbar .nav-cta-btn:hover,
 .navbar .dropdown-cta-btn:hover,
-.navbar .cart-cta-btn:hover {
-    background: #c46310;
-    color: #ffffff !important;
-    border-color: #c46310;
+.navbar .cart-cta-btn:hover,
+.navbar .nav-cta-text:hover {
+    background: var(--color-primary);
+    color: #fff !important;
+    border-color: var(--color-primary);
 }
-html[data-theme='dark'] .navbar .nav-link,
-html[data-theme='dark'] .navbar .nav-cta-btn,
-html[data-theme='dark'] .navbar .dropdown-cta-btn,
-html[data-theme='dark'] .navbar .cart-cta-btn {
-    background: #232c3b;
-    color: #ffcc70 !important;
-    border-color: #ffcc70;
-    font-weight: 700;
-    text-shadow: none;
-}
-html[data-theme='dark'] .navbar .nav-link:hover,
-html[data-theme='dark'] .navbar .nav-cta-btn:hover,
-html[data-theme='dark'] .navbar .dropdown-cta-btn:hover,
-html[data-theme='dark'] .navbar .cart-cta-btn:hover {
-    background: #ffb84d;
-    color: #1a2230 !important;
-    border-color: #ffb84d;
-}
+/* Ya no es necesario sobreescribir en dark, las variables hacen el trabajo */
 /* Iconos carrito y modo oscuro */
 .navbar .nav-cart-btn,
 .navbar .nav-darkmode-btn {

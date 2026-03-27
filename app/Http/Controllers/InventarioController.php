@@ -23,7 +23,7 @@ class InventarioController extends Controller
             ->paginate(12);
 
         $movimientos = InventarioMovimiento::with(['producto', 'user'])
-            ->latest('id')
+            ->latest('movimiento_inventario_id')
             ->limit(15)
             ->get();
 
@@ -64,8 +64,8 @@ class InventarioController extends Controller
         $producto->save();
 
         InventarioMovimiento::create([
-            'producto_id' => $producto->id,
-            'user_id' => auth()->id(),
+            'producto_id' => $producto->getKey(),
+            'usuario_id' => auth()->id(),
             'tipo' => $datos['tipo'],
             'cantidad' => $cantidad,
             'stock_anterior' => $anterior,

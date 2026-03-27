@@ -72,7 +72,7 @@ class AdminAnalyticsService
         $stats = $this->dashboardStats();
         $proveedoresData = $this->proveedoresAnalytics();
 
-        $ultimosPedidos = Pedido::with('user')->latest('id')->limit(10)->get();
+        $ultimosPedidos = Pedido::with('user')->latest((new Pedido())->getKeyName())->limit(10)->get();
 
         $topProductos = PedidoDetalle::join('productos', 'productos.id', '=', 'pedido_detalles.producto_id')
             ->select(
@@ -86,27 +86,28 @@ class AdminAnalyticsService
             ->limit(5)
             ->get();
 
+        // Usuarios are stored in `usuarios` table and pedidos reference `usuario_id`
         $topClientes = DB::table('pedidos')
-            ->join('users', 'users.id', '=', 'pedidos.user_id')
+            ->join('usuarios', 'usuarios.usuario_id', '=', 'pedidos.usuario_id')
             ->select(
-                'users.id',
-                'users.name',
-                'users.email',
+                'usuarios.usuario_id',
+                'usuarios.name',
+                'usuarios.email',
                 DB::raw('COUNT(pedidos.id) as total_pedidos'),
                 DB::raw('SUM(pedidos.total) as total_gastado')
             )
-            ->groupBy('users.id', 'users.name', 'users.email')
+            ->groupBy('usuarios.usuario_id', 'usuarios.name', 'usuarios.email')
             ->orderByDesc('total_gastado')
             ->limit(5)
             ->get();
 
-        $ultimasResenas = ProductoResena::with(['user', 'producto'])->latest('id')->limit(8)->get();
+        $ultimasResenas = ProductoResena::with(['user', 'producto'])->latest('resena_producto_id')->limit(8)->get();
 
         $pedidosPorEstado = Pedido::select('estado', DB::raw('COUNT(*) as total'))
             ->groupBy('estado')
             ->get();
 
-        $usuariosRecientes = User::latest('id')->limit(6)->get();
+        $usuariosRecientes = User::latest('usuario_id')->limit(6)->get();
 
         $proveedoresTop = $proveedoresData['rows']->take(6)->values();
         $topProveedorVentas = $proveedoresData['rows']->sortByDesc('total_vendidos')->first();
@@ -337,29 +338,30 @@ class AdminAnalyticsService
     private function proveedoresAnalytics(): array
     {
         $rows = Cache::remember('analytics.proveedores.rows', now()->addMinutes(5), function () {
-            $proveedores = Proveedor::leftJoin('productos', 'productos.proveedor_id', '=', 'proveedores.id')
+            // proveedores table uses `proveedor_id` as primary key; select and group by that column
+            $proveedores = Proveedor::leftJoin('productos', 'productos.proveedor_id', '=', 'proveedores.proveedor_id')
             ->leftJoin('pedido_detalles', 'pedido_detalles.producto_id', '=', 'productos.id')
             ->select(
-                'proveedores.id',
+                'proveedores.proveedor_id as id',
                 'proveedores.nombre',
                 DB::raw('COUNT(DISTINCT productos.id) as total_productos'),
                 DB::raw('COALESCE(SUM(pedido_detalles.cantidad), 0) as total_vendidos'),
                 DB::raw('COALESCE(SUM(pedido_detalles.cantidad * pedido_detalles.precio), 0) as ingresos')
             )
-            ->groupBy('proveedores.id', 'proveedores.nombre')
+            ->groupBy('proveedores.proveedor_id', 'proveedores.nombre')
             ->orderByDesc('total_vendidos')
             ->orderByDesc('ingresos')
             ->get();
 
-            $productosTop = Producto::join('proveedores', 'proveedores.id', '=', 'productos.proveedor_id')
+            $productosTop = Producto::join('proveedores', 'proveedores.proveedor_id', '=', 'productos.proveedor_id')
             ->leftJoin('pedido_detalles', 'pedido_detalles.producto_id', '=', 'productos.id')
             ->select(
-                'proveedores.id as proveedor_id',
+                'proveedores.proveedor_id as proveedor_id',
                 'productos.nombre as producto_nombre',
                 DB::raw('COALESCE(SUM(pedido_detalles.cantidad), 0) as total_vendido')
             )
-            ->groupBy('proveedores.id', 'productos.id', 'productos.nombre')
-            ->orderBy('proveedores.id')
+            ->groupBy('proveedores.proveedor_id', 'productos.id', 'productos.nombre')
+            ->orderBy('proveedores.proveedor_id')
             ->orderByDesc('total_vendido')
             ->get()
             ->groupBy('proveedor_id')
@@ -396,11 +398,11 @@ class AdminAnalyticsService
         $stats = $this->dashboardStats();
 
         $rows = Pedido::with('user')
-            ->latest('id')
+            ->latest((new Pedido())->getKeyName())
             ->limit(30)
             ->get()
             ->map(fn (Pedido $pedido) => [
-                'pedido' => '#' . $pedido->id,
+                'pedido' => '#' . $pedido->getKey(),
                 'cliente' => $pedido->user->name ?? $pedido->nombre ?? 'Sin cliente',
                 'estado' => ucfirst((string) $pedido->estado),
                 'total' => number_format((float) $pedido->total, 2, '.', ''),
@@ -429,7 +431,7 @@ class AdminAnalyticsService
     private function productosData(): array
     {
         $rows = Producto::with(['categoria', 'catalogo', 'artista'])
-            ->latest('id')
+            ->latest((new Producto())->getKeyName())
             ->limit(30)
             ->get()
             ->map(fn (Producto $producto) => [
@@ -506,7 +508,7 @@ class AdminAnalyticsService
         $clientes = User::role('cliente')
             ->withCount('pedidos')
             ->withSum('pedidos', 'total')
-            ->latest('id')
+            ->latest((new User())->getKeyName())
             ->limit(30)
             ->get();
 
@@ -539,7 +541,7 @@ class AdminAnalyticsService
     private function usuariosData(): array
     {
         $rows = User::with('roles:id,name')
-            ->latest('id')
+            ->latest((new User())->getKeyName())
             ->limit(30)
             ->get()
             ->map(fn (User $user) => [
@@ -565,7 +567,7 @@ class AdminAnalyticsService
         ];
     }
 
-    private function panelData(): array
+    public function panelData(): array
     {
         $rows = collect([
             $this->panelModuleRow('Productos', Producto::query()),

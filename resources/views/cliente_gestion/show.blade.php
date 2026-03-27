@@ -38,7 +38,7 @@
                                 <tbody>
                                     @forelse($pedidos as $pedido)
                                         <tr>
-                                            <td>#{{ $pedido->id }}</td>
+                                            <td>#{{ $pedido->getKey() }}</td>
                                             <td>{{ $pedido->created_at->format('d/m/Y') }}</td>
                                             <td>{{ ucfirst($pedido->estado) }}</td>
                                             <td>${{ number_format($pedido->total, 2) }}</td>

@@ -5,6 +5,8 @@
     --dz-text-main: #2d2d2d;
     --dz-text-heading: #7c2d12;
     --dz-text-subtle: #475569;
+    --invoice-hero-image: none; /* usar inline: style="--invoice-hero-image: url('/ruta.jpg')" */
+    --invoice-muted-color: rgba(31,41,55,0.6);
 }
 html[data-theme='dark'], .dark {
     --dz-text-main: #f3e9e0;
@@ -35,25 +37,15 @@ html[data-theme='light'], .light {
      Fin sistema de temas para recibos factura
      ===================== */
 /* recibos-factura-section.css: Migración de estilos desde recibos_factura.blade.php */
-
-.invoice-page {
-    background:
-        radial-gradient(circle at 10% 8%, rgba(245, 158, 11, 0.12), transparent 32%),
-        radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.08), transparent 30%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0));
-    border-radius: 1rem;
-    padding-bottom: 2rem;
-}
 .invoice-hero {
     margin-top: 1.5rem;
     border-radius: 1rem;
-    color: #fff;
+    color: var(--dz-text-main);
     padding: 1.8rem;
-    background:
-        radial-gradient(circle at 12% 20%, rgba(245, 158, 11, 0.35), transparent 42%),
-        radial-gradient(circle at 82% 15%, rgba(59, 130, 246, 0.22), transparent 35%),
-        linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
+    /* fondo por defecto (oscuro) */
+    background: radial-gradient(circle at 12% 20%, rgba(245, 158, 11, 0.35), transparent 42%), radial-gradient(circle at 82% 15%, rgba(59, 130, 246, 0.22), transparent 35%), linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
     box-shadow: 0 18px 38px rgba(15, 23, 42, 0.24);
+    transition: background 260ms ease, color 180ms ease, box-shadow 260ms ease;
 }
 .invoice-card {
     background: var(--dz-surface);
@@ -91,13 +83,46 @@ html[data-theme='light'], .light {
     white-space: nowrap;
     background: var(--dz-page-grad-1);
 }
+html[data-theme='dark'] .invoice-table thead th {
+    background: #1a0800;
+}
 .invoice-table td {
     white-space: nowrap;
     vertical-align: middle;
 }
-html[data-theme='dark'] .invoice-page {
-    background:
-        radial-gradient(circle at 10% 8%, rgba(245, 158, 11, 0.15), transparent 32%),
-        radial-gradient(circle at 92% 0%, rgba(59, 130, 246, 0.13), transparent 30%),
-        linear-gradient(180deg, rgba(31, 41, 55, 0.65), rgba(17, 24, 39, 0));
+
+/* MODO OSCURO: mantener el diseño original para .invoice-hero */
+html[data-theme='dark'] .invoice-hero,.dark .invoice-hero {
+    color: var(--dz-text-main);
+    background: #1a0800;
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.24);
+}
+
+/* MODO CLARO: adaptar visualmente mezclando imagen opcional con degradados suaves */
+html[data-theme='light'] .invoice-hero,
+.light .invoice-hero {
+    color: var(--dz-text-main);
+    background-image: var(--invoice-hero-image), radial-gradient(circle at 12% 20%, rgba(245,158,11,0.12), transparent 42%), radial-gradient(circle at 82% 15%, rgba(59,130,246,0.08), transparent 35%), linear-gradient(130deg, #ffffff 0%, #f5e9e0 52%, #f8fafc 100%);
+    background-size: cover, 180% 180%, 180% 180%, auto;
+    background-position: center, left top, right top, center;
+    background-repeat: no-repeat;
+    background-blend-mode: overlay, normal, normal, normal;
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+}
+
+/* Overlay para mantener contraste sobre imágenes */
+.invoice-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.0), rgba(0,0,0,0.02));
+}
+
+@media (max-width: 767.98px) {
+    html[data-theme='light'] .invoice-hero,
+    .light .invoice-hero {
+        background-size: cover, 220% 220%, 220% 220%, auto;
+    }
+    .invoice-hero::before { background: linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(0,0,0,0.03)); }
 }

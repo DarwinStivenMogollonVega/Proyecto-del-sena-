@@ -12,6 +12,7 @@
     $miPerfilActive = request()->routeIs('perfil.edit') || request()->routeIs('perfil.update');
 @endphp
 
+
 <nav class="navbar navbar-expand-lg navbar-dark dz-nav">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand fw-bold dz-brand" href="{{ route('web.index') }}">
@@ -44,23 +45,16 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link nav-cta-btn {{ request()->routeIs('web.soporte') ? 'active' : '' }}" href="{{ route('web.soporte') }}">
-                        <span class="nav-cta-icon"><i class="bi bi-question-circle"></i></span>
-                        <span class="nav-cta-text">Soporte</span>
-                    </a>
-                </li>
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
                         @foreach($catalogos as $catalogo)
-                            <li>
-                                <a class="dropdown-item" href="{{ route('web.catalogo.show', $catalogo->id) }}">{{ $catalogo->nombre }}</a>
-                            </li>
-                            @if(!$loop->last)
-                                <li><hr class="dropdown-divider" /></li>
-                            @endif
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('web.catalogo.show', $catalogo->getKey()) }}">{{ $catalogo->nombre }}</a>
+                                </li>
+                                @if(!$loop->last)
+                                    <li><hr class="dropdown-divider" /></li>
+                                @endif
                         @endforeach
                     </ul>
                 </li>
@@ -70,7 +64,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategoria">
                         @foreach($categorias as $categoria)
                             <li>
-                                <a class="dropdown-item" href="{{ route('web.categoria.show', $categoria->id) }}">{{ $categoria->nombre }}</a>
+                                <a class="dropdown-item" href="{{ route('web.categoria.show', $categoria->getKey()) }}">{{ $categoria->nombre }}</a>
                             </li>
                             @if(!$loop->last)
                                 <li><hr class="dropdown-divider" /></li>
@@ -121,14 +115,14 @@
                 </li>
             </ul>
 
-            <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn">
+            <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn nav-cta-text">
                 <span class="cart-cta-icon">
                     <i class="bi bi-cart-fill"></i>
                 </span>
                 <span class="cart-cta-text">Carrito</span>
                 <span class="badge rounded-pill cart-count-badge">{{ session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0 }}</span>
             </a>
-            <button type="button" class="btn ms-2 theme-switch-btn" data-theme-toggle>
+            <button type="button" class="btn ms-2 theme-switch-btn nav-cta-text" data-theme-toggle>
                 <span class="theme-switch-icon">
                     <i class="bi bi-moon-stars-fill"></i>
                 </span>

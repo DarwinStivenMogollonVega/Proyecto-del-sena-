@@ -1,33 +1,33 @@
-# Documentación del Producto
+<?phpumentación del Producto
 
-## 1. Visión General del Sistema
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;para la venta de música física y digital (vinilos, CDs, formatos digitales). El sistema está construido sobre Laravel 11, utiliza Bootstrap 5 + AdminLTE para la interfaz, Spatie Permissions para control de acceso y MariaDB como base de datos. Opera en tres capas principales:
 
-DiscZone es una plataforma e-commerce para la venta de música física y digital (vinilos, CDs, formatos digitales). El sistema está construido sobre Laravel 11, utiliza Bootstrap 5 + AdminLTE para la interfaz, Spatie Permissions para control de acceso y MariaDB como base de datos. Opera en tres capas principales:
-
-- **Panel administrativo**: gestión interna y administración de la tienda.
-- **Área privada de clientes**: gestión de pedidos, perfil y facturación para usuarios autenticados.
-- **Sitio web público**: exploración del catálogo y proceso de compra para visitantes.
-
-El acceso está controlado por roles (`admin`, `cliente`) y permisos granulares.
-
-## 2. Arquitectura y Módulos Principales
-
-### Diagrama Jerárquico de Módulos
-
-- Panel Administrativo
-  - Dashboard
-  - Seguridad y Control de Acceso (Usuarios, Roles, Logs)
-  - Gestión del Catálogo Musical (Productos, Artistas, Categorías, Catálogos)
+return new class extends Migrationn interna y administración de la tienda.
+{ **Área privada de clientes**: gestión de pedidos, perfil y facturación para usuarios autenticados.
+    /**io web público**: exploración del catálogo y proceso de compra para visitantes.
+     * Run the migrations.
+     */so está controlado por roles (`admin`, `cliente`) y permisos granulares.
+    public function up(): void
+    { Arquitectura y Módulos Principales
+        Schema::create('categorias', function (Blueprint $table) {
+            $table->id();e Módulos
+            $table->string('nombre', 100);
+            $table->text('descripcion')->nullable();
+            $table->timestamps();
+        });ad y Control de Acceso (Usuarios, Roles, Logs)
+    }estión del Catálogo Musical (Productos, Artistas, Categorías, Catálogos)
   - Gestión Comercial (Pedidos, Facturas)
-  - Administración de Clientes
-  - Gestión de Inventario
-- Área del Cliente
-  - Mis Pedidos
-  - Facturación
-  - Perfil y Cuenta
-- Sitio Web Público
-  - Catálogo Público
-  - Ficha de Producto
+    Administración de Clientes
+    /**tión de Inventario
+     * Reverse the migrations.
+     */ Pedidos
+    public function down(): void
+    {erfil y Cuenta
+        Schema::dropIfExists('categorias');
+    }atálogo Público
+};- Ficha de Producto
   - Carrito y Checkout
   - Páginas Informativas (Acerca de)
 

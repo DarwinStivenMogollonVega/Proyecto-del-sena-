@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="card dz-admin-table-card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h3 class="card-title mb-0">Editar factura #{{ $registro->id }}</h3>
+                        <h3 class="card-title mb-0">Editar factura #{{ $registro->getKey() }}</h3>
                         <a href="{{ route('admin.facturas.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
                     </div>
                     <div class="card-body">
@@ -21,7 +21,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('admin.facturas.update', $registro->id) }}" method="post">
+                        <form action="{{ route('admin.facturas.update', $registro->getKey()) }}" method="post">
                             @csrf
                             @method('PUT')
                             <div class="row g-3">
@@ -29,7 +29,7 @@
                                     <label class="form-label">Usuario</label>
                                     <select name="user_id" class="form-select" required>
                                         @foreach($usuarios as $u)
-                                            <option value="{{ $u->id }}" {{ (string) old('user_id', $registro->user_id) === (string) $u->id ? 'selected' : '' }}>{{ $u->name }} ({{ $u->email }})</option>
+                                            <option value="{{ $u->getKey() }}" {{ (string) old('user_id', $registro->user_id) === (string) $u->getKey() ? 'selected' : '' }}>{{ $u->name }} ({{ $u->email }})</option>
                                         @endforeach
                                     </select>
                                 </div>

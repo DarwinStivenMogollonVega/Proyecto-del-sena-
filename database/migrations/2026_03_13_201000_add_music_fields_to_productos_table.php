@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('productos', function (Blueprint $table) {
-            $table->foreignId('artista_id')->nullable()->constrained('artistas')->nullOnDelete()->after('catalogo_id');
-            $table->string('genero_musical', 80)->nullable()->after('artista_id');
-            $table->unsignedSmallInteger('anio_lanzamiento')->nullable()->after('genero_musical');
-            $table->enum('formato_producto', ['cd', 'vinilo', 'digital'])->default('cd')->after('anio_lanzamiento');
-            $table->json('lista_canciones')->nullable()->after('descripcion');
-        });
+        if (!Schema::hasColumn('productos', 'artista_id')) {
+            Schema::table('productos', function (Blueprint $table) {
+                $table->foreignId('artista_id')->nullable()->constrained('artistas', 'artista_id')->nullOnDelete()->after('catalogo_id');
+                $table->string('genero_musical', 80)->nullable()->after('artista_id');
+                $table->unsignedSmallInteger('anio_lanzamiento')->nullable()->after('genero_musical');
+                $table->enum('formato_producto', ['cd', 'vinilo', 'digital'])->default('cd')->after('anio_lanzamiento');
+                $table->json('lista_canciones')->nullable()->after('descripcion');
+            });
+        }
     }
 
     /**

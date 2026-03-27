@@ -2,39 +2,59 @@
 /* =====================
      Variables de color base para texto accesible (catálogo)
      ===================== */
-:root {
-    --dz-text-main: #2d2d2d;
-    --dz-text-heading: #7c2d12;
-    --dz-text-subtle: #475569;
-}
-html[data-theme='dark'], .dark {
-    --dz-text-main: #f3e9e0;
-    --dz-text-heading: #fbbf24;
-    --dz-text-subtle: #cbd5e1;
-}
-html[data-theme='light'], .light {
-    --dz-text-main: #23272e;
-    --dz-text-heading: #b45309;
-    --dz-text-subtle: #475569;
-}
 
 /* =====================
-     Estilos de texto accesible para catálogo
+     Variables globales y sistema de temas para catálogo
      ===================== */
+
+/* =====================
+     Variables globales para catálogo (panel de control, coherencia visual)
+     ===================== */
+:root {
+    --color-bg: #f8fafc; /* fondo general muy claro */
+    --color-card: #fff;   /* tarjetas blancas */
+    --color-border: #e5e7eb; /* bordes suaves */
+    --color-text: #23272e; /* texto principal */
+    --color-heading: #1e293b; /* títulos oscuros */
+    --color-subtle: #64748b; /* texto secundario */
+    --color-primary: #2563eb; /* azul para acentos */
+    --color-success: #22c55e; /* verde para estados */
+}
+html[data-theme='dark'], .dark {
+    --color-bg: #181c23; /* fondo general oscuro */
+    --color-card: #232c3b; /* tarjetas azul/gris oscuro */
+    --color-border: #232c3b; /* bordes oscuros */
+    --color-text: #f1f5f9; /* texto claro */
+    --color-heading: #f3f4f6; /* títulos claros */
+    --color-subtle: #94a3b8; /* texto secundario claro */
+    --color-primary: #60a5fa; /* azul claro para acentos */
+    --color-success: #22d3ee; /* verde/azul para estados */
+}
+html[data-theme='light'], .light {
+    --color-bg: #f8fafc;
+    --color-card: #fff;
+    --color-border: #e5e7eb;
+    --color-text: #23272e;
+    --color-heading: #1e293b;
+    --color-subtle: #64748b;
+    --color-primary: #2563eb;
+    --color-success: #22c55e;
+}
 .catalogo-hero,
 .catalogo-hero h1,
 .catalogo-hero .hero-subtitle {
-    color: var(--dz-text-main);
+    color: var(--color-text);
 }
 .catalogo-hero h1 {
-    color: var(--dz-text-heading);
+    color: var(--color-heading);
 }
 .catalogo-hero .hero-subtitle {
-    color: var(--dz-text-subtle);
+    color: var(--color-subtle);
 }
-/* =====================
-     Fin sistema de temas para catálogo
-     ===================== */
+.catalogo-filter {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+}
 
 section {
     display: block;
@@ -116,22 +136,61 @@ html[data-theme='dark'] .logo-light { filter: none; }
    NAVBAR MENÚS Y DROPDOWNS
    ===================================================== */
 .navbar .dropdown-menu {
-  background: var(--dz-navbar-bg);
-  color: var(--dz-navbar-color);
-  border: 1px solid var(--dz-navbar-border);
+    background: var(--dz-navbar-bg, #ffffff);
+    color: var(--dz-navbar-color, #212529);
+    border: 1px solid var(--dz-navbar-border, #e9ecef);
   font-size: 1.05rem;
 }
 .navbar .dropdown-item {
-  color: var(--dz-navbar-color);
-  font-weight: 600;
-  border-radius: 0.5rem;
-  padding: 0.45rem 1.1rem;
+    display: block;
+    width: 100%;
+    padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+    clear: both;
+    font-weight: 400;
+    color: var(--bs-dropdown-link-color);
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
 }
 .navbar .dropdown-item:hover,
 .navbar .dropdown-item:focus {
-  background: var(--dz-navbar-hover-bg);
-  color: var(--dz-navbar-hover-color);
+    background: var(--dz-navbar-hover-bg, #e9ecef);
+    color: var(--dz-navbar-hover-color, #212529);
 }
 
 /* Fin de archivo optimizado */
+/* Utilidades visuales unificadas para paneles */
+.panel-bg-light {
+    background: var(--color-card);
+}
+.panel-title-primary {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+.panel-title-success {
+    color: var(--color-success);
+    font-weight: 600;
+}
+.panel-title-warning {
+    color: var(--color-warning, #f59e42);
+    font-weight: 600;
+}
+.panel-badge-primary {
+    background: var(--color-primary);
+    color: #fff;
+}
+.panel-badge-success {
+    background: var(--color-success);
+    color: #fff;
+}
+.panel-badge-warning {
+    background: var(--color-warning, #f59e42);
+    color: #fff;
+}
+.panel-badge-muted {
+    background: var(--color-subtle);
+    color: #fff;
+}
 

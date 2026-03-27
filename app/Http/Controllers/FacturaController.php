@@ -23,8 +23,8 @@ class FacturaController extends Controller
         $texto = trim((string) $request->input('texto'));
 
         $query = Factura::with('pedido')
-            ->where('user_id', auth()->id())
-            ->orderByDesc('id');
+            ->where('usuario_id', auth()->id())
+            ->orderByDesc('factura_id');
 
         if ($texto !== '') {
             $query->where(function ($q) use ($texto) {
@@ -39,7 +39,7 @@ class FacturaController extends Controller
 
         $registros = $query->paginate(10);
 
-        $baseQuery = Factura::where('user_id', auth()->id());
+        $baseQuery = Factura::where('usuario_id', auth()->id());
         $resumen = [
             'totalRecibos' => (clone $baseQuery)->count(),
             'montoFacturado' => (float) ((clone $baseQuery)->sum('total') ?? 0),
@@ -50,21 +50,21 @@ class FacturaController extends Controller
 
     public function generarDesdePedido($pedidoId)
     {
-        $pedido = Pedido::with(['detalles.producto', 'user'])
-            ->where('id', $pedidoId)
-            ->where('user_id', auth()->id())
+            $pedido = Pedido::with(['detalles.producto', 'user'])
+            ->where((new Pedido())->getKeyName(), $pedidoId)
+            ->where('usuario_id', auth()->id())
             ->firstOrFail();
 
         $factura = $this->crearFacturaDesdePedido($pedido);
 
-        return redirect()->route('perfil.facturas.show', $factura->id);
+        return redirect()->route('perfil.facturas.show', $factura->getKey());
     }
 
     public function show($id)
     {
         $factura = Factura::with(['pedido.detalles.producto', 'pedido.user'])
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
+            ->where((new Factura())->getKeyName(), $id)
+            ->where('usuario_id', auth()->id())
             ->firstOrFail();
 
         return view('web.recibo_factura_detalle', compact('factura'));
@@ -73,8 +73,8 @@ class FacturaController extends Controller
     public function pdf($id)
     {
         $factura = Factura::with(['pedido.detalles.producto', 'pedido.user'])
-            ->where('id', $id)
-            ->where('user_id', auth()->id())
+            ->where((new Factura())->getKeyName(), $id)
+            ->where('usuario_id', auth()->id())
             ->firstOrFail();
 
         $pdf = Pdf::loadView('web.factura_pdf', compact('factura'))->setPaper('a4');
@@ -84,13 +84,13 @@ class FacturaController extends Controller
 
     private function crearFacturaDesdePedido(Pedido $pedido): Factura
     {
-        $existente = Factura::where('pedido_id', $pedido->id)->first();
+        $existente = Factura::where('pedido_id', $pedido->getKey())->first();
 
         if ($existente) {
             return $existente->fresh(['pedido.detalles.producto', 'pedido.user']);
         }
 
-        return DB::transaction(function () use ($pedido) {
+                return DB::transaction(function () use ($pedido) {
             $subtotal = (float) $pedido->detalles->sum(function ($detalle) {
                 return ((float) $detalle->precio) * ((int) $detalle->cantidad);
             });
@@ -109,8 +109,8 @@ class FacturaController extends Controller
             }
 
             $factura = Factura::create([
-                'pedido_id' => $pedido->id,
-                'user_id' => $pedido->user_id,
+                'pedido_id' => $pedido->getKey(),
+                'usuario_id' => $pedido->usuario_id,
                 'numero_factura' => null,
                 'fecha_emision' => now(),
                 'estado_pedido' => (string) $pedido->estado,
@@ -123,7 +123,7 @@ class FacturaController extends Controller
                 'cliente_identificacion' => $identificacion,
             ]);
 
-            $factura->numero_factura = 'FAC-' . now()->format('Ymd') . '-' . str_pad((string) $factura->id, 6, '0', STR_PAD_LEFT);
+            $factura->numero_factura = 'FAC-' . now()->format('Ymd') . '-' . str_pad((string) $factura->getKey(), 6, '0', STR_PAD_LEFT);
             $factura->save();
 
             return $factura->fresh(['pedido.detalles.producto', 'pedido.user']);

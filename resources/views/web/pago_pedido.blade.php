@@ -22,8 +22,18 @@
                     </a>
                 </div>
                 <div class="checkout-card p-4 p-lg-5 mt-3">
-                    <form action="{{ route('pedido.pago.guardar') }}" method="POST">
+                    <form action="{{ route('pedido.pago.guardar') }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Corrige los siguientes errores:</strong>
+                                <ul class="mb-0 mt-2">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="row g-3">
                             <div class="col-12">
                                 <div class="list-group">
@@ -55,7 +65,7 @@
                         <div id="pago-tarjeta" class="mt-3" style="display:none;">
                             <div class="mb-2">
                                 <label class="form-label">Número de tarjeta</label>
-                                <input type="text" class="form-control" name="tarjeta_numero" maxlength="19">
+                                <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="tarjeta_numero" maxlength="19" oninput="this.value = this.value.replace(/\D/g,'')">
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Nombre en la tarjeta</label>
@@ -68,7 +78,7 @@
                                 </div>
                                 <div class="col-6 mb-2">
                                     <label class="form-label">CVV</label>
-                                    <input type="text" class="form-control" name="tarjeta_cvv" maxlength="4">
+                                    <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="tarjeta_cvv" maxlength="4" oninput="this.value = this.value.replace(/\D/g,'')">
                                 </div>
                             </div>
                         </div>
@@ -103,6 +113,41 @@
                                 Finalizar compra <i class="bi bi-check-circle ms-2"></i>
                             </button>
                         </div>
+                        <hr class="my-3">
+                        <div class="mt-3">
+                            <label class="form-label">Comprobante de pago (opcional)</label>
+                            <input type="file" name="comprobante_pago" class="form-control">
+                            <small class="text-muted">JPG, PNG, WEBP — máximo 4 MB</small>
+                        </div>
+
+                        <div class="mt-3">
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" name="requiere_factura_electronica" value="1" {{ old('requiere_factura_electronica', $pago['requiere_factura_electronica'] ?? false) ? 'checked' : '' }}>
+                                <span class="form-check-label">Solicitar factura electrónica</span>
+                            </label>
+                        </div>
+                        <div id="factura-fields" style="display: none;" class="mt-2">
+                            <div class="mb-2">
+                                <label class="form-label">Tipo de documento</label>
+                                <select name="tipo_documento" class="form-select">
+                                    <option value="">Selecciona...</option>
+                                    <option value="nit">NIT</option>
+                                    <option value="cedula">Cédula</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Número de documento</label>
+                                <input type="text" name="numero_documento" class="form-control" value="{{ old('numero_documento') }}">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Razón social</label>
+                                <input type="text" name="razon_social" class="form-control" value="{{ old('razon_social') }}">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Correo para factura</label>
+                                <input type="email" name="correo_factura" class="form-control" value="{{ old('correo_factura') }}">
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -129,6 +174,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.querySelector('input[name="requiere_factura_electronica"]');
+    const facturaFields = document.getElementById('factura-fields');
+    if (!checkbox) return;
+    function toggle() {
+        facturaFields.style.display = checkbox.checked ? 'block' : 'none';
+    }
+    toggle();
+    checkbox.addEventListener('change', toggle);
 });
 </script>
 @push('estilos')

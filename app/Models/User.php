@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,6 +9,22 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    /**
+     * Usar la tabla 'usuarios' en vez de 'users'.
+     */
+    protected $table = 'usuarios';
+    /**
+     * Nombre de la clave primaria en la tabla 'usuarios'.
+     */
+    protected $primaryKey = 'usuario_id';
+    /**
+     * Incrementing primary key (entero).
+     */
+    public $incrementing = true;
+    /**
+     * Tipo de la clave primaria.
+     */
+    protected $keyType = 'int';
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
@@ -61,23 +76,31 @@ class User extends Authenticatable
         return $this->hasMany(Entrada::class);
     }
 
+    /**
+     * Compatibilidad: devolver `id` usando la columna real de la llave primaria.
+     */
+    public function getIdAttribute()
+    {
+        return $this->{$this->primaryKey} ?? null;
+    }
+
     public function pedidos()
     {
-        return $this->hasMany(Pedido::class);
+        return $this->hasMany(Pedido::class, 'usuario_id');
     }
 
     public function facturas()
     {
-        return $this->hasMany(Factura::class);
+        return $this->hasMany(Factura::class, 'usuario_id');
     }
 
     public function inventarioMovimientos()
     {
-        return $this->hasMany(InventarioMovimiento::class);
+        return $this->hasMany(InventarioMovimiento::class, 'usuario_id');
     }
 
     public function adminActivityLogs()
     {
-        return $this->hasMany(AdminActivityLog::class);
+        return $this->hasMany(AdminActivityLog::class, 'usuario_id');
     }
 }

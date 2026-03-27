@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('movimientos_inventario', function (Blueprint $table) {
             $table->id('movimiento_inventario_id');
             $table->foreignId('producto_id')->constrained('productos')->cascadeOnDelete();
-            $table->foreignId('usuario_id')->nullable()->constrained('usuarios')->nullOnDelete();
+            $table->foreignId('usuario_id')->nullable()->constrained('usuarios', 'usuario_id')->nullOnDelete();
             $table->enum('tipo_movimiento', ['entrada', 'salida', 'ajuste']);
             $table->integer('cantidad');
             $table->integer('stock_anterior');

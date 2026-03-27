@@ -22,6 +22,23 @@
     <meta
       name="keywords"
       content="Sistema, ArtCode"
+        /* Sticky actions column for small screens */
+        @media (max-width: 768px) {
+          .table-responsive { overflow: visible; }
+          th.actions-col,
+          td.actions-col {
+            position: -webkit-sticky;
+            position: sticky;
+            right: 0;
+            background: var(--adm-surface);
+            z-index: 1051;
+            box-shadow: -8px 0 18px rgba(15,23,42,0.06);
+            min-width: 72px;
+            vertical-align: middle;
+          }
+          th.actions-col { text-align: right; }
+          td.actions-col .btn { min-width: 40px; }
+        }
     />
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
@@ -57,7 +74,7 @@
         color-scheme: light;
         --adm-body-bg: #f4f7fb;
         --adm-surface: #ffffff;
-        --adm-surface-soft: #f8fbff;
+        --adm-surface-soft: #172033;
         --adm-border: #dbe4ef;
         --adm-text: #172033;
         --adm-muted: #607086;
@@ -98,6 +115,34 @@
         --adm-sidebar-panel: rgba(148, 163, 184, 0.05);
       }
 
+      /* Responsive sidebar color adjustments */
+      /* On small screens prefer a simpler, high-contrast solid background */
+      @media (max-width: 767.98px) {
+        :root {
+          --adm-sidebar-bg: linear-gradient(180deg, #0b1220 0%, #0f1727 100%);
+          --adm-sidebar-text: rgba(226,232,240,0.96);
+          --adm-sidebar-muted: rgba(226,232,240,0.72);
+          --adm-sidebar-active-bg: rgba(255,255,255,0.06);
+          --adm-sidebar-panel: rgba(255,255,255,0.02);
+        }
+
+        html[data-theme='dark'] {
+          --adm-sidebar-bg: linear-gradient(180deg, #07101a 0%, #0b1220 100%);
+          --adm-sidebar-text: rgba(229,231,235,0.98);
+          --adm-sidebar-muted: rgba(203,213,225,0.76);
+          --adm-sidebar-active-bg: rgba(148,163,184,0.10);
+          --adm-sidebar-panel: rgba(148,163,184,0.03);
+        }
+      }
+
+      /* Slightly different palette when the sidebar is collapsed (narrow) */
+      @media (max-width: 992px) {
+        .app-sidebar {
+          box-shadow: inset -1px 0 0 var(--adm-sidebar-border), 8px 0 18px rgba(2,6,23,0.08);
+        }
+        .app-sidebar .nav-link p { opacity: 0.98; }
+      }
+
       body.admin-shell {
         background:
           linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 16%),
@@ -128,7 +173,7 @@
       }
 
       .app-header {
-        background: var(--adm-header-bg);
+        background: var(--adm-headerheader-bg);
         border-bottom: 1px solid var(--adm-border);
         backdrop-filter: blur(10px);
       }
@@ -172,7 +217,7 @@
       }
 
       .card-header:not(.bg-dark):not(.bg-primary):not(.bg-danger) {
-        background: linear-gradient(120deg, var(--adm-surface-soft), var(--adm-surface));
+        background: var(--adm-surface);
       }
 
       .table {
@@ -403,6 +448,45 @@
         transform: scaleY(1);
       }
 
+      /* Mobile sidebar off-canvas behaviour */
+      @media (max-width: 991.98px) {
+        .app-sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 18rem;
+          transform: translateX(-110%);
+          transition: transform 0.28s ease, box-shadow 0.18s ease;
+          z-index: 1050;
+        }
+
+        body.sidebar-open .app-sidebar {
+          transform: translateX(0);
+          box-shadow: 0 24px 48px rgba(2,6,23,0.28);
+        }
+
+        .sidebar-mobile-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(2,6,23,0.45);
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.22s ease, visibility 0.22s ease;
+          z-index: 1040;
+        }
+
+        body.sidebar-open .sidebar-mobile-backdrop {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        /* When sidebar is hidden adjust main content spacing */
+        .app-main {
+          transition: margin-left 0.28s ease;
+        }
+      }
+
       .app-sidebar .nav-header.dz-sidebar-section {
         display: flex;
         align-items: center;
@@ -482,6 +566,16 @@
         color: var(--adm-heading);
         font-size: 0.82rem;
         font-weight: 800;
+      }
+
+      /* image inside profile avatar */
+      .admin-profile-avatar-img {
+        width: 1.85rem;
+        height: 1.85rem;
+        border-radius: 999px;
+        object-fit: cover;
+        display: inline-block;
+        vertical-align: middle;
       }
 
       .admin-profile-name {
@@ -576,6 +670,8 @@
         border: 2px solid rgba(255, 255, 255, 0.6);
         box-shadow: 0 10px 20px rgba(2, 6, 23, 0.2);
       }
+
+      .admin-user-avatar-lg img { width:100%; height:100%; border-radius:999px; object-fit:cover; }
 
       .admin-user-title {
         margin: 0;
@@ -869,6 +965,27 @@
       }
     </style>
     @stack('estilos')
+    <style>
+      /* Vertical actions layout for very small screens */
+      @media (max-width: 768px) {
+        .actions-col .d-flex {
+          flex-direction: column !important;
+          gap: .45rem !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        .actions-col .btn {
+          width: 40px !important;
+          height: 40px !important;
+          padding: .35rem !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        th.actions-col { text-align: center !important; }
+        td.actions-col { padding: .25rem .5rem !important; }
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -900,14 +1017,13 @@
       <!--begin::Footer-->
       <footer class="app-footer">
         <!--begin::To the end-->
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2025&nbsp;
-          <a href="#" class="text-decoration-none">ArtCode</a>.
+          Copyright &copy; 2026&nbsp;
+          <a href="#" class="text-decoration-none">DiscMusic</a>.
         </strong>
-        All rights reserved.
+        Todos los derechos reservados.
         <!--end::Copyright-->
       </footer>
       <!--end::Footer-->
@@ -1065,6 +1181,28 @@
 
           var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
           applyAdminTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // Sidebar mobile toggle
+        document.querySelectorAll('[data-sidebar-toggle]').forEach(function(btn){
+          btn.addEventListener('click', function(ev){
+            ev.preventDefault();
+            document.body.classList.toggle('sidebar-open');
+          });
+        });
+
+        var sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        if (sidebarBackdrop) {
+          sidebarBackdrop.addEventListener('click', function(){
+            document.body.classList.remove('sidebar-open');
+          });
+        }
+
+        // Close sidebar on escape
+        document.addEventListener('keydown', function(e){
+          if (e.key === 'Escape') {
+            document.body.classList.remove('sidebar-open');
+          }
         });
       });
     </script>

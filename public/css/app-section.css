@@ -75,9 +75,6 @@ body {
     background-attachment: fixed;
     transition: background 0.25s ease, color 0.25s ease;
 }
-html.theme-shifting body {
-    
-}
 @keyframes dzThemeShiftFlash {
     0% {
         filter: saturate(1) brightness(1);

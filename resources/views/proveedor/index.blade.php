@@ -30,22 +30,22 @@
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <h3 class="card-title">Proveedores</h3>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('proveedores.index') }}" method="get">
-                    <div class="input-group">
-                        <input name="texto" type="text" class="form-control" value="{{ $texto }}" placeholder="Buscar proveedor, contacto, email o telefono">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">Buscar</button>
-                            @can('proveedor-create')
-                            <a href="{{ route('proveedores.create') }}" class="btn btn-primary">Nuevo</a>
-                            @endcan
+        <div class="card mb-4" style="border-radius:1rem">
+            <div class="card-header py-3 d-flex align-items-center justify-content-between">
+                <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">Proveedores</h6>
+                <div class="d-flex gap-2 align-items-center">
+                    <form action="{{ route('proveedores.index') }}" method="get" class="d-flex">
+                        <div class="input-group">
+                            <input name="texto" type="text" class="form-control form-control-sm" value="{{ $texto }}" placeholder="Buscar proveedor, contacto, email o telefono">
+                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-search"></i></button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                    @can('proveedor-create')
+                        <a href="{{ route('proveedores.create') }}" class="btn btn-sm btn-primary">Nuevo</a>
+                    @endcan
+                </div>
+            </div>
+            <div class="card-body p-0">
 
                 @if(session('mensaje'))
                 <div class="alert alert-info alert-dismissible fade show mt-2">
@@ -61,32 +61,24 @@
                 </div>
                 @endif
 
-                <div class="table-responsive mt-3">
-                    <table class="table table-bordered align-middle">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle" style="font-size:.88rem">
                         <thead>
                             <tr>
-                                <th style="width:150px">Opciones</th>
-                                <th>ID</th>
+                                <th class="px-3">#</th>
                                 <th>Proveedor</th>
                                 <th>Contacto</th>
                                 <th>Telefono</th>
                                 <th>Email</th>
-                                <th>Productos</th>
+                                <th class="text-center">Productos</th>
                                 <th>Estado</th>
+                                <th class="actions-col" style="width:150px">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($registros as $reg)
                             <tr>
-                                <td>
-                                    @can('proveedor-edit')
-                                    <a href="{{ route('proveedores.edit', $reg->id) }}" class="btn btn-info btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                    @endcan
-                                    @can('proveedor-delete')
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-eliminar-{{ $reg->id }}"><i class="bi bi-trash-fill"></i></button>
-                                    @endcan
-                                </td>
-                                <td>{{ $reg->id }}</td>
+                                <td class="px-3 fw-semibold">{{ $reg->getKey() }}</td>
                                 <td>
                                     <div class="fw-semibold">{{ $reg->nombre }}</div>
                                     <small class="text-muted">{{ $reg->direccion ?: '-' }}</small>
@@ -94,27 +86,45 @@
                                 <td>{{ $reg->contacto ?: '-' }}</td>
                                 <td>{{ $reg->telefono ?: '-' }}</td>
                                 <td>{{ $reg->email ?: '-' }}</td>
-                                <td>{{ $reg->productos_count }}</td>
+                                <td class="text-center"><span class="badge panel-badge-primary">{{ $reg->productos_count }}</span></td>
                                 <td>
                                     @if($reg->activo)
-                                        <span class="badge text-bg-success">Activo</span>
+                                        <span class="badge panel-badge-success">Activo</span>
                                     @else
-                                        <span class="badge text-bg-secondary">Inactivo</span>
+                                        <span class="badge panel-badge-muted">Inactivo</span>
                                     @endif
                                 </td>
+                                <td class="actions-col">
+                                    @can('proveedor-edit')
+                                        <a href="{{ route('proveedores.edit', $reg->getKey()) }}" class="btn btn-sm btn-outline-info me-1"><i class="bi bi-pencil-fill"></i></a>
+                                    @endcan
+                                    @can('proveedor-delete')
+                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-eliminar-proveedor-{{ $reg->getKey() }}" data-modal-id="modal-eliminar-proveedor-{{ $reg->getKey() }}" title="Eliminar"><i class="bi bi-trash-fill"></i></button>
+                                    @endcan
+                                </td>
                             </tr>
-                            @include('proveedor.delete')
                             @empty
                             <tr>
-                                <td colspan="8">No hay proveedores registrados.</td>
+                                <td colspan="8" class="text-center py-3" style="color:var(--adm-muted)">No hay proveedores registrados.</td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="card-footer clearfix">
-                {{ $registros->appends(['texto' => $texto]) }}
+        </div>
+    </div>
+                @foreach($registros as $reg)
+                    @can('proveedor-delete')
+                    @include('proveedor.delete', ['reg' => $reg])
+                @endcan
+                @can('proveedor-activate')
+                    @include('proveedor.activate', ['reg' => $reg])
+                @endcan
+                @endforeach
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <div>Mostrando {{ $registros->count() }} de {{ $registros->total() }} proveedores</div>
+                <div>{{ $registros->appends(['texto' => $texto])->links() }}</div>
             </div>
         </div>
     </div>
