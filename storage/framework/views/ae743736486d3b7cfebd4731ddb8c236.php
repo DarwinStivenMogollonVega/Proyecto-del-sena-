@@ -65,7 +65,7 @@
                         <div id="pago-tarjeta" class="mt-3" style="display:none;">
                             <div class="mb-2">
                                 <label class="form-label">Número de tarjeta</label>
-                                <input type="text" class="form-control" name="tarjeta_numero" maxlength="19">
+                                <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="tarjeta_numero" maxlength="19" oninput="this.value = this.value.replace(/\D/g,'')">
                             </div>
                             <div class="mb-2">
                                 <label class="form-label">Nombre en la tarjeta</label>
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="col-6 mb-2">
                                     <label class="form-label">CVV</label>
-                                    <input type="text" class="form-control" name="tarjeta_cvv" maxlength="4">
+                                    <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="tarjeta_cvv" maxlength="4" oninput="this.value = this.value.replace(/\D/g,'')">
                                 </div>
                             </div>
                         </div>
