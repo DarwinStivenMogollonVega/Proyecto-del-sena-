@@ -1,0 +1,84 @@
+@extends('plantilla.app')
+@section('contenido')
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem;">
+                    <div class="card-header" style="background:transparent; border-bottom:1px">
+                        <h3 class="card-title">Álbum</h3>
+                    </div>
+                    <div class="card-body">
+                      <form action="{{ isset($registro) ? route('albums.update', $registro->getKey()) : route('albums.store') }}" 
+                         method="POST" id="formRegistroAlbum" novalidate>
+
+                            @csrf
+                            @if(isset($registro))
+                                @method('PUT')
+                            @endif
+                            @if($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Corrige los siguientes errores:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control @error('nombre') is-invalid @enderror"
+                                     id="nombre" name="nombre" value="{{old('nombre', $registro->nombre ?? '')}}" minlength="1" maxlength="150" required>
+                                     @error('nombre')
+                                        <small class="text-danger">{{ $message }}</small>
+                                     @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <input type="text" class="form-control @error('descripcion') is-invalid @enderror"
+                                     id="descripcion" name="descripcion" value="{{old('descripcion', $registro->descripcion ?? '')}}" maxlength="1000">
+                                     @error('descripcion')
+                                        <small class="text-danger">{{ $message }}</small>
+                                     @enderror
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-secondary me-md-2"
+                                    onclick="window.location.href='{{route('albums.index')}}';">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer clearfix">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    document.getElementById('mnuCatalogo')?.classList.add('menu-open');
+    document.getElementById('mnuCatalogoLink')?.classList.add('active');
+    document.getElementById('itemAlbum')?.classList.add('active');
+
+    (() => {
+        const form = document.getElementById('formRegistroAlbum');
+        if (!form) return;
+
+        form.addEventListener('submit', (event) => {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.querySelectorAll('input, textarea').forEach((field) => {
+                    if (!field.checkValidity()) field.classList.add('is-invalid');
+                });
+            }
+        });
+    })();
+</script>
+@endpush

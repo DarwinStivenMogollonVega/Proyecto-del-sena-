@@ -47,21 +47,22 @@
                             @forelse($registros as $reg)
                                 <tr>
                                     <td>{{ $reg->getKey() }}</td>
-                                    <td>{{ $reg->user->name ?? $reg->nombre }}</td>
-                                    <td>{{ $reg->email }}</td>
-                                    <td>{{ strtoupper($reg->tipo_documento ?? '-') }} {{ $reg->numero_documento ?? '' }}</td>
-                                    <td>{{ $reg->razon_social ?? '-' }}</td>
-                                    <td class="fw-bold">${{ number_format($reg->total, 2) }}</td>
+                                    <td>{{ $reg->user->name ?? $reg->nombre ?? $reg->nombre_cliente ?? $reg->cliente_nombre ?? '-' }}</td>
+                                    <td>{{ strtoupper($reg->tipo_documento ?? '') }} {{ $reg->numero_documento ?? $reg->identificacion_cliente ?? '' }}</td>
+                                    <td>{{ $reg->razon_social ?? $reg->cliente_razon_social ?? $reg->nombre_cliente ?? '-' }}</td>
+                                    <td>{{ $reg->correo_cliente ?? $reg->email ?? '-' }}</td>
+                                    <td class="fw-bold">${{ number_format($reg->total ?? ($reg->subtotal + ($reg->impuestos ?? 0)) ?? 0, 2) }}</td>
                                     <td>
                                         @php
-                                            $badgeClass = match($reg->estado) {
+                                            $estado = $reg->estado ?? $reg->estado_pedido ?? 'pendiente';
+                                            $badgeClass = match($estado) {
                                                 'pagada' => 'panel-badge-success',
                                                 'pendiente' => 'panel-badge-warning',
                                                 'anulada' => 'panel-badge-muted',
                                                 default => 'panel-badge-muted',
                                             };
                                         @endphp
-                                        <span class="badge {{ $badgeClass }}">{{ ucfirst($reg->estado) }}</span>
+                                        <span class="badge {{ $badgeClass }}">{{ ucfirst($estado) }}</span>
                                     </td>
                                     <td>{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : '-' }}</td>
                                     <td>

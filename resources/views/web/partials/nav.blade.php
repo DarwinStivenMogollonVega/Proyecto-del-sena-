@@ -12,7 +12,6 @@
     $miPerfilActive = request()->routeIs('perfil.edit') || request()->routeIs('perfil.update');
 @endphp
 
-
 <nav class="navbar navbar-expand-lg navbar-dark dz-nav">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand fw-bold dz-brand" href="{{ route('web.index') }}">
@@ -45,16 +44,27 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link nav-cta-btn {{ request()->routeIs('web.productos') ? 'active' : '' }}" href="{{ route('web.productos') }}">
+                        <span class="nav-cta-icon"><i class="bi bi-box-seam"></i></span>
+                        <span class="nav-cta-text">productos</span>
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
+                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownFormato" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Formato</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownFormato">
                         @foreach($catalogos as $catalogo)
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('web.catalogo.show', $catalogo->getKey()) }}">{{ $catalogo->nombre }}</a>
-                                </li>
-                                @if(!$loop->last)
-                                    <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                @if(Route::has('web.formato.show'))
+                                    <a class="dropdown-item" href="{{ route('web.formato.show', $catalogo->id) }}">{{ $catalogo->nombre }}</a>
+                                @else
+                                    <a class="dropdown-item" href="{{ url('/formato-web/'.$catalogo->id) }}">{{ $catalogo->nombre }}</a>
                                 @endif
+                            </li>
+                            @if(!$loop->last)
+                                <li><hr class="dropdown-divider" /></li>
+                            @endif
                         @endforeach
                     </ul>
                 </li>
@@ -64,7 +74,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategoria">
                         @foreach($categorias as $categoria)
                             <li>
-                                <a class="dropdown-item" href="{{ route('web.categoria.show', $categoria->getKey()) }}">{{ $categoria->nombre }}</a>
+                                <a class="dropdown-item" href="{{ route('web.categoria.show', $categoria->id) }}">{{ $categoria->nombre }}</a>
                             </li>
                             @if(!$loop->last)
                                 <li><hr class="dropdown-divider" /></li>
@@ -79,7 +89,7 @@
                             <i class="bi bi-person-circle me-2"></i>{{ auth()->user()->name }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
-                            @canany(['user-list', 'rol-list', 'producto-list', 'categoria-list', 'catalogo-list', 'pedido-list'])
+                            @canany(['user-list', 'rol-list', 'producto-list', 'categoria-list', 'formato-list', 'pedido-list'])
                                 <li><h6 class="dropdown-header text-uppercase small fw-bold">Administrador</h6></li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Panel de control</a>
@@ -115,14 +125,14 @@
                 </li>
             </ul>
 
-            <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn nav-cta-text">
+            <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn">
                 <span class="cart-cta-icon">
                     <i class="bi bi-cart-fill"></i>
                 </span>
                 <span class="cart-cta-text">Carrito</span>
                 <span class="badge rounded-pill cart-count-badge">{{ session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0 }}</span>
             </a>
-            <button type="button" class="btn ms-2 theme-switch-btn nav-cta-text" data-theme-toggle>
+            <button type="button" class="btn ms-2 theme-switch-btn" data-theme-toggle>
                 <span class="theme-switch-icon">
                     <i class="bi bi-moon-stars-fill"></i>
                 </span>

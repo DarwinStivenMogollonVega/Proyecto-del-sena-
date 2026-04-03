@@ -18,7 +18,7 @@
                     <!-- Logo removido por solicitud -->
                 </div>
                 <h1 class="display-6 fw-bold mb-2">Descubre tu proximo disco favorito</h1>
-                <p class="mb-0 hero-subtitle">Explora el catalogo, compara precios y encuentra nuevas joyas para tu coleccion.</p>
+                <p class="mb-0 hero-subtitle">Explora el formato, compara precios y encuentra nuevas joyas para tu coleccion.</p>
             </div>
             <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
                 <a href="#productos" class="btn btn-light px-4">
@@ -40,7 +40,7 @@
         <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $metricas['totalProductos'] }}</strong><span>Productos</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $metricas['disponibles'] }}</strong><span>Disponibles</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $metricas['totalCategorias'] }}</strong><span>Categorias</span></div></div>
-        <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $metricas['totalCatalogos'] }}</strong><span>Catalogos</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>{{ $metricas['totalCatalogos'] }}</strong><span>Formatos</span></div></div>
     </div>
 
     <form id="explorar" method="GET" action="{{ route('web.index') }}" class="search-panel p-3 p-md-4 mt-4">
@@ -74,7 +74,7 @@
             ['title' => 'Disponibles ahora', 'icon' => 'bi-check2-circle', 'items' => $disponiblesAhora],
         ] as $section)
             @if($section['items']->isNotEmpty())
-                <div class="product-section">
+    nu            <div class="product-section">
                     <div class="section-title">
                         <i class="bi {{ $section['icon'] }} icon"></i>
                         <h3>{{ $section['title'] }}</h3>
@@ -107,7 +107,7 @@
                                         @if ($stock >= 50)
                                             <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                         @elseif ($stock > 0)
-                                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
+                                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</span>
                                         @else
                                             <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                         @endif
@@ -118,7 +118,7 @@
                                         @if ($stock >= 50)
                                             <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                         @elseif ($stock > 0)
-                                            <span class="all-product-discount"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
+                                            <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</span>
                                         @else
                                             <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                         @endif
@@ -126,8 +126,8 @@
                                             @if($producto->categoria)
                                                 <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i>{{ $producto->categoria->nombre }}</span>
                                             @endif
-                                            @if($producto->catalogo)
-                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ $producto->catalogo->nombre }}</span>
+                                            @if($producto->formato)
+                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ $producto->formato->nombre }}</span>
                                             @endif
                                         </div>
                                         <div class="all-product-inline-stats">
@@ -136,23 +136,15 @@
                                             <span><i class="bi bi-box-seam me-1"></i>{{ $stock }}</span>
                                         </div>
                                         @php
-                                            $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                                                $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
+                                            } else {
+                                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                                            }
                                         @endphp
-                                        @if($inWishlist)
-                                            <form action="{{ route('web.wishlist.remove', $producto->getKey()) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                                    <i class="bi bi-heart-fill text-danger"></i>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                                    <i class="bi bi-heart"></i>
-                                                </button>
-                                            </form>
-                                        @endif
+                                        <button type="button" class="all-product-wishlist-btn js-wishlist-toggle" data-product-id="{{ $producto->getKey() }}" title="Agregar a deseados">
+                                            <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
+                                        </button>
                                         <a href="{{ route('web.show', $producto->getKey()) }}" class="all-product-cta" title="Ver producto">
                                             <i class="bi bi-eye"></i> ver
                                         </a>
@@ -231,36 +223,16 @@
                                 @if($producto->categoria)
                                     <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i>{{ $producto->categoria->nombre }}</span>
                                 @endif
-                                @if($producto->catalogo)
-                                    <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ $producto->catalogo->nombre }}</span>
+                                @if($producto->formato)
+                                    <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i>{{ $producto->formato->nombre }}</span>
                                 @endif
-                            </div>
-
-                            <div class="all-product-inline-stats">
-                                <span><i class="bi bi-star-fill text-warning me-1"></i>{{ number_format($ratingAll, 1) }}</span>
-                                <span><i class="bi bi-chat-left-text me-1"></i>{{ $reviewsAll }}</span>
-                                <span><i class="bi bi-box-seam me-1"></i>{{ $stockAll }}</span>
-                            </div>
-
-                            @php
-                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
-                            @endphp
-                            @if($inWishlist)
-                                <form action="{{ route('web.wishlist.remove', $producto->getKey()) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                        <i class="bi bi-heart-fill text-danger"></i>
-                                    </button>
-                                </form>
-                            @else
-                                <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                        <i class="bi bi-heart"></i>
-                                    </button>
-                                </form>
-                            @endif
-                            <a href="{{ route('web.show', $producto->getKey()) }}" class="all-product-cta" title="Ver producto">
+                            <form action="{{ route('web.wishlist.add', $producto->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                            </form>
+                            <a href="{{ route('web.show', $producto->id) }}" class="all-product-cta" title="Ver producto">
                                 <i class="bi bi-eye"></i> ver
                             </a>
                         </div>

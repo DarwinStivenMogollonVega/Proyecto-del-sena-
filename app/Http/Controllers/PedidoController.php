@@ -30,6 +30,10 @@ class PedidoController extends Controller
             }
 
             // Procesar el pedido (similar a pagoGuardar)
+            if (! auth()->check()) {
+                return redirect()->route('login')->with('error', 'Debe iniciar sesión para completar el pedido.');
+            }
+
             DB::beginTransaction();
             try {
                 $total = 0;
@@ -53,11 +57,11 @@ class PedidoController extends Controller
                     'usuario_id' => auth()->id(),
                     'total' => $total,
                     'estado' => 'pendiente',
-                    'nombre' => $validated['nombre'],
-                    'email' => $validated['email'],
-                    'telefono' => $validated['telefono'],
-                    'direccion' => $validated['direccion'],
-                    'metodo_pago' => $validated['metodo_pago'],
+                    'nombre' => $validated['nombre'] ?? auth()->user()->name ?? 'Cliente',
+                    'email' => $validated['email'] ?? auth()->user()->email ?? null,
+                    'telefono' => $validated['telefono'] ?? null,
+                    'direccion' => $validated['direccion'] ?? null,
+                    'metodo_pago' => $validated['metodo_pago'] ?? null,
                     'comprobante_pago' => $comprobantePath,
                     'requiere_factura_electronica' => $requiereFactura,
                     'tipo_documento' => $requiereFactura ? $request->input('tipo_documento') : null,
@@ -65,6 +69,8 @@ class PedidoController extends Controller
                     'razon_social' => $requiereFactura ? $request->input('razon_social') : null,
                     'correo_factura' => $requiereFactura ? $request->input('correo_factura') : null,
                 ]);
+
+                Log::info('Pedido creado (realizar)', ['pedido_id' => $pedido->getKey(), 'usuario_id' => $pedido->usuario_id, 'attrs' => $pedido->getAttributes()]);
 
                 $subtotal = 0;
                 foreach ($carrito as $productoId => $item) {
@@ -84,7 +90,7 @@ class PedidoController extends Controller
                 $impuestos = round($subtotal * 0.19, 2);
                 $totalFactura = $subtotal + $impuestos;
 
-                $ultimoNumero = Factura::max('id') ?? 0;
+                $ultimoNumero = Factura::max('factura_id') ?? 0;
                 $numeroFactura = 'F' . str_pad($ultimoNumero + 1, 6, '0', STR_PAD_LEFT);
 
                 Factura::create([
@@ -105,7 +111,8 @@ class PedidoController extends Controller
 
                 session()->forget(['carrito', 'checkout.datos', 'checkout.entrega', 'checkout.pago']);
                 DB::commit();
-                return redirect()->route('pedido.entrega')->with('success', 'Pedido confirmado con éxito.')->with('mensaje', 'Tu pedido #' . $pedido->getKey() . ' fue guardado y ya aparece en la sección Mis pedidos.');
+                $numero = $pedido->getKey();
+                return redirect()->route('web.index')->with('success', 'Pedido N°' . $numero . ' realizado con éxito.')->with('mensaje', 'Su pedido N°' . $numero . ' fue creado correctamente.');
             } catch (\Throwable $e) {
                 DB::rollBack();
                 report($e);
@@ -157,7 +164,7 @@ class PedidoController extends Controller
             'totalProductos' => \App\Models\Producto::count(),
             'disponibles' => \App\Models\Producto::where('cantidad', '>', 0)->count(),
             'totalCategorias' => \App\Models\Categoria::count(),
-            'totalCatalogos' => \App\Models\Catalogo::count(),
+            'totalCatalogos' => \App\Models\Formato::count(),
         ];
         // Puedes agregar más variables si la vista las requiere
         // Lógica de destacados igual que en el index público
@@ -257,6 +264,10 @@ class PedidoController extends Controller
 
     public function pagoGuardar(\App\Http\Requests\PedidoPagoRequest $request)
     {
+        if (! auth()->check()) {
+            return redirect()->route('login')->with('error', 'Debe iniciar sesión para completar el pedido.');
+        }
+
         $validated = $request->validated();
 
         $rutaComprobante = null;
@@ -269,7 +280,18 @@ class PedidoController extends Controller
             }
         }
         $validated['comprobante_pago'] = $rutaComprobante;
-        session(['checkout.pago' => $validated]);
+        // mask sensitive payment data before storing in session/pedido
+        $masked = $validated;
+        if (($validated['metodo_pago'] ?? '') === 'tarjeta' && !empty($validated['tarjeta_numero'])) {
+            $digits = preg_replace('/\D+/', '', $validated['tarjeta_numero']);
+            $last4 = substr($digits, -4);
+            $masked['tarjeta_numero_masked'] = '****' . $last4;
+            // never store full PAN
+            unset($masked['tarjeta_numero']);
+            unset($masked['tarjeta_cvv']);
+        }
+
+        session(['checkout.pago' => $masked]);
 
         // Procesar el pedido completo
         $carrito = session()->get('carrito', []);
@@ -290,15 +312,27 @@ class PedidoController extends Controller
 
             $requiereFactura = $pago['requiere_factura_electronica'] ?? false;
 
+            // prepare metodo_pago label with masked info if tarjeta
+            $metodoLabel = $pago['metodo_pago'] ?? 'desconocido';
+            if (($pago['metodo_pago'] ?? '') === 'tarjeta' && isset($pago['tarjeta_numero_masked'])) {
+                $metodoLabel = 'tarjeta ' . $pago['tarjeta_numero_masked'];
+            }
+
+            // Defensive defaults in case some session pieces were lost
+            $nombre = $datos['nombre'] ?? ($pago['nombre'] ?? auth()->user()->name ?? 'Cliente');
+            $email = $datos['email'] ?? ($pago['email'] ?? auth()->user()->email ?? null);
+            $telefono = $datos['telefono'] ?? ($pago['telefono'] ?? null);
+            $direccion = $entrega['direccion'] ?? ($datos['direccion'] ?? null);
+
             $pedido = Pedido::create([
                 'usuario_id' => auth()->id(),
                 'total' => $total,
                 'estado' => 'pendiente',
-                'nombre' => $datos['nombre'],
-                'email' => $datos['email'],
-                'telefono' => $datos['telefono'],
-                'direccion' => $entrega['direccion'],
-                'metodo_pago' => $pago['metodo_pago'],
+                'nombre' => $nombre,
+                'email' => $email,
+                'telefono' => $telefono,
+                'direccion' => $direccion,
+                'metodo_pago' => $metodoLabel,
                 'comprobante_pago' => $pago['comprobante_pago'] ?? null,
                 'requiere_factura_electronica' => $requiereFactura,
                 'tipo_documento' => $requiereFactura ? ($pago['tipo_documento'] ?? null) : null,
@@ -306,6 +340,8 @@ class PedidoController extends Controller
                 'razon_social' => $requiereFactura ? ($pago['razon_social'] ?? null) : null,
                 'correo_factura' => $requiereFactura ? ($pago['correo_factura'] ?? null) : null,
             ]);
+
+            Log::info('Pedido creado', ['pedido_id' => $pedido->getKey(), 'usuario_id' => $pedido->usuario_id, 'attrs' => $pedido->getAttributes()]);
 
             $subtotal = 0;
             foreach ($carrito as $productoId => $item) {
@@ -325,10 +361,10 @@ class PedidoController extends Controller
             $impuestos = round($subtotal * 0.19, 2);
             $totalFactura = $subtotal + $impuestos;
 
-            $ultimoNumero = Factura::max('id') ?? 0;
+            $ultimoNumero = Factura::max('factura_id') ?? 0;
             $numeroFactura = 'F' . str_pad($ultimoNumero + 1, 6, '0', STR_PAD_LEFT);
 
-            Factura::create([
+            $factura = Factura::create([
                 'pedido_id' => $pedido->getKey(),
                 'usuario_id' => $pedido->usuario_id,
                 'numero_factura' => $numeroFactura,
@@ -343,9 +379,15 @@ class PedidoController extends Controller
                 'identificacion_cliente' => $pedido->numero_documento ?? $pedido->email,
             ]);
 
+            Log::info('Factura creada desde pagoGuardar', ['factura_id' => $factura->getKey(), 'pedido_id' => $pedido->getKey(), 'attrs' => $factura->getAttributes()]);
+
+            // Also log when creating factura from the "realizar" flow (if applicable)
+            Log::info('Factura creada (realizar)', ['factura_id' => $factura->getKey(), 'pedido_id' => $pedido->getKey(), 'attrs' => $factura->getAttributes()]);
+
             session()->forget(['carrito', 'checkout.datos', 'checkout.entrega', 'checkout.pago']);
             DB::commit();
-            return redirect()->route('perfil.pedidos')->with('success', 'Pedido confirmado con éxito.')->with('mensaje', 'Tu pedido #' . $pedido->getKey() . ' fue guardado y ya aparece en la sección Mis pedidos.');
+            $numero = $pedido->getKey();
+            return redirect()->route('web.index')->with('success', 'Pedido N°' . $numero . ' realizado con éxito.')->with('mensaje', 'Su pedido N°' . $numero . ' fue creado correctamente.');
         } catch (\Throwable $e) {
             DB::rollBack();
             report($e);

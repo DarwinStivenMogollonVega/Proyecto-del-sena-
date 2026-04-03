@@ -6,11 +6,11 @@
             <div class="col-md-12">
                 <div class="card mb-4 shadow-sm border-0" style="border-radius:1rem;">
                     <div class="card-header" style="background:transparent; border-bottom:1px">
-                        <h3 class="card-title">Catálogo</h3>
+                        <h3 class="card-title">Formato</h3>
                     </div>
 
                     <div class="card-body">
-                        <form action="{{ isset($registro) ? route('catalogo.update', $registro->getKey()) : route('catalogo.store') }}" 
+                        <form action="{{ isset($registro) ? route('formato.update', $registro->getKey()) : route('formato.store') }}" 
                               method="POST" id="formRegistroCatalogo" novalidate>
 
                             @csrf
@@ -59,7 +59,7 @@
 
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <button type="button" class="btn btn-secondary me-md-2"
-                                        onclick="window.location.href='{{ route('catalogo.index') }}';">Cancelar</button>
+                                        onclick="window.location.href='{{ route('formato.index') }}';">Cancelar</button>
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                         </form>
@@ -75,9 +75,9 @@
 
 @push('scripts')
 <script>
-    document.getElementById('mnuCatalogo')?.classList.add('menu-open');
-    document.getElementById('mnuCatalogoLink')?.classList.add('active');
-    document.getElementById('itemCatalogo')?.classList.add('active');
+    document.getElementById('mnuFormato')?.classList.add('menu-open');
+    document.getElementById('mnuFormatoLink')?.classList.add('active');
+    document.getElementById('itemFormato')?.classList.add('active');
 
     (() => {
         const form = document.getElementById('formRegistroCatalogo');

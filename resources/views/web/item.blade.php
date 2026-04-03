@@ -31,8 +31,17 @@
                         @if($producto->categoria)
                             <span class="badge bg-primary me-1"><i class="bi bi-tags-fill me-1"></i>{{ $producto->categoria->nombre }}</span>
                         @endif
-                        @if($producto->catalogo)
-                            <span class="badge bg-danger"><i class="bi bi-bookmark-fill me-1"></i>{{ $producto->catalogo->nombre }}</span>
+                        @if($producto->formato)
+                            <span class="badge bg-danger"><i class="bi bi-bookmark-fill me-1"></i>{{ $producto->formato->nombre }}</span>
+                        @endif
+                        @if($producto->artista)
+                            <span class="badge bg-success ms-2"><i class="bi bi-music-note-beamed me-1"></i>{{ $producto->artista->nombre }}</span>
+                        @endif
+                        @if($producto->proveedor)
+                            <span class="text-muted d-block mt-1">Proveedor: {{ $producto->proveedor->nombre }}</span>
+                        @endif
+                        @if($producto->anio_lanzamiento)
+                            <span class="text-muted d-block">Año: {{ $producto->anio_lanzamiento }}</span>
                         @endif
                     </p>
 
@@ -51,7 +60,7 @@
                     @if ($producto->cantidad >= 50)
                         <p class="text-success fw-semibold mb-2"><i class="bi bi-check-circle me-1"></i> Disponible</p>
                     @elseif ($producto->cantidad > 0)
-                        <p class="text-warning fw-semibold mb-2"><i class="bi bi-exclamation-circle me-1"></i> Pocas unidades</p>
+                        <p class="text-warning fw-semibold mb-2"><i class="bi bi-tag-fill me-1"></i> ${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</p>
                     @else
                         <p class="text-danger fw-semibold mb-2"><i class="bi bi-x-circle me-1"></i> Agotado</p>
                     @endif
@@ -64,15 +73,16 @@
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
                         <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
                         @php
-                            $wishlist = session('wishlist', []);
-                            $inWishlist = in_array($producto->getKey(), $wishlist);
+                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                                $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
+                            } else {
+                                $wishlist = session('wishlist', []);
+                                $inWishlist = in_array($producto->getKey(), $wishlist);
+                            }
                         @endphp
-                        <form action="{{ route('web.wishlist.add', $producto->getKey()) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="all-product-wishlist-btn js-wishlist-toggle" data-product-id="{{ $producto->getKey() }}" title="Agregar a deseados">
+                            <i class="bi {{ $inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart' }}"></i>
+                        </button>
                         <a class="btn btn-outline-secondary" href="javascript:history.back()">Regresar</a>
                     </form>
                 </div>

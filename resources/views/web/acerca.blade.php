@@ -23,7 +23,7 @@
                 <div class="about-card h-100 shadow-sm rounded about-bg-light">
                     <h5 class="fw-bold about-title-primary">Descubrimiento musical</h5>
                     <p>
-                        En DiscZone, el usuario puede navegar por categorías y catálogos para encontrar discos según estilo, colección o preferencia personal. La búsqueda y el ordenamiento por precio ayudan a localizar productos de forma rápida.
+                        En DiscZone, el usuario puede navegar por categorías y formatos para encontrar discos según estilo, colección o preferencia personal. La búsqueda y el ordenamiento por precio ayudan a localizar productos de forma rápida.
                     </p>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="about-card p-4 rounded shadow-sm about-bg-light">
             <h4 class="fw-bold mb-2 about-title-primary">¿Qué representa DiscZone para el usuario?</h4>
             <p>
-                DiscZone combina una interfaz moderna con una estructura de compra práctica para quienes quieren adquirir música física sin complicaciones. El sistema prioriza la experiencia del usuario en cada paso: desde la exploración del catálogo hasta la confirmación del pedido.
+                DiscZone combina una interfaz moderna con una estructura de compra práctica para quienes quieren adquirir música física sin complicaciones. El sistema prioriza la experiencia del usuario en cada paso: desde la exploración del formato hasta la confirmación del pedido.
             </p>
             <p>
                 La plataforma está construida para que el usuario siempre tenga contexto: ve disponibilidad, conoce el precio claramente, administra su carrito y recibe retroalimentación en cada acción importante. Esto mejora la confianza y evita fricciones durante el proceso de compra.

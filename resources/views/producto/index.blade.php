@@ -42,8 +42,9 @@
                                         <th>Proveedor</th>
                                         <th>Artista</th>
                                         <th>Año</th>
+                                        <th>Álbum</th>
                                         <th>Categoría</th>
-                                        <th>Catálogo</th>
+                                        <th>Formato</th>
                                         <th>Imagen</th>
                                 <th class="actions-col" style="width: 150px">Acciones</th>
                                     </tr>
@@ -60,6 +61,13 @@
                                     <td>{{ $reg->artista->nombre ?? 'Sin artista' }}</td>
                                             <td>{{ $reg->anio_lanzamiento ?? '-' }}</td>
                                             <td>
+                                                @if($reg->album)
+                                                    <span class="badge panel-badge-primary">{{ $reg->album->nombre }}</span>
+                                                @else
+                                                    <span class="badge panel-badge-muted">Sin álbum</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 @if($reg->categoria)
                                                     <span class="badge panel-badge-primary">{{ $reg->categoria->nombre }}</span>
                                                 @else
@@ -67,10 +75,10 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($reg->catalogo)
-                                                    <span class="badge panel-badge-success">{{ $reg->catalogo->nombre }}</span>
+                                                @if($reg->formato)
+                                                    <span class="badge panel-badge-success">{{ $reg->formato->nombre }}</span>
                                                 @else
-                                                    <span class="badge panel-badge-muted">Sin Catálogo</span>
+                                                    <span class="badge panel-badge-muted">Sin Formato</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -104,7 +112,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="12" class="text-center py-4" style="color:#888;">
+                                            <td colspan="13" class="text-center py-4" style="color:#888;">
                                                 <i class="bi bi-inbox me-2"></i>No hay registros que coincidan con la búsqueda
                                             </td>
                                         </tr>

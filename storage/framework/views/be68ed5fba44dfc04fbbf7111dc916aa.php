@@ -30,8 +30,17 @@
                         <?php if($producto->categoria): ?>
                             <span class="badge bg-primary me-1"><i class="bi bi-tags-fill me-1"></i><?php echo e($producto->categoria->nombre); ?></span>
                         <?php endif; ?>
-                        <?php if($producto->catalogo): ?>
-                            <span class="badge bg-danger"><i class="bi bi-bookmark-fill me-1"></i><?php echo e($producto->catalogo->nombre); ?></span>
+                        <?php if($producto->formato): ?>
+                            <span class="badge bg-danger"><i class="bi bi-bookmark-fill me-1"></i><?php echo e($producto->formato->nombre); ?></span>
+                        <?php endif; ?>
+                        <?php if($producto->artista): ?>
+                            <span class="badge bg-success ms-2"><i class="bi bi-music-note-beamed me-1"></i><?php echo e($producto->artista->nombre); ?></span>
+                        <?php endif; ?>
+                        <?php if($producto->proveedor): ?>
+                            <span class="text-muted d-block mt-1">Proveedor: <?php echo e($producto->proveedor->nombre); ?></span>
+                        <?php endif; ?>
+                        <?php if($producto->anio_lanzamiento): ?>
+                            <span class="text-muted d-block">Año: <?php echo e($producto->anio_lanzamiento); ?></span>
                         <?php endif; ?>
                     </p>
 
@@ -63,15 +72,16 @@
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
                         <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
                         <?php
-                            $wishlist = session('wishlist', []);
-                            $inWishlist = in_array($producto->getKey(), $wishlist);
+                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                                $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
+                            } else {
+                                $wishlist = session('wishlist', []);
+                                $inWishlist = in_array($producto->getKey(), $wishlist);
+                            }
                         ?>
-                        <form action="<?php echo e(route('web.wishlist.add', $producto->getKey())); ?>" method="POST" class="d-inline">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                <i class="bi <?php echo e($inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart'); ?>"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="all-product-wishlist-btn js-wishlist-toggle" data-product-id="<?php echo e($producto->getKey()); ?>" title="Agregar a deseados">
+                            <i class="bi <?php echo e($inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart'); ?>"></i>
+                        </button>
                         <a class="btn btn-outline-secondary" href="javascript:history.back()">Regresar</a>
                     </form>
                 </div>

@@ -12,7 +12,6 @@
     $miPerfilActive = request()->routeIs('perfil.edit') || request()->routeIs('perfil.update');
 ?>
 
-
 <nav class="navbar navbar-expand-lg navbar-dark dz-nav">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand fw-bold dz-brand" href="<?php echo e(route('web.index')); ?>">
@@ -45,16 +44,27 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link nav-cta-btn <?php echo e(request()->routeIs('web.productos') ? 'active' : ''); ?>" href="<?php echo e(route('web.productos')); ?>">
+                        <span class="nav-cta-icon"><i class="bi bi-box-seam"></i></span>
+                        <span class="nav-cta-text">productos</span>
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownCatalogo" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Catálogo</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownCatalogo">
+                    <a class="nav-link dropdown-toggle dropdown-cta-btn" id="navbarDropdownFormato" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-journal-bookmark-fill me-1"></i>Formato</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownFormato">
                         <?php $__currentLoopData = $catalogos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $catalogo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li>
-                                    <a class="dropdown-item" href="<?php echo e(route('web.catalogo.show', $catalogo->getKey())); ?>"><?php echo e($catalogo->nombre); ?></a>
-                                </li>
-                                <?php if(!$loop->last): ?>
-                                    <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <?php if(Route::has('web.formato.show')): ?>
+                                    <a class="dropdown-item" href="<?php echo e(route('web.formato.show', $catalogo->id)); ?>"><?php echo e($catalogo->nombre); ?></a>
+                                <?php else: ?>
+                                    <a class="dropdown-item" href="<?php echo e(url('/formato-web/'.$catalogo->id)); ?>"><?php echo e($catalogo->nombre); ?></a>
                                 <?php endif; ?>
+                            </li>
+                            <?php if(!$loop->last): ?>
+                                <li><hr class="dropdown-divider" /></li>
+                            <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </ul>
                 </li>
@@ -64,7 +74,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategoria">
                         <?php $__currentLoopData = $categorias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li>
-                                <a class="dropdown-item" href="<?php echo e(route('web.categoria.show', $categoria->getKey())); ?>"><?php echo e($categoria->nombre); ?></a>
+                                <a class="dropdown-item" href="<?php echo e(route('web.categoria.show', $categoria->id)); ?>"><?php echo e($categoria->nombre); ?></a>
                             </li>
                             <?php if(!$loop->last): ?>
                                 <li><hr class="dropdown-divider" /></li>
@@ -80,7 +90,7 @@
 
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
-                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['user-list', 'rol-list', 'producto-list', 'categoria-list', 'catalogo-list', 'pedido-list'])): ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['user-list', 'rol-list', 'producto-list', 'categoria-list', 'formato-list', 'pedido-list'])): ?>
                                 <li><h6 class="dropdown-header text-uppercase small fw-bold">Administrador</h6></li>
                                 <li>
                                     <a class="dropdown-item" href="<?php echo e(route('dashboard')); ?>"><i class="bi bi-speedometer2 me-2"></i>Panel de control</a>
@@ -116,14 +126,14 @@
                 </li>
             </ul>
 
-            <a href="<?php echo e(route('carrito.mostrar')); ?>" class="btn cart-cta-btn nav-cta-text">
+            <a href="<?php echo e(route('carrito.mostrar')); ?>" class="btn cart-cta-btn">
                 <span class="cart-cta-icon">
                     <i class="bi bi-cart-fill"></i>
                 </span>
                 <span class="cart-cta-text">Carrito</span>
                 <span class="badge rounded-pill cart-count-badge"><?php echo e(session('carrito') ? array_sum(array_column(session('carrito'), 'cantidad')) : 0); ?></span>
             </a>
-            <button type="button" class="btn ms-2 theme-switch-btn nav-cta-text" data-theme-toggle>
+            <button type="button" class="btn ms-2 theme-switch-btn" data-theme-toggle>
                 <span class="theme-switch-icon">
                     <i class="bi bi-moon-stars-fill"></i>
                 </span>

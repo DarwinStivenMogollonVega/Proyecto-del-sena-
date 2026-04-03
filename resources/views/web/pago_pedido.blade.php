@@ -1,8 +1,8 @@
 @extends('web.app')
 
 @push('estilos')
-<link rel="stylesheet" href="{{ asset('css/formulario_pedido_section.css') }}">
-<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/formulario_pedido_section.css') }}"> 
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">        
 @endpush
 
 
@@ -18,7 +18,7 @@
                 </div>
                 <div class="d-flex justify-content-end mb-3">
                     <a href="{{ route('pedido.entrega') }}" class="btn btn-outline-light btn-lg px-4 shadow-sm fw-semibold rounded-pill">
-                        <i class="bi bi-arrow-left me-2"></i> Volver a entrega
+                        <i class="bi bi-arrow-left me-2"></i> Volver a entrega  
                     </a>
                 </div>
                 <div class="checkout-card p-4 p-lg-5 mt-3">
@@ -40,7 +40,7 @@
                                     <label class="list-group-item d-flex align-items-center gap-3">
                                         <input class="form-check-input me-2" type="radio" name="metodo_pago" value="tarjeta" required>
                                         <i class="bi bi-credit-card fs-4 text-primary"></i>
-                                        <span>Tarjeta crédito o débito</span>
+                                        <span>Tarjeta crédito o débito</span>   
                                     </label>
                                     <label class="list-group-item d-flex align-items-center gap-3">
                                         <input class="form-check-input me-2" type="radio" name="metodo_pago" value="pse">
@@ -50,7 +50,7 @@
                                     <label class="list-group-item d-flex align-items-center gap-3">
                                         <input class="form-check-input me-2" type="radio" name="metodo_pago" value="nequi">
                                         <img src="{{ asset('assets/img/nequi.png') }}" alt="Nequi" style="width:28px;">
-                                        <span class="nequi-text">Nequi</span>
+                                        <span class="nequi-text">Nequi</span>   
                                     </label>
                                     <label class="list-group-item d-flex align-items-center gap-3">
                                         <input class="form-check-input me-2" type="radio" name="metodo_pago" value="efectivo">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <!-- Campos condicionales para cada método de pago -->
+                        <!-- Campos condicionales para cada método de pago -->  
                         <div id="pago-tarjeta" class="mt-3" style="display:none;">
                             <div class="mb-2">
                                 <label class="form-label">Número de tarjeta</label>
@@ -73,16 +73,16 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 mb-2">
-                                    <label class="form-label">Expira</label>
+                                    <label class="form-label">Expira</label>    
                                     <input type="text" class="form-control" name="tarjeta_expira" placeholder="MM/AA" maxlength="5">
                                 </div>
                                 <div class="col-6 mb-2">
-                                    <label class="form-label">CVV</label>
+                                    <label class="form-label">CVV</label>       
                                     <input type="text" inputmode="numeric" pattern="\d*" class="form-control" name="tarjeta_cvv" maxlength="4" oninput="this.value = this.value.replace(/\D/g,'')">
                                 </div>
                             </div>
                         </div>
-                        <div id="pago-pse" class="mt-3" style="display:none;">
+                        <div id="pago-pse" class="mt-3" style="display:none;">  
                             <div class="mb-2">
                                 <label class="form-label">Banco</label>
                                 <input type="text" class="form-control" name="pse_banco">
@@ -100,15 +100,15 @@
                         </div>
                         <div id="pago-efectivo" class="mt-3" style="display:none;">
                             <div class="mb-2">
-                                <label class="form-label">Punto de pago</label>
+                                <label class="form-label">Punto de pago</label> 
                                 <select class="form-select" name="efectivo_punto">
-                                    <option value="">Selecciona...</option>
-                                    <option value="baloto">Baloto</option>
-                                    <option value="efecty">Efecty</option>
+                                    <option value="">Selecciona...</option>     
+                                    <option value="baloto">Baloto</option>      
+                                    <option value="efecty">Efecty</option>      
                                 </select>
                             </div>
                         </div>
-                        <div class="d-flex flex-column flex-md-row gap-2 mt-4">
+                        <div class="d-flex flex-column flex-md-row gap-2 mt-4"> 
                             <button type="submit" class="btn btn-dark px-4 flex-fill" style="background:#d87c23; border:none; color:#fff; font-weight:600; border-radius:12px;">
                                 Finalizar compra <i class="bi bi-check-circle ms-2"></i>
                             </button>
@@ -122,7 +122,7 @@
 
                         <div class="mt-3">
                             <label class="form-check">
-                                <input class="form-check-input" type="checkbox" name="requiere_factura_electronica" value="1" {{ old('requiere_factura_electronica', $pago['requiere_factura_electronica'] ?? false) ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" name="requiere_factura_electronica" value="1" {{ old('requiere_factura_electronica', $pago['requiere_factura_electronica'] ?? false) ? 'checked' : '' }}>       
                                 <span class="form-check-label">Solicitar factura electrónica</span>
                             </label>
                         </div>
@@ -130,9 +130,9 @@
                             <div class="mb-2">
                                 <label class="form-label">Tipo de documento</label>
                                 <select name="tipo_documento" class="form-select">
-                                    <option value="">Selecciona...</option>
+                                    <option value="">Selecciona...</option>     
                                     <option value="nit">NIT</option>
-                                    <option value="cedula">Cédula</option>
+                                    <option value="cedula">Cédula</option>      
                                 </select>
                             </div>
                             <div class="mb-2">
@@ -140,7 +140,7 @@
                                 <input type="text" name="numero_documento" class="form-control" value="{{ old('numero_documento') }}">
                             </div>
                             <div class="mb-2">
-                                <label class="form-label">Razón social</label>
+                                <label class="form-label">Razón social</label>  
                                 <input type="text" name="razon_social" class="form-control" value="{{ old('razon_social') }}">
                             </div>
                             <div class="mb-2">
@@ -159,7 +159,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const radios = document.querySelectorAll('input[name="metodo_pago"]');
+    const radios = document.querySelectorAll('input[name="metodo_pago"]');      
     const bloques = {
         tarjeta: document.getElementById('pago-tarjeta'),
         pse: document.getElementById('pago-pse'),
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     radios.forEach(radio => {
         radio.addEventListener('change', function() {
-            Object.values(bloques).forEach(div => div.style.display = 'none');
+            Object.values(bloques).forEach(div => div.style.display = 'none');  
             if (bloques[this.value]) {
                 bloques[this.value].style.display = 'block';
             }
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const facturaFields = document.getElementById('factura-fields');
     if (!checkbox) return;
     function toggle() {
-        facturaFields.style.display = checkbox.checked ? 'block' : 'none';
+        facturaFields.style.display = checkbox.checked ? 'block' : 'none';      
     }
     toggle();
     checkbox.addEventListener('change', toggle);

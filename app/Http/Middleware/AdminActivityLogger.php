@@ -49,7 +49,7 @@ class AdminActivityLogger
             'productos.',
             'proveedores.',
             'categoria.',
-            'catalogo.',
+            'formato.',
             'artistas.',
             'inventario.',
             'pedidos.cambiar.estado',

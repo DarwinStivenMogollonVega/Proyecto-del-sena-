@@ -69,3 +69,70 @@
         </div>
     </div>
 </section>
+@push('scripts')
+    <script>
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    var root = document.documentElement;
+                    var container = document.querySelector('.formulario-pedido-wrap');
+                    if (!container) return;
+
+                    var authAccent = getComputedStyle(root).getPropertyValue('--auth-accent').trim();
+                    var dzAccent = getComputedStyle(root).getPropertyValue('--dz-accent').trim();
+                    var finalAccent = authAccent || dzAccent || '';
+
+                    if (finalAccent) {
+                        container.style.setProperty('--dz-accent', finalAccent);
+                        var authAccentDark = getComputedStyle(root).getPropertyValue('--auth-accent-dark').trim();
+                        if (authAccentDark) container.style.setProperty('--dz-accent-dark', authAccentDark);
+
+                        function parseColorToRgb(input) {
+                            if (!input) return null;
+                            input = input.trim();
+                            var hexMatch = input.match(/^#([a-f\d]{3}|[a-f\d]{6})$/i);
+                            if (hexMatch) {
+                                var hex = hexMatch[1];
+                                if (hex.length === 3) {
+                                    hex = hex.split('').map(function (c) { return c + c; }).join('');
+                                }
+                                var intVal = parseInt(hex, 16);
+                                return [ (intVal >> 16) & 255, (intVal >> 8) & 255, intVal & 255 ];
+                            }
+                            var rgbMatch = input.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*[\d.]+)?\s*\)/i);
+                            if (rgbMatch) {
+                                return [parseFloat(rgbMatch[1]), parseFloat(rgbMatch[2]), parseFloat(rgbMatch[3])];
+                            }
+                            return null;
+                        }
+
+                        function luminance(r, g, b) {
+                            var a = [r, g, b].map(function (v) {
+                                v = v / 255;
+                                return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+                            });
+                            return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+                        }
+
+                        function contrastColorFor(rgb) {
+                            var L = luminance(rgb[0], rgb[1], rgb[2]);
+                            return L > 0.55 ? '#0f172a' : '#ffffff';
+                        }
+
+                        var rgb = parseColorToRgb(finalAccent);
+                        if (rgb) container.style.setProperty('--dz-accent-contrast', contrastColorFor(rgb));
+
+                        if (authAccentDark) {
+                            var rgb2 = parseColorToRgb(authAccentDark);
+                            if (rgb2) container.style.setProperty('--dz-accent-dark-contrast', contrastColorFor(rgb2));
+                        }
+                    }
+                } catch (e) {
+                    // silent
+                }
+            });
+        })();
+    </script>
+@endpush
+
+@endsection

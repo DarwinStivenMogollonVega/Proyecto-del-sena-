@@ -6,8 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use App\Models\Categoria;
-use App\Models\Catalogo;
+use App\Models\Formato;
 use App\Observers\AnalyticsObserver;
 use App\Models\Producto;
 use App\Models\Pedido;
@@ -44,13 +45,23 @@ class AppServiceProvider extends ServiceProvider
                 return Categoria::select('id', 'nombre')->orderBy('nombre')->get();
             });
 
-            $catalogos = Cache::remember('shared.web.catalogos', now()->addMinutes(30), function () {
-                // `catalogos` table uses `catalogo_id` as primary key; select the real PK
-                return Catalogo::select('catalogo_id', 'nombre')->orderBy('nombre')->get();
+            $formatos = Cache::remember('shared.web.formatos', now()->addMinutes(30), function () {
+                if (Schema::hasTable('formatos')) {
+                    return Formato::select('formato_id', 'nombre')->orderBy('nombre')->get();
+                }
+                // fallback to legacy catalogos table
+                return CatalogoModel::select('catalogo_id as formato_id', 'nombre')->orderBy('nombre')->get();
+            });
+
+            $artistas = Cache::remember('shared.web.artistas', now()->addMinutes(30), function () {
+                return Artista::select('artista_id', 'nombre')->orderBy('nombre')->get();
             });
 
             $view->with('categorias', $categorias);
-            $view->with('catalogos', $catalogos);
+            // Provide both names for compatibility while migrating frontend/views.
+            $view->with('formatos', $formatos);
+            $view->with('catalogos', $formatos);
+            $view->with('artistas', $artistas);
         });
 
         // Registrar observer que emite actualizaciones de estadísticas en tiempo real

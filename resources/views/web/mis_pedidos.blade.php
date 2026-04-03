@@ -140,16 +140,18 @@
                                 @foreach($registros as $reg)
 
                                     <tr>
-                                        <td>
-                                            @if(auth()->user()->can('pedido-cancel'))
-                                                <button class="btn btn-outline-warning btn-sm"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#modal-estado-{{ $reg->getKey() }}">
-                                                    <i class="bi bi-arrow-repeat"></i>
-                                                </button>
-                                            @else
-                                                <span class="text-muted small">Sin acciones</span>
-                                            @endif
+                                        <td class="text-start align-middle">
+                                            <div class="d-flex justify-content-start align-items-center h-100">
+                                                @if(auth()->user()->can('pedido-cancel'))
+                                                    <button class="btn btn-outline-warning btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modal-estado-{{ $reg->getKey() }}">
+                                                        <i class="bi bi-arrow-repeat"></i>
+                                                    </button>
+                                                @else
+                                                    <span class="text-muted small">Sin acciones</span>
+                                                @endif
+                                            </div>
                                         </td>
 
                                         <td>#{{ $reg->getKey() }}</td>

@@ -35,6 +35,7 @@
 							<th>Email</th>
 							<th>Teléfono</th>
 							<th>Dirección</th>
+							<th>Comprobante</th>
 							<th>Total</th>
 							<th>Estado</th>
 							<th>Fecha</th>
@@ -51,6 +52,13 @@
 							<td>{{ $pedido->email }}</td>
 							<td>{{ $pedido->telefono }}</td>
 							<td>{{ $pedido->direccion }}</td>
+							<td>
+								@if($pedido->comprobante_pago)
+									<a href="{{ asset('storage/' . $pedido->comprobante_pago) }}" target="_blank" class="btn btn-sm btn-outline-info">Ver captura</a>
+								@else
+									<span class="text-muted small">Sin archivo</span>
+								@endif
+							</td>
 							<td class="fw-bold">${{ number_format($pedido->total, 2) }}</td>
 							<td>
 								<span class="badge badge-{{ $pedido->estado }} rounded-pill px-2 py-1" style="font-size:.85rem">
@@ -58,8 +66,10 @@
 								</span>
 							</td>
 							<td style="color:var(--adm-muted)">{{ $pedido->created_at->format('d/m/Y H:i') }}</td>
-							<td>
-								<a href="#" class="btn btn-sm btn-outline-primary">Ver detalles</a>
+							<td class="text-start align-middle">
+								<div class="d-flex justify-content-start align-items-center h-100">
+									<a href="#" class="btn btn-sm btn-outline-primary">Ver detalles</a>
+								</div>
 							</td>
 						</tr>
 						@empty

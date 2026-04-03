@@ -79,7 +79,7 @@
 
                 <li class="dz-sidebar-divider" aria-hidden="true"></li>
 
-                @canany(['user-list', 'rol-list', 'producto-list', 'proveedor-list', 'artista-list', 'categoria-list', 'catalogo-list'])
+                @canany(['user-list', 'rol-list', 'producto-list', 'proveedor-list', 'artista-list', 'categoria-list', 'formato-list'])
                 <li class="nav-header dz-sidebar-section">Gestión</li>
                 @endcanany
 
@@ -117,13 +117,13 @@
                 </li>
                 @endcanany
 
-                {{-- ── [M-03] Gestión del Catálogo Musical ────────────── --}}
-                @canany(['producto-list', 'artista-list', 'categoria-list', 'catalogo-list'])
-                <li class="nav-item" id="mnuCatalogo">
-                    <a href="#" class="nav-link" id="mnuCatalogoLink">
+                {{-- ── [M-03] Gestión del Formato Musical ────────────── --}}
+                @canany(['producto-list', 'artista-list', 'categoria-list', 'formato-list'])
+                <li class="nav-item" id="mnuFormato">
+                    <a href="#" class="nav-link" id="mnuFormatoLink">
                         <i class="nav-icon bi bi-music-note-list"></i>
                         <p>
-                            Catálogo Musical
+                            Formato Musical
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
@@ -155,14 +155,23 @@
                         </li>
                         @endcan
 
-                        @can('catalogo-list')
+                        @canany(['formato-list','producto-list'])
                         <li class="nav-item">
-                            <a href="{{ route('catalogo.index') }}" class="nav-link" id="itemCatalogo">
+                            <a href="{{ route('formato.index') }}" class="nav-link" id="itemFormato">
                                 <i class="nav-icon bi bi-journal-bookmark-fill"></i>
-                                <p>Catálogos</p>
+                                <p>Formatos</p>
                             </a>
                         </li>
-                        @endcan
+                        @endcanany
+
+                        @canany(['album-list','formato-list','producto-list'])
+                        <li class="nav-item">
+                            <a href="{{ route('albums.index') }}" class="nav-link" id="itemAlbum">
+                                <i class="nav-icon bi bi-collection-fill"></i>
+                                <p>Álbumes</p>
+                            </a>
+                        </li>
+                        @endcanany
                     </ul>
                 </li>
                 @endcanany
@@ -251,7 +260,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Auto-open any treeview group that contains an active child
-    ['mnuSeguridad', 'mnuCatalogo', 'mnuComercial'].forEach(function(id) {
+    ['mnuSeguridad', 'mnuFormato', 'mnuComercial'].forEach(function(id) {
         var group = document.getElementById(id);
         if (!group) return;
         if (group.querySelector('.nav-treeview .nav-link.active')) {

@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\Categoria;
-use App\Models\Catalogo;
+use App\Models\Formato;
 use App\Models\Proveedor;
 use App\Models\Artista;
+use App\Models\Album;
 use App\Models\InventarioMovimiento;
 use App\Http\Requests\ProductoRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -25,7 +26,7 @@ class ProductoController extends Controller
         $this->authorize('producto-list'); 
         $texto = $request->input('texto');
 
-        $registros = Producto::with(['categoria', 'catalogo', 'proveedor', 'artista'])
+        $registros = Producto::with(['categoria', 'catalogo', 'formato', 'proveedor', 'artista'])
             ->where('nombre', 'like', "%{$texto}%")
             ->orWhere('codigo', 'like', "%{$texto}%")
             ->orderBy('id', 'desc')
@@ -41,10 +42,11 @@ class ProductoController extends Controller
     {
         $this->authorize('producto-create'); 
         $categorias = Categoria::all();
-        $catalogos  = Catalogo::all();
+        $formatos  = Formato::all();
         $proveedores = Proveedor::orderBy('nombre')->get();
         $artistas = Artista::orderBy('nombre')->get();
-        return view('producto.action', compact('categorias','catalogos', 'proveedores', 'artistas'));
+        $albums = Album::orderBy('nombre')->get();
+        return view('producto.action', compact('categorias','formatos', 'proveedores', 'artistas', 'albums'));
     }
 
     /**
@@ -61,12 +63,15 @@ class ProductoController extends Controller
         $registro->precio = $validated['precio'];
         $registro->cantidad = $validated['cantidad'];
         $registro->categoria_id = $validated['categoria_id'];
+        // support both new `formato_id` and legacy `catalogo_id` from payload
         $registro->catalogo_id = $validated['catalogo_id'] ?? null;
+        $registro->formato_id = $validated['formato_id'] ?? ($validated['catalogo_id'] ?? null);
         $registro->proveedor_id = $validated['proveedor_id'] ?? null;
         $registro->artista_id = $validated['artista_id'] ?? null;
         $registro->anio_lanzamiento = $validated['anio_lanzamiento'] ?? null;
         $registro->descripcion = $validated['descripcion'] ?? null;
         $registro->lista_canciones = $this->parseListaCanciones($validated['lista_canciones'] ?? null);
+        $registro->album_id = $validated['album_id'] ?? null;
 
         $sufijo = strtolower(Str::random(2));
         $image = $request->file('imagen');
@@ -106,11 +111,12 @@ class ProductoController extends Controller
     {
         $this->authorize('producto-edit'); 
         $categorias = Categoria::all();
-        $catalogos  = Catalogo::all(); // <- agregado
+        $formatos  = Formato::all(); // <- agregado
         $proveedores = Proveedor::orderBy('nombre')->get();
         $artistas = Artista::orderBy('nombre')->get();
+        $albums = Album::orderBy('nombre')->get();
         $registro   = Producto::findOrFail($id);
-        return view('producto.action', compact('registro','categorias','catalogos', 'proveedores', 'artistas'));
+        return view('producto.action', compact('registro','categorias','formatos', 'proveedores', 'artistas', 'albums'));
     }
 
     /**
@@ -127,12 +133,15 @@ class ProductoController extends Controller
         $registro->precio = $validated['precio'];
         $registro->cantidad = $validated['cantidad'];
         $registro->categoria_id = $validated['categoria_id'];
+        // support both new `formato_id` and legacy `catalogo_id` from payload
         $registro->catalogo_id = $validated['catalogo_id'] ?? null;
+        $registro->formato_id = $validated['formato_id'] ?? ($validated['catalogo_id'] ?? null);
         $registro->proveedor_id = $validated['proveedor_id'] ?? null;
         $registro->artista_id = $validated['artista_id'] ?? null;
         $registro->anio_lanzamiento = $validated['anio_lanzamiento'] ?? null;
         $registro->descripcion = $validated['descripcion'] ?? null;
         $registro->lista_canciones = $this->parseListaCanciones($validated['lista_canciones'] ?? null);
+        $registro->album_id = $validated['album_id'] ?? null;
 
         $stockAnterior = (int) $registro->getOriginal('cantidad');
         $stockNuevo = (int) $validated['cantidad'];
@@ -199,5 +208,19 @@ class ProductoController extends Controller
             ->all();
 
         return empty($canciones) ? null : $canciones;
+    }
+
+    /**
+     * Search products (AJAX) for real-time linking in admin modals
+     */
+    public function search(Request $request)
+    {
+        $q = $request->query('q', '');
+        $productos = Producto::where('nombre', 'like', "%{$q}%")
+            ->orderBy('nombre')
+            ->limit(20)
+            ->get(['id', 'nombre', 'categoria_id']);
+
+        return response()->json($productos);
     }
 }

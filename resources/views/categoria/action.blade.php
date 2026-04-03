@@ -67,8 +67,8 @@
 @endsection
 @push('scripts')
 <script>
-    document.getElementById('mnuCatalogo')?.classList.add('menu-open');
-    document.getElementById('mnuCatalogoLink')?.classList.add('active');
+    document.getElementById('mnuFormato')?.classList.add('menu-open');
+    document.getElementById('mnuFormatoLink')?.classList.add('active');
     document.getElementById('itemCategoria').classList.add('active');
 
     (() => {

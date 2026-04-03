@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
         ]);
         */
         $this->call(RolesAndPermissionsSeeder::class);
+        // Seed products, categories, catalogos, proveedores y artistas de prueba
+        $this->call(ProductosSeeder::class);
+        // Seed pedidos y detalles de pedido enlazados a usuarios y productos
+        $this->call(PedidosSeeder::class);
+        // Generar facturas automáticas para pedidos pagados
+        $this->call(FacturasSeeder::class);
     }
 }

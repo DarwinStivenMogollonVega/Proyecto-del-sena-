@@ -43,7 +43,7 @@ class PedidoCheckoutTest extends TestCase
                 'metodo_pago' => 'efectivo',
             ]);
 
-        $response->assertRedirect(route('pedido.entrega'));
+        $response->assertRedirect(route('web.index'));
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('pedidos', [
@@ -103,7 +103,7 @@ class PedidoCheckoutTest extends TestCase
                 'correo_factura' => 'facturas@empresa.test',
             ]);
 
-        $response->assertRedirect(route('pedido.entrega'));
+        $response->assertRedirect(route('web.index'));
 
         $this->assertDatabaseHas('pedidos', [
             'usuario_id' => $user->id,

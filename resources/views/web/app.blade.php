@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="title" content="Shop | DiscZone.com" />
     <meta name="author" content="DiscZone" />
     <meta name="description" content="Shop | DiscZone.com" />
@@ -31,6 +32,16 @@
 <body>
     @include('web.partials.nav')
 
+    <!-- Toast container for global notifications -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="dz-global-toast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
     @if(View::hasSection('header'))
         @include('web.partials.header')
     @endif
@@ -43,6 +54,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="{{ asset('js/wishlist-toggle.js') }}"></script>
     <script>
         (function () {
             function initSiteVisualFx() {

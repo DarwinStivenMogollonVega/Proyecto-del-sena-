@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artista;
+use App\Models\Producto;
 use App\Http\Requests\ArtistaRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -22,7 +23,9 @@ class ArtistaController extends Controller
             ->orderByDesc('artista_id')
             ->paginate(10);
 
-        return view('artista.index', compact('registros', 'texto'));
+        $productos = Producto::orderBy('nombre')->get();
+
+        return view('artista.index', compact('registros', 'texto', 'productos'));
     }
 
     public function create()
@@ -136,6 +139,31 @@ class ArtistaController extends Controller
         $registro->delete();
 
         return redirect()->route('artistas.index')->with('mensaje', 'Artista eliminado correctamente.');
+    }
+
+    /**
+     * Vincular productos a un artista (recibe array de product_ids)
+     */
+    public function vincularProductos(Request $request, Artista $artista)
+    {
+        abort_unless(auth()->user()->can('artista-edit') || auth()->user()->can('producto-edit'), 403);
+
+        $data = $request->validate([
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['integer', 'exists:productos,id'],
+        ]);
+
+        $selected = $data['product_ids'] ?? [];
+
+        if (!empty($selected)) {
+            Producto::whereIn('id', $selected)->update(['artista_id' => $artista->artista_id]);
+        }
+
+        Producto::where('artista_id', $artista->artista_id)
+            ->whereNotIn('id', $selected ?: [0])
+            ->update(['artista_id' => null]);
+
+        return redirect()->route('artistas.index')->with('success', 'Productos vinculados al artista');
     }
 
     /**

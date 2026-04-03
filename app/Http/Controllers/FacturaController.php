@@ -18,6 +18,58 @@ class FacturaController extends Controller
         $usuarios = \App\Models\User::all();
         return view('admin.facturas.edit', compact('registro', 'usuarios'));
     }
+    /**
+     * Actualiza una factura desde el panel admin normalizando los nombres de input.
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $registro = Factura::findOrFail($id);
+
+        $data = $request->validate([
+            'usuario_id' => 'required|exists:users,usuario_id',
+            'nombre_cliente' => 'required|string|max:255',
+            'correo_cliente' => 'nullable|email|max:255',
+            'telefono' => 'nullable|string|max:50',
+            'direccion_cliente' => 'nullable|string|max:500',
+            'identificacion_cliente' => 'nullable|string|max:100',
+            'numero_documento' => 'nullable|string|max:100',
+            'tipo_documento' => 'nullable|string|max:50',
+            'total' => 'nullable|numeric',
+            'estado' => 'nullable|string|max:50',
+        ]);
+
+        // Normalizar y asignar
+        $registro->usuario_id = $data['usuario_id'];
+        $registro->nombre_cliente = $data['nombre_cliente'];
+        if (!empty($data['correo_cliente'])) {
+            $registro->correo_cliente = $data['correo_cliente'];
+        }
+        if (!empty($data['direccion_cliente'])) {
+            $registro->direccion_cliente = $data['direccion_cliente'];
+        }
+
+        if (!empty($data['telefono'])) {
+            $registro->telefono_cliente = $data['telefono'];
+        }
+
+        // Preferir identificacion_cliente; si viene tipo/numero construirlo
+        if (!empty($data['identificacion_cliente'])) {
+            $registro->identificacion_cliente = $data['identificacion_cliente'];
+        } elseif (!empty($data['numero_documento'])) {
+            $registro->identificacion_cliente = trim((string) (($data['tipo_documento'] ?? '') ? strtoupper($data['tipo_documento']) . ' ' . $data['numero_documento'] : $data['numero_documento']));
+        }
+
+        if (array_key_exists('total', $data) && $data['total'] !== null) {
+            $registro->total = (float) $data['total'];
+        }
+        if (!empty($data['estado'])) {
+            $registro->estado_pedido = $data['estado'];
+        }
+
+        $registro->save();
+
+        return redirect()->route('admin.facturas.index')->with('mensaje', 'Factura actualizada correctamente');
+    }
     public function index(Request $request)
     {
         $texto = trim((string) $request->input('texto'));
@@ -136,10 +188,11 @@ class FacturaController extends Controller
     public function adminFacturasIndex(Request $request)
     {
         $texto = trim((string) $request->input('texto'));
-        $query = Factura::with('user')->orderByDesc('id');
+        $keyName = (new Factura())->getKeyName();
+        $query = Factura::with('user')->orderByDesc($keyName);
         if ($texto !== '') {
-            $query->where(function ($q) use ($texto) {
-                $q->where('id', 'like', "%{$texto}%")
+            $query->where(function ($q) use ($texto, $keyName) {
+                $q->where($keyName, 'like', "%{$texto}%")
                     ->orWhere('razon_social', 'like', "%{$texto}%")
                     ->orWhere('correo_factura', 'like', "%{$texto}%")
                     ->orWhere('numero_documento', 'like', "%{$texto}%")

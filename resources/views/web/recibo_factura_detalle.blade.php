@@ -3,73 +3,8 @@
 @section('titulo', 'Factura ' . $factura->numero_factura . ' - DiscZone')
 
 @push('estilos')
-<style>
-    .receipt-shell {
-        max-width: 980px;
-        margin: 2rem auto 3rem;
-    }
-
-    .receipt-card {
-        background: var(--dz-surface);
-        border: 1px solid var(--dz-border);
-        border-radius: 1rem;
-        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.1);
-        overflow: hidden;
-    }
-
-    .receipt-head {
-        padding: 1.5rem;
-        color: #fff;
-        background: linear-gradient(130deg, #111827 0%, #7c2d12 52%, #0f172a 100%);
-    }
-
-    .receipt-block {
-        border: 1px solid var(--dz-border);
-        border-radius: 0.8rem;
-        padding: 1rem;
-        background: var(--dz-page-grad-1);
-    }
-
-    .receipt-table td,
-    .receipt-table th {
-        vertical-align: middle;
-    }
-
-    .receipt-total {
-        font-size: 1.15rem;
-    }
-
-    html[data-theme='dark'] .receipt-card {
-        background: #111827;
-        border-color: #334155;
-        box-shadow: 0 12px 24px rgba(2, 6, 23, 0.55);
-    }
-
-    html[data-theme='dark'] .receipt-block {
-        background: #1f2937;
-        border-color: #334155;
-    }
-
-    @media print {
-        .receipt-no-print {
-            display: none !important;
-        }
-
-        body {
-            background: #fff !important;
-        }
-
-        .receipt-shell {
-            margin: 0;
-            max-width: 100%;
-        }
-
-        .receipt-card {
-            box-shadow: none;
-            border-color: #d1d5db;
-        }
-    }
-</style>
+<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
+<link rel="stylesheet" href="{{ asset('css/recibo_factura_detalle.css') }}">
 @endpush
 
 @section('contenido')

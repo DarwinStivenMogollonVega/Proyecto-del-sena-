@@ -90,19 +90,19 @@
                             </div>
 
                             <div class="row">
-                                <!-- Catálogo -->
+                                <!-- Formato (antes Catálogo) -->
                                 <div class="col-md-3 mb-3">
-                                    <label for="catalogo_id" class="form-label">Catálogo</label>
-                                    <select name="catalogo_id" id="catalogo_id" class="form-control @error('catalogo_id') is-invalid @enderror" required>
-                                        <option value="">Seleccione un catálogo</option>
-                                        @foreach($catalogos as $catalogo)
-                                            <option value="{{ $catalogo->getKey() }}"
-                                                {{ (string) old('catalogo_id', $registro->catalogo_id ?? '') === (string) $catalogo->getKey() ? 'selected' : '' }}>
-                                                {{ $catalogo->nombre }}
+                                    <label for="formato_id" class="form-label">Formato</label>
+                                    <select name="formato_id" id="formato_id" class="form-control @error('formato_id') is-invalid @enderror" required>
+                                        <option value="">Seleccione un formato</option>
+                                        @foreach($formatos as $formato)
+                                            <option value="{{ $formato->getKey() }}"
+                                                {{ (string) old('formato_id', $registro->formato_id ?? '') === (string) $formato->getKey() ? 'selected' : '' }}>
+                                                {{ $formato->nombre }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    @error('catalogo_id')
+                                    @error('formato_id')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -119,6 +119,22 @@
                                         @endforeach
                                     </select>
                                     @error('proveedor_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                
+                                <div class="col-md-3 mb-3">
+                                    <label for="album_id" class="form-label">Álbum</label>
+                                    <select name="album_id" id="album_id" class="form-control @error('album_id') is-invalid @enderror">
+                                        <option value="">Sin álbum</option>
+                                        @foreach($albums as $album)
+                                            <option value="{{ $album->getKey() }}"
+                                                {{ (string) old('album_id', $registro->album_id ?? '') === (string) $album->getKey() ? 'selected' : '' }}>
+                                                {{ $album->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('album_id')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>

@@ -30,7 +30,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'inventario-list', 'inventario-edit',
             'pedido-list', 'pedido-anulate',
             'categoria-list', 'categoria-create', 'categoria-edit', 'categoria-delete',
-            'catalogo-list', 'catalogo-create', 'catalogo-edit', 'catalogo-delete',
+            'formato-list', 'formato-create', 'formato-edit', 'formato-delete',
         ];
 
 

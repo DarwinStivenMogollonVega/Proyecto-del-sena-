@@ -82,8 +82,8 @@
 @push('scripts')
 <script>
     document.getElementById('itemArtista')?.classList.add('active');
-    document.getElementById('mnuCatalogo')?.classList.add('menu-open');
-    document.getElementById('mnuCatalogoLink')?.classList.add('active');
+    document.getElementById('mnuFormato')?.classList.add('menu-open');
+    document.getElementById('mnuFormatoLink')?.classList.add('active');
     
     // Client-side validation for identificador_unico
     (function(){

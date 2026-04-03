@@ -43,8 +43,8 @@
                         <tbody>
                             @forelse($pedidos as $reg)
                                 <tr>
-                                    <td>
-                                        <div class="d-flex gap-2 justify-content-end">
+                                    <td class="text-start align-middle">
+                                        <div class="d-flex justify-content-start align-items-center h-100">
                                             <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modal-estado-{{ $reg->getKey() }}" title="Cambiar estado"><i class="bi bi-arrow-repeat"></i></button>
                                         </div>
                                     </td>

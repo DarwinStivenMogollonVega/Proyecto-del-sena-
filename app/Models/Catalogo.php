@@ -2,20 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Catalogo extends Model
+// `Catalogo` kept for backward compatibility and delegates to `Formato`.
+class Catalogo extends Formato
 {
-    protected $table = 'catalogos';
-    protected $primaryKey = 'catalogo_id';
-    protected $fillable = ['nombre', 'descripcion'];
-    public function productos()
-{
-    return $this->hasMany(Producto::class, 'catalogo_id', 'catalogo_id');
-}
-
-    public function getIdAttribute()
-    {
-        return $this->{$this->getKeyName()};
-    }
+    // Intentionally empty — inherits behavior from Formato.
 }

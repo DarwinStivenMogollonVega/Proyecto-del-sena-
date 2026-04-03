@@ -34,6 +34,8 @@ use App\Models\ProductoResena;
 Route::get('/', [WebController::class, 'index'])->name('web.index');
 Route::view('/acerca', 'web.acerca')->name('web.acerca');
 Route::get('/producto/{id}', [WebController::class, 'show'])->name('web.show');
+// Página pública de listado de productos (ruta pública única para tienda)
+Route::get('/tienda', [WebController::class, 'productos'])->name('web.productos');
 Route::post('/producto/{id}/resena', [WebController::class, 'guardarResena'])
     ->middleware('auth')
     ->name('web.resena.guardar');
@@ -43,7 +45,9 @@ Route::view('/soporte', 'web.soporte')->name('web.soporte');
 
 // 🔹 Nueva ruta para mostrar productos por categoría
 Route::get('/categoria-web/{id}', [CategoriaController::class, 'show'])->name('web.categoria.show');
-Route::get('/catalogo-web/{id}', [CatalogoController::class, 'show'])->name('web.catalogo.show');
+Route::get('/formato-web/{id}', [CatalogoController::class, 'show'])->name('web.formato.show');
+// Ruta pública para ver productos por artista
+Route::get('/artista-web/{id}', [WebController::class, 'artistaShow'])->name('web.artista.show');
 
 Route::get('/carrito', [CarritoController::class, 'mostrar'])->name('carrito.mostrar');
 Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('carrito.agregar');
@@ -73,6 +77,52 @@ Route::post('/deseados/agregar/{id}', function($id) {
     return redirect()->back()->with('success', 'Producto agregado a la lista de deseados');
 })->name('web.wishlist.add');
 
+Route::post('/deseados/toggle/{id}', function($id) {
+    $producto = App\Models\Producto::find($id);
+    if (!$producto) {
+        return response()->json(['success' => false, 'message' => 'Producto no encontrado'], 404);
+    }
+    // If user is authenticated, persist in DB; otherwise keep using session
+    if (auth()->check()) {
+        $userId = auth()->id();
+        $exists = App\Models\Wishlist::where('user_id', $userId)->where('producto_id', $id)->exists();
+        if ($exists) {
+            App\Models\Wishlist::where('user_id', $userId)->where('producto_id', $id)->delete();
+            $action = 'removed';
+            $inWishlist = false;
+        } else {
+            App\Models\Wishlist::create(['user_id' => $userId, 'producto_id' => $id]);
+            $action = 'added';
+            $inWishlist = true;
+        }
+        $count = App\Models\Wishlist::where('user_id', $userId)->count();
+        return response()->json([ 'success' => true, 'action' => $action, 'inWishlist' => $inWishlist, 'count' => $count ]);
+    }
+
+    // Guest: session-based fallback
+    $wishlist = session('wishlist', []);
+    $action = 'added';
+    if (isset($wishlist[$id])) {
+        unset($wishlist[$id]);
+        $action = 'removed';
+    } else {
+        $wishlist[$id] = [
+            'id' => $producto->id,
+            'nombre' => $producto->nombre,
+            'artista' => $producto->artista?->nombre,
+            'precio' => $producto->precio,
+            'imagen' => $producto->imagen,
+        ];
+    }
+    session(['wishlist' => $wishlist]);
+    return response()->json([
+        'success' => true,
+        'action' => $action,
+        'inWishlist' => $action === 'added',
+        'count' => count($wishlist)
+    ]);
+})->name('web.wishlist.toggle');
+
 Route::post('/deseados/quitar/{id}', function($id) {
     $wishlist = session('wishlist', []);
     if (isset($wishlist[$id])) {
@@ -90,7 +140,16 @@ Route::middleware(['auth', 'admin.activity'])->group(function(){
     Route::resource('productos', ProductoController::class);
     Route::resource('proveedores', ProveedorController::class)->except(['show']);
     Route::resource('categoria', CategoriaController::class);
-    Route::resource('catalogo', CatalogoController::class); // ✅ NUEVO: rutas del catálogo
+    Route::resource('formato', CatalogoController::class); // ✅ Rutas del formato (antes catálogo)
+    Route::resource('albums', App\Http\Controllers\AlbumController::class)->except(['show']);
+    Route::post('/albums/{album}/vincular-productos', [App\Http\Controllers\AlbumController::class, 'vincularProductos'])->name('albums.vincular_productos');
+    Route::post('/formato/{formato}/vincular-productos', [CatalogoController::class, 'vincularProductos'])->name('formato.vincular_productos');
+    Route::post('/categoria/{categoria}/vincular-productos', [CategoriaController::class, 'vincularProductos'])->name('categoria.vincular_productos');
+    // AJAX endpoints para vinculación en tiempo real
+    Route::post('/categoria/{categoria}/vincular-producto', [CategoriaController::class, 'attachProducto'])->name('categoria.attach_product');
+    Route::delete('/categoria/{categoria}/vincular-producto/{producto}', [CategoriaController::class, 'detachProducto'])->name('categoria.detach_product');
+    Route::get('/productos/search', [ProductoController::class, 'search'])->name('productos.search');
+    Route::post('/artistas/{artista}/vincular-productos', [ArtistaController::class, 'vincularProductos'])->name('artista.vincular_productos');
     Route::resource('artistas', ArtistaController::class)->except(['show']);
     Route::post('/artistas/check-identifier', [ArtistaController::class, 'checkIdentifier'])->name('artistas.checkIdentifier');
     // Ruta explícita para ver detalles de un artista (la resource excluye 'show')

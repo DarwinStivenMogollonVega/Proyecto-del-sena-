@@ -57,6 +57,9 @@
                                             @can('artista-edit')
                                             <a href="{{ route('artistas.edit', $reg->getKey()) }}" class="btn btn-sm btn-outline-info" title="Editar"><i class="bi bi-pencil"></i></a>
                                             @endcan
+                                            @can('artista-edit')
+                                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal-vincular-{{ $reg->getKey() }}" title="Vincular productos"><i class="bi bi-link-45deg"></i></button>
+                                            @endcan
                                             @can('artista-delete')
                                             <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-eliminar-artista-{{ $reg->getKey() }}" title="Eliminar"><i class="bi bi-trash"></i></button>
                                             @endcan
@@ -94,3 +97,49 @@
         @include('artista.activate', ['reg' => $reg])
     @endcan
 @endforeach
+
+@foreach($registros as $reg)
+    @can('artista-edit')
+    <!-- Modal vincular productos -->
+    <div class="modal fade" id="modal-vincular-{{ $reg->getKey() }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vincular productos al artista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form action="{{ route('artista.vincular_productos', $reg->getKey()) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p class="small text-muted">Selecciona los productos que se asignarán a este artista.</p>
+                        <div class="mb-2">
+                            <select name="product_ids[]" id="product_ids_{{ $reg->getKey() }}" class="form-control" multiple size="10">
+                                @foreach($productos as $p)
+                                    <option value="{{ $p->getKey() }}" {{ $p->artista_id == $reg->artista_id ? 'selected' : '' }}>{{ $p->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endcan
+@endforeach
+@push('scripts')
+<script>
+    // Permite togglear opciones en <select multiple> sin necesidad de Ctrl
+    document.addEventListener('mousedown', function(e){
+        const el = e.target;
+        if (el.tagName === 'OPTION' && el.parentElement && el.parentElement.multiple) {
+            e.preventDefault();
+            el.selected = !el.selected;
+            el.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+</script>
+@endpush

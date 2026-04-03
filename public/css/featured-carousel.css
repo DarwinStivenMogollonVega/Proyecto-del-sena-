@@ -1,0 +1,28 @@
+/* Styles for featured carousel */
+.featured-carousel .featured-card{
+    width: 220px;
+    border-radius: .8rem;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+.featured-carousel .featured-img-wrapper{
+    height: 140px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+}
+.featured-carousel .featured-img-wrapper img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:cover;
+}
+.featured-carousel .card-body{padding:0.6rem}
+.featured-carousel .price{color:var(--bs-dark);} 
+
+@media (max-width: 768px){
+    .featured-carousel .featured-card{width:46%;}
+}
+@media (max-width: 480px){
+    .featured-carousel .featured-card{width:90%;}
+}

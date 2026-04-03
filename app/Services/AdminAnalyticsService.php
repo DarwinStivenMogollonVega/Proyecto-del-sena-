@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\AdminActivityLog;
 use App\Models\Artista;
-use App\Models\Catalogo;
+use App\Models\Formato;
 use App\Models\Categoria;
 use App\Models\InventarioMovimiento;
 use App\Models\Pedido;
@@ -31,7 +31,7 @@ class AdminAnalyticsService
             [
                 'slug' => 'productos',
                 'titulo' => 'Productos e Inventario',
-                'descripcion' => 'Resumen del catalogo, stock actual y datos del inventario.',
+                'descripcion' => 'Resumen de formatos, stock actual y datos del inventario.',
                 'icono' => 'bi-vinyl-fill',
             ],
             [
@@ -61,7 +61,7 @@ class AdminAnalyticsService
             [
                 'slug' => 'panel',
                 'titulo' => 'Panel de Control',
-                'descripcion' => 'Datos operativos de categorias, catalogos, artistas, inventario y actividad.',
+                'descripcion' => 'Datos operativos de categorias, formatos, artistas, inventario y actividad.',
                 'icono' => 'bi-kanban-fill',
             ],
         ];
@@ -155,7 +155,7 @@ class AdminAnalyticsService
                 'stockBajo' => Producto::where('cantidad', '<=', 5)->count(),
                 'productosSinStock' => Producto::where('cantidad', '<=', 0)->count(),
                 'totalCategorias' => Categoria::count(),
-                'totalCatalogos' => Catalogo::count(),
+                'totalCatalogos' => Formato::count(),
                 'totalArtistas' => Artista::count(),
                 'totalMovimientosInventario' => InventarioMovimiento::count(),
                 'totalActividadPanel' => AdminActivityLog::count(),
@@ -208,7 +208,7 @@ class AdminAnalyticsService
             ],
             'panel' => [
                 ['label' => 'Categorias', 'value' => $stats['totalCategorias']],
-                ['label' => 'Catalogos',  'value' => $stats['totalCatalogos']],
+                ['label' => 'Formatos',   'value' => $stats['totalCatalogos']],
                 ['label' => 'Artistas',   'value' => $stats['totalArtistas']],
             ],
         ];
@@ -419,7 +419,7 @@ class AdminAnalyticsService
                 ['label' => 'Pedidos totales', 'value' => $stats['totalPedidos']],
                 ['label' => 'Productos totales', 'value' => $stats['totalProductos']],
                 ['label' => 'Categorias', 'value' => $stats['totalCategorias']],
-                ['label' => 'Catalogos', 'value' => $stats['totalCatalogos']],
+                ['label' => 'Formatos', 'value' => $stats['totalCatalogos']],
                 ['label' => 'Artistas', 'value' => $stats['totalArtistas']],
                 ['label' => 'Ingreso total', 'value' => '$' . number_format((float) $stats['ingresoTotal'], 2)],
             ],
@@ -437,7 +437,7 @@ class AdminAnalyticsService
             ->map(fn (Producto $producto) => [
                 'producto' => $producto->nombre,
                 'categoria' => $producto->categoria->nombre ?? 'Sin categoria',
-                'catalogo' => $producto->catalogo->nombre ?? 'Sin catalogo',
+                'formato' => $producto->catalogo->nombre ?? 'Sin formato',
                 'artista' => $producto->artista->nombre ?? 'Sin artista',
                 'stock' => (int) $producto->cantidad,
                 'precio' => number_format((float) $producto->precio, 2, '.', ''),
@@ -454,14 +454,14 @@ class AdminAnalyticsService
             'summary' => [
                 ['label' => 'Total productos', 'value' => Producto::count()],
                 ['label' => 'Categorias registradas', 'value' => Categoria::count()],
-                ['label' => 'Catalogos registrados', 'value' => Catalogo::count()],
+                ['label' => 'Formatos registrados', 'value' => Formato::count()],
                 ['label' => 'Artistas registrados', 'value' => Artista::count()],
                 ['label' => 'Pocas unidades (<=5)', 'value' => Producto::where('cantidad', '<=', 5)->count()],
                 ['label' => 'Movimientos de inventario', 'value' => InventarioMovimiento::count()],
                 ['label' => 'Productos con descuento', 'value' => $productosConDescuento],
                 ['label' => 'Total descuentos aplicados', 'value' => '$' . number_format($totalDescuentos, 2)],
             ],
-            'headings' => ['Producto', 'Categoria', 'Catalogo', 'Artista', 'Stock', 'Precio', 'Descuento', 'Precio final'],
+            'headings' => ['Producto', 'Categoria', 'Formato', 'Artista', 'Stock', 'Precio', 'Descuento', 'Precio final'],
             'rows' => $rows,
         ];
     }
@@ -572,7 +572,7 @@ class AdminAnalyticsService
         $rows = collect([
             $this->panelModuleRow('Productos', Producto::query()),
             $this->panelModuleRow('Categorias', Categoria::query()),
-            $this->panelModuleRow('Catalogos', Catalogo::query()),
+            $this->panelModuleRow('Formatos', Formato::query()),
             $this->panelModuleRow('Artistas', Artista::query()),
             $this->panelModuleRow('Movimientos de inventario', InventarioMovimiento::query()),
             $this->panelModuleRow('Resenas', ProductoResena::query()),
@@ -585,7 +585,7 @@ class AdminAnalyticsService
             'descripcion' => 'Resumen operativo de los modulos administrativos y actividad registrada del panel.',
             'summary' => [
                 ['label' => 'Categorias', 'value' => Categoria::count()],
-                ['label' => 'Catalogos', 'value' => Catalogo::count()],
+                ['label' => 'Formatos', 'value' => Formato::count()],
                 ['label' => 'Artistas', 'value' => Artista::count()],
                 ['label' => 'Productos', 'value' => Producto::count()],
                 ['label' => 'Movimientos inventario', 'value' => InventarioMovimiento::count()],

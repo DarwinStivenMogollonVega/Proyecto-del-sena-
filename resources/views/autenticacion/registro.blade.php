@@ -10,10 +10,10 @@
     <div class="auth-card p-4 p-lg-5">
       <a href="{{ route('web.index') }}" class="auth-brand register-brand mb-4">
         <span class="auth-brand-mark auth-brand-mark-full">
-          <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
+          <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
         </span>
         <span class="auth-brand-mark auth-brand-mark-icon">
-          <img src="{{ asset('assets/img/recurso12.png') }}" alt="DisMusic Logo" class="auth-brand-icon dark" />
+          <img src="{{ asset('assets/img/recurso11.png') }}" alt="DisMusic Logo" class="auth-brand-icon light" />
         </span>
       </a>
       <div class="mb-4">

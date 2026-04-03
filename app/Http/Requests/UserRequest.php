@@ -29,31 +29,47 @@ class UserRequest extends FormRequest
         $isPerfil = $this->routeIs('perfil.*');
 
         $rules = [
-            'name' => 'required|string|min:3|max:100|not_regex:/\d/',
+            'name' => ['required','string','min:3','max:100','regex:/^[\p{L}\s\'"\-]+$/u'],
             'email' => [
                 'required',
                 'email:rfc,dns',
                 'max:100',
-                Rule::unique('usuarios', 'email')->ignore(auth()->id(), 'usuario_id'),
             ],
             'password' => [$method === 'POST' ? 'required' : 'nullable', 'string', 'min:8', 'confirmed'],
-            'activo' => ['required', 'boolean'],
-            'role' => ['required', 'string', Rule::exists('roles', 'name')],
         ];
         if (!$isPerfil) {
-        $rules['activo'] = ['required', 'boolean'];
-        $rules['role'] = ['required', 'string', Rule::exists('roles', 'name')];
-    }
+            $rules['activo'] = ['required', 'boolean'];
+            $rules['role'] = ['required', 'string', Rule::exists('roles', 'name')];
+        }
+
+        // Email uniqueness: ignore current user when updating profile
+        $ignoreId = $isPerfil ? auth()->id() : $id;
+        if ($ignoreId) {
+            $rules['email'][] = Rule::unique('usuarios', 'email')->ignore($ignoreId, 'usuario_id');
+        } else {
+            $rules['email'][] = Rule::unique('usuarios', 'email');
+        }
 
         // Campos opcionales que el formulario de perfil también puede enviar.
-        $rules['telefono'] = 'nullable|string|max:20';
-        $rules['documento_identidad'] = 'nullable|string|max:30';
+        // Phone split into phone_code (dial code) and telefono (local number)
+        $rules['phone_code'] = 'nullable|digits_between:1,4';
+        $rules['telefono'] = 'nullable|digits_between:4,15';
+        // Documento: exactamente 10 dígitos cuando se proporciona
+        $rules['documento_identidad'] = 'nullable|digits:10';
         $rules['fecha_nacimiento'] = 'nullable|date|before_or_equal:today|after_or_equal:' . Carbon::today()->subYears(80)->format('Y-m-d');
         $rules['direccion'] = 'nullable|string|max:255';
-        $rules['ciudad'] = 'nullable|string|max:120|not_regex:/\d/';
-        $rules['pais'] = 'nullable|string|max:120|not_regex:/\d/';
-        $rules['codigo_postal'] = 'nullable|string|max:20';
-        $rules['avatar'] = 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048';
+        $rules['ciudad'] = ['nullable','string','max:120','regex:/^\p{L}[\p{L}\s\-]*$/u'];
+        $rules['pais'] = ['nullable','string','max:120','regex:/^\p{L}[\p{L}\s\-]*$/u'];
+
+        // dynamic postal rules depending on phone_code
+        $postalMap = ['57' => 6, '1' => 5, '34' => 5];
+        $code = $this->input('phone_code');
+        if ($code && isset($postalMap[$code])) {
+            $rules['codigo_postal'] = ['nullable','digits:' . $postalMap[$code]];
+        } else {
+            $rules['codigo_postal'] = ['nullable','digits_between:1,10'];
+        }
+        $rules['avatar'] = 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096';
         $rules['avatar_crop_size'] = 'nullable|integer|min:' . config('avatar.crop_min', 100) . '|max:' . config('avatar.crop_max', 800);
 
         return $rules;
@@ -63,12 +79,20 @@ class UserRequest extends FormRequest
     {
         $name = (string) $this->input('name', '');
         $email = (string) $this->input('email', '');
+        $telefono = (string) $this->input('telefono', '');
+        $phone_code = (string) $this->input('phone_code', '');
+        $documento = (string) $this->input('documento_identidad', '');
+        $codigo_postal = (string) $this->input('codigo_postal', '');
 
         $this->merge([
             'name' => strip_tags(trim($name)),
             'email' => mb_strtolower(trim($email)),
             'activo' => $this->boolean('activo'),
             'role' => is_string($this->input('role')) ? trim($this->input('role')) : $this->input('role'),
+            'telefono' => preg_replace('/\D+/', '', $telefono),
+            'phone_code' => preg_replace('/\D+/', '', $phone_code),
+            'documento_identidad' => preg_replace('/\D+/', '', $documento),
+            'codigo_postal' => preg_replace('/\D+/', '', $codigo_postal),
         ]);
     }
 
@@ -98,7 +122,7 @@ class UserRequest extends FormRequest
             'role.exists' => 'El rol seleccionado no existe o no es válido.',
 
             'telefono.max' => 'El teléfono no puede tener más de 20 caracteres.',
-            'documento_identidad.max' => 'El documento no puede tener más de 30 caracteres.',
+            'documento_identidad.digits' => 'El documento debe tener exactamente 10 dígitos.',
             'fecha_nacimiento.date' => 'La fecha de nacimiento no es válida.',
             'fecha_nacimiento.before_or_equal' => 'La fecha de nacimiento no puede ser posterior a hoy.',
             'fecha_nacimiento.after_or_equal' => 'La fecha de nacimiento no puede ser anterior a hace 80 años.',

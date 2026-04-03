@@ -16,7 +16,7 @@
                     <!-- Logo removido por solicitud -->
                 </div>
                 <h1 class="display-6 fw-bold mb-2">Descubre tu proximo disco favorito</h1>
-                <p class="mb-0 hero-subtitle">Explora el catalogo, compara precios y encuentra nuevas joyas para tu coleccion.</p>
+                <p class="mb-0 hero-subtitle">Explora el formato, compara precios y encuentra nuevas joyas para tu coleccion.</p>
             </div>
             <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
                 <a href="#productos" class="btn btn-light px-4">
@@ -38,7 +38,7 @@
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($metricas['totalProductos']); ?></strong><span>Productos</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($metricas['disponibles']); ?></strong><span>Disponibles</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($metricas['totalCategorias']); ?></strong><span>Categorias</span></div></div>
-        <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($metricas['totalCatalogos']); ?></strong><span>Catalogos</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($metricas['totalCatalogos']); ?></strong><span>Formatos</span></div></div>
     </div>
 
     <form id="explorar" method="GET" action="<?php echo e(route('web.index')); ?>" class="search-panel p-3 p-md-4 mt-4">
@@ -72,7 +72,7 @@
             ['title' => 'Disponibles ahora', 'icon' => 'bi-check2-circle', 'items' => $disponiblesAhora],
         ]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $section): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php if($section['items']->isNotEmpty()): ?>
-                <div class="product-section">
+    nu            <div class="product-section">
                     <div class="section-title">
                         <i class="bi <?php echo e($section['icon']); ?> icon"></i>
                         <h3><?php echo e($section['title']); ?></h3>
@@ -124,8 +124,8 @@
                                             <?php if($producto->categoria): ?>
                                                 <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i><?php echo e($producto->categoria->nombre); ?></span>
                                             <?php endif; ?>
-                                            <?php if($producto->catalogo): ?>
-                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i><?php echo e($producto->catalogo->nombre); ?></span>
+                                            <?php if($producto->formato): ?>
+                                                <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i><?php echo e($producto->formato->nombre); ?></span>
                                             <?php endif; ?>
                                         </div>
                                         <div class="all-product-inline-stats">
@@ -134,23 +134,15 @@
                                             <span><i class="bi bi-box-seam me-1"></i><?php echo e($stock); ?></span>
                                         </div>
                                         <?php
-                                            $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                                                $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
+                                            } else {
+                                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
+                                            }
                                         ?>
-                                        <?php if($inWishlist): ?>
-                                            <form action="<?php echo e(route('web.wishlist.remove', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                                <?php echo csrf_field(); ?>
-                                                <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                                    <i class="bi bi-heart-fill text-danger"></i>
-                                                </button>
-                                            </form>
-                                        <?php else: ?>
-                                            <form action="<?php echo e(route('web.wishlist.add', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                                <?php echo csrf_field(); ?>
-                                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                                    <i class="bi bi-heart"></i>
-                                                </button>
-                                            </form>
-                                        <?php endif; ?>
+                                        <button type="button" class="all-product-wishlist-btn js-wishlist-toggle" data-product-id="<?php echo e($producto->getKey()); ?>" title="Agregar a deseados">
+                                            <i class="bi <?php echo e($inWishlist ? 'bi-heart-fill text-danger' : 'bi-heart'); ?>"></i>
+                                        </button>
                                         <a href="<?php echo e(route('web.show', $producto->getKey())); ?>" class="all-product-cta" title="Ver producto">
                                             <i class="bi bi-eye"></i> ver
                                         </a>
@@ -230,36 +222,16 @@
                                 <?php if($producto->categoria): ?>
                                     <span class="all-product-chip"><i class="bi bi-tags-fill me-1"></i><?php echo e($producto->categoria->nombre); ?></span>
                                 <?php endif; ?>
-                                <?php if($producto->catalogo): ?>
-                                    <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i><?php echo e($producto->catalogo->nombre); ?></span>
+                                <?php if($producto->formato): ?>
+                                    <span class="all-product-chip"><i class="bi bi-journal-bookmark-fill me-1"></i><?php echo e($producto->formato->nombre); ?></span>
                                 <?php endif; ?>
-                            </div>
-
-                            <div class="all-product-inline-stats">
-                                <span><i class="bi bi-star-fill text-warning me-1"></i><?php echo e(number_format($ratingAll, 1)); ?></span>
-                                <span><i class="bi bi-chat-left-text me-1"></i><?php echo e($reviewsAll); ?></span>
-                                <span><i class="bi bi-box-seam me-1"></i><?php echo e($stockAll); ?></span>
-                            </div>
-
-                            <?php
-                                $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));
-                            ?>
-                            <?php if($inWishlist): ?>
-                                <form action="<?php echo e(route('web.wishlist.remove', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="all-product-wishlist-btn" title="Quitar de deseados">
-                                        <i class="bi bi-heart-fill text-danger"></i>
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                                <form action="<?php echo e(route('web.wishlist.add', $producto->getKey())); ?>" method="POST" class="d-inline">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
-                                        <i class="bi bi-heart"></i>
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                            <a href="<?php echo e(route('web.show', $producto->getKey())); ?>" class="all-product-cta" title="Ver producto">
+                            <form action="<?php echo e(route('web.wishlist.add', $producto->id)); ?>" method="POST" class="d-inline">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="all-product-wishlist-btn" title="Agregar a deseados">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                            </form>
+                            <a href="<?php echo e(route('web.show', $producto->id)); ?>" class="all-product-cta" title="Ver producto">
                                 <i class="bi bi-eye"></i> ver
                             </a>
                         </div>

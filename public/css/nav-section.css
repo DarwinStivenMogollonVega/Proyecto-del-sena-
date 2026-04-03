@@ -97,6 +97,14 @@ html[data-theme='dark'] .navbar .nav-darkmode-btn {
     height: auto;
     object-fit: contain;
 }
+html[data-theme='dark'] .dz-brand-logo {
+    /* Nav brand (left) - slightly larger for clarity and consistent across themes */
+    width: 78.75px;
+    min-width: 36px;
+    max-width: 115px;
+    height: auto;
+    object-fit: contain;
+}
 .dz-brand-logo.logo-dis-music.light.img-fluid,
 .dz-brand-logo.logo-dis-music.dark.img-fluid {
     width: 78.75px;
@@ -110,6 +118,20 @@ html[data-theme='dark'] .navbar .nav-darkmode-btn {
     width: 212px;
     max-width: 42vw;
     min-width: 94px;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    opacity: 1;
+    margin: 0 auto;
+    transition: filter 0.2s, width 0.2s;
+}
+html[data-theme='dark'] .logo {
+    /* Hero/center logo: keep prominent but constrained for smaller screens */
+    display: block;
+    width: 320px;
+    max-width: 42vw;
+    min-width: 120px;
     height: auto;
     object-fit: contain;
     position: relative;

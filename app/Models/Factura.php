@@ -20,11 +20,13 @@ class Factura extends Model
         // Columnas usadas por la migración
         'nombre_cliente',
         'correo_cliente',
+        'telefono_cliente',
         'direccion_cliente',
         'identificacion_cliente',
         // Compatibilidad con nombres antiguos en código
         'cliente_nombre',
         'cliente_email',
+        'cliente_telefono',
         'cliente_direccion',
         'cliente_identificacion',
     ];
@@ -49,5 +51,31 @@ class Factura extends Model
     public function getIdAttribute()
     {
         return $this->{$this->getKeyName()};
+    }
+
+    // Accessors to provide backward-compatible attribute names used in views
+    public function getClienteNombreAttribute()
+    {
+        return $this->attributes['cliente_nombre'] ?? $this->attributes['nombre_cliente'] ?? ($this->user?->name ?? null);
+    }
+
+    public function getClienteEmailAttribute()
+    {
+        return $this->attributes['cliente_email'] ?? $this->attributes['correo_cliente'] ?? ($this->user?->email ?? null);
+    }
+
+    public function getClienteTelefonoAttribute()
+    {
+        return $this->attributes['cliente_telefono'] ?? $this->attributes['telefono_cliente'] ?? null;
+    }
+
+    public function getClienteDireccionAttribute()
+    {
+        return $this->attributes['cliente_direccion'] ?? $this->attributes['direccion_cliente'] ?? null;
+    }
+
+    public function getClienteIdentificacionAttribute()
+    {
+        return $this->attributes['cliente_identificacion'] ?? $this->attributes['identificacion_cliente'] ?? null;
     }
 }

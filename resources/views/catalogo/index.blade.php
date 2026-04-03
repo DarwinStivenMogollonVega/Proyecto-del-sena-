@@ -4,19 +4,19 @@
     <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div>
-                <h4 class="fw-bold mb-1" style="color:var(--adm-heading)">Catálogos</h4>
-                <p class="mb-0 small" style="color:var(--adm-muted)">Listado de catálogos disponibles</p>
+                <h4 class="fw-bold mb-1" style="color:var(--adm-heading)">Formatos</h4>
+                <p class="mb-0 small" style="color:var(--adm-muted)">Listado de formatos disponibles</p>
             </div>
             <div class="d-flex gap-2">
-                <form action="{{ route('catalogo.index') }}" method="get" class="d-flex">
+                <form action="{{ route('formato.index') }}" method="get" class="d-flex">
                     <div class="input-group">
-                        <input name="texto" type="text" class="form-control form-control-sm" value="{{ $texto }}" placeholder="Buscar catálogo por nombre">
+                        <input name="texto" type="text" class="form-control form-control-sm" value="{{ $texto }}" placeholder="Buscar formato por nombre">
                         <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-search"></i></button>
                     </div>
                 </form>
-                @can('catalogo-create')
-                    <a href="{{ route('catalogo.create') }}" class="btn btn-sm btn-primary">Nuevo</a>
-                @endcan
+                @canany(['formato-create'])
+                    <a href="{{ route('formato.create') }}" class="btn btn-sm btn-primary">Nuevo</a>
+                @endcanany
             </div>
         </div>
 
@@ -55,12 +55,13 @@
                                     </td>
                                     <td>
                                         <div class="d-flex gap-2 justify-content-end">
-                                            @can('catalogo-edit')
-                                            <a href="{{ route('catalogo.edit', $reg->getKey()) }}" class="btn btn-sm btn-outline-info" title="Editar"><i class="bi bi-pencil"></i></a>
-                                            @endcan
-                                            @can('catalogo-delete')
-                                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-eliminar-catalogo-{{ $reg->getKey() }}" title="Eliminar"><i class="bi bi-trash"></i></button>
-                                            @endcan
+                                            @canany(['formato-edit'])
+                                            <a href="{{ route('formato.edit', $reg->getKey()) }}" class="btn btn-sm btn-outline-info" title="Editar"><i class="bi bi-pencil"></i></a>
+                                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modal-vincular-{{ $reg->getKey() }}" title="Vincular productos"><i class="bi bi-link-45deg"></i></button>
+                                            @endcanany
+                                            @canany(['formato-delete'])
+                                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-eliminar-formato-{{ $reg->getKey() }}" title="Eliminar"><i class="bi bi-trash"></i></button>
+                                            @endcanany
                                         </div>
                                     </td>
                                 </tr>
@@ -78,7 +79,7 @@
             </div>
                 {{-- modals moved below the page to keep rows clean --}}
             <div class="card-footer d-flex justify-content-between align-items-center">
-                <div>Mostrando {{ $registros->count() }} de {{ $registros->total() }} catálogos</div>
+                <div>Mostrando {{ $registros->count() }} de {{ $registros->total() }} formatos</div>
                 <div>{{ $registros->appends(['texto' => $texto])->links() }}</div>
             </div>
         </div>
@@ -87,10 +88,56 @@
 @endsection
 
 @foreach($registros as $reg)
-    @can('catalogo-delete')
-        @include('catalogo.delete', ['reg' => $reg])
-    @endcan
-    @can('catalogo-activate')
-        @include('catalogo.activate', ['reg' => $reg])
+    @canany(['formato-delete'])
+        @include('formato.delete', ['reg' => $reg])
+    @endcanany
+    @canany(['formato-activate'])
+        @include('formato.activate', ['reg' => $reg])
+    @endcanany
+@endforeach
+
+@foreach($registros as $reg)
+    @canany(['formato-edit','catalogo-edit'])
+    <!-- Modal vincular productos -->
+    <div class="modal fade" id="modal-vincular-{{ $reg->getKey() }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vincular productos al formato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form action="{{ route('formato.vincular_productos', $reg->getKey()) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p class="small text-muted">Selecciona los productos que pertenecerán a este formato.</p>
+                        <div class="mb-2">
+                            <select name="product_ids[]" id="product_ids_{{ $reg->getKey() }}" class="form-control" multiple size="10">
+                                @foreach($productos as $p)
+                                    <option value="{{ $p->getKey() }}" {{ $p->catalogo_id == ($reg->catalogo_id ?? $reg->formato_id) ? 'selected' : '' }}>{{ $p->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     @endcan
 @endforeach
+@push('scripts')
+<script>
+    // Permite togglear opciones en <select multiple> sin necesidad de Ctrl
+    document.addEventListener('mousedown', function(e){
+        const el = e.target;
+        if (el.tagName === 'OPTION' && el.parentElement && el.parentElement.multiple) {
+            e.preventDefault();
+            el.selected = !el.selected;
+            el.parentElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+</script>
+@endpush

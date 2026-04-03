@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
 use App\Http\Requests\CategoriaRequest;
+use App\Models\Producto;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoriaController extends Controller
@@ -23,7 +24,9 @@ class CategoriaController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(3);
 
-        return view('categoria.index', compact('registros', 'texto'));
+        $productos = Producto::orderBy('nombre')->get();
+
+        return view('categoria.index', compact('registros', 'texto', 'productos'));
     }
 
     /**
@@ -121,5 +124,63 @@ class CategoriaController extends Controller
             ->appends(request()->query());
 
         return view('web.categoria', compact('categoria', 'productos'));
+    }
+
+    /**
+     * Vincular productos a una categoría (recibe array de product_ids)
+     */
+    public function vincularProductos(Request $request, Categoria $categoria)
+    {
+        $this->authorize('categoria-edit');
+
+        $data = $request->validate([
+            'product_ids' => ['nullable', 'array'],
+            'product_ids.*' => ['integer', 'exists:productos,id'],
+        ]);
+
+        $selected = $data['product_ids'] ?? [];
+
+        if (!empty($selected)) {
+            Producto::whereIn('id', $selected)->update(['categoria_id' => $categoria->getKey()]);
+        }
+
+        Producto::where('categoria_id', $categoria->getKey())
+            ->whereNotIn('id', $selected ?: [0])
+            ->update(['categoria_id' => null]);
+
+        return redirect()->route('categoria.index')->with('success', 'Productos vinculados a la categoría');
+    }
+
+    /**
+     * Adjuntar un solo producto a la categoría (AJAX)
+     */
+    public function attachProducto(Request $request, Categoria $categoria)
+    {
+        $this->authorize('categoria-edit');
+
+        $data = $request->validate([
+            'product_id' => ['required','integer','exists:productos,id']
+        ]);
+
+        $producto = Producto::findOrFail($data['product_id']);
+        $producto->categoria_id = $categoria->getKey();
+        $producto->save();
+
+        return response()->json(['success' => true, 'producto' => $producto]);
+    }
+
+    /**
+     * Desvincular (quitar) un producto de la categoría (AJAX)
+     */
+    public function detachProducto(Categoria $categoria, Producto $producto)
+    {
+        $this->authorize('categoria-edit');
+
+        if ($producto->categoria_id == $categoria->getKey()) {
+            $producto->categoria_id = null;
+            $producto->save();
+        }
+
+        return response()->json(['success' => true]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Schema;
 
 class CatalogoRequest extends FormRequest
 {
@@ -20,11 +21,14 @@ class CatalogoRequest extends FormRequest
      */
     public function rules(): array
     {
-        $routeCatalogo = $this->route('catalogo');
+        $routeCatalogo = $this->route('formato') ?? $this->route('catalogo');
         $id = is_object($routeCatalogo) ? $routeCatalogo->getKey() : $routeCatalogo;
 
+        $table = Schema::hasTable('formatos') ? 'formatos' : 'catalogos';
+        $idColumn = Schema::hasTable('formatos') ? 'formato_id' : 'catalogo_id';
+
         return [
-            'nombre' => ['required', 'string', 'min:3', 'max:150', Rule::unique('catalogos', 'nombre')->ignore($id, 'catalogo_id')],
+            'nombre' => ['required', 'string', 'min:3', 'max:150', Rule::unique($table, 'nombre')->ignore($id, $idColumn)],
             'descripcion' => ['nullable', 'string', 'max:1000'],
         ];
     }

@@ -584,12 +584,12 @@
     </div>
     @endcanany
 
-    {{-- ── [M-03] Gestión del Catálogo Musical ────────────────────── --}}
-    @canany(['producto-list', 'artista-list', 'categoria-list', 'catalogo-list'])
+    {{-- ── [M-03] Gestión del Formato Musical ────────────────────── --}}
+    @canany(['producto-list', 'artista-list', 'categoria-list', 'formato-list'])
     <div class="card mb-4" style="border-radius:1rem">
         <div class="card-header py-3 d-flex align-items-center gap-2">
             <i class="bi bi-music-note-list" style="color:#8b5cf6;font-size:1.1rem"></i>
-            <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">Gestión del Catálogo Musical</h6>
+            <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">Gestión del Formato Musical</h6>
             <span class="badge ms-1 rounded-pill" style="background:rgba(139,92,246,.12);color:#8b5cf6;font-size:.72rem">M-03</span>
         </div>
         <div class="card-body pt-2">
@@ -618,11 +618,11 @@
                     </a>
                 </div>
                 @endcan
-                @can('catalogo-list')
+                @can('formato-list')
                 <div class="col-12 col-md-3">
-                    <a href="{{ route('catalogo.index') }}" class="module-card h-100">
+                    <a href="{{ route('formato.index') }}" class="module-card h-100">
                         <span class="module-icon bg-purple-soft text-purple"><i class="bi bi-journal-bookmark-fill"></i></span>
-                        <span class="module-label">Catálogos</span>
+                        <span class="module-label">Formatos</span>
                     </a>
                 </div>
                 @endcan

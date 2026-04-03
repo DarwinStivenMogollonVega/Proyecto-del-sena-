@@ -1,8 +1,8 @@
 @php
-    $actionResolved = $action ?? (isset($reg) ? route('catalogo.destroy', $reg->getKey()) : '#');
-    $modalId = $modalId ?? (isset($reg) ? 'modal-eliminar-catalogo-'.$reg->getKey() : 'modal-eliminar-catalogo');
+    $actionResolved = $action ?? (isset($reg) ? route('formato.destroy', $reg->getKey()) : '#');
+    $modalId = $modalId ?? (isset($reg) ? 'modal-eliminar-formato-'.$reg->getKey() : 'modal-eliminar-formato');
     $titleText = $title ?? (isset($reg) ? "Eliminar: {$reg->nombre}" : 'Confirmar eliminación');
-    $messageText = $message ?? (isset($reg) ? "Esta acción es irreversible. Confirma eliminar el catálogo: {$reg->nombre}." : 'Esta acción es irreversible. ¿Deseas continuar?');
+    $messageText = $message ?? (isset($reg) ? "Esta acción es irreversible. Confirma eliminar el formato: {$reg->nombre}." : 'Esta acción es irreversible. ¿Deseas continuar?');
 @endphp
 
 <div class="modal fade" id="{{ $modalId }}" tabindex="-1" aria-labelledby="{{ $modalId }}Label" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog">
@@ -12,14 +12,14 @@
                 @csrf
                 @method('DELETE')
                 <div class="modal-header border-0 pb-0">
-                    <h4 class="modal-title fw-bold" id="{{ $modalId }}Label" style="color:#b91c1c; font-size:1.5rem;">{{ $title ?? 'Eliminar catálogo' }}</h4>
+                    <h4 class="modal-title fw-bold" id="{{ $modalId }}Label" style="color:#b91c1c; font-size:1.5rem;">{{ $title ?? 'Eliminar formato' }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body" style="color:#222; font-size:1.02rem;">
                     <div class="mb-3" style="background:#f7fbfd; border:1px solid #e6eef4; border-radius:.8rem; padding:1rem; box-shadow:0 2px 6px rgba(14,30,37,0.03);">
-                        <strong>Advertencia:</strong> Esta acción es <u>irreversible</u>. Por favor, confirme que desea eliminar el catálogo <strong>{{ $reg->nombre ?? $reg->name }}</strong>.
+                        <strong>Advertencia:</strong> Esta acción es <u>irreversible</u>. Por favor, confirme que desea eliminar el formato <strong>{{ $reg->nombre ?? $reg->name }}</strong>.
                     </div>
-                    <p class="mb-0 text-center">¿Desea eliminar el catálogo <strong>{{ $reg->nombre ?? $reg->name }}</strong>?</p>
+                    <p class="mb-0 text-center">¿Desea eliminar el formato <strong>{{ $reg->nombre ?? $reg->name }}</strong>?</p>
                 </div>
                 <div class="modal-footer justify-content-center border-0 pt-0">
                     <div class="d-flex justify-content-center gap-2 w-100">
