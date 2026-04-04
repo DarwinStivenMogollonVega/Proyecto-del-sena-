@@ -86,7 +86,7 @@
                         @if ($stockAll >= 50)
                             <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                         @elseif ($stockAll > 0)
-                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</span>
+                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
                         @else
                             <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                         @endif

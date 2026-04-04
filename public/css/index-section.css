@@ -38,13 +38,13 @@ html[data-theme='light'], .light {
    VARIABLES Y CONFIGURACIÓN GLOBAL INDEX HERO
    ===================================================== */
 :root {
-  --dz-hero-radius: 1.4rem;
-  --dz-hero-shadow: 0 24px 60px rgba(196, 99, 16, 0.16);
-  --dz-hero-bg-accent: rgba(196, 99, 16, 0.12);
-  --dz-hero-heading: #ff7a00;
-  --dz-hero-subtitle: #8a6a5c;
-  --dz-logo-width: 141px;
-  --dz-logo-min-width: 71px;
+    --dz-hero-radius: 1.2rem;
+    --dz-hero-shadow: 0 18px 44px rgba(196, 99, 16, 0.14);
+    --dz-hero-bg-accent: rgba(196, 99, 16, 0.10);
+    --dz-hero-heading: #ff7a00;
+    --dz-hero-subtitle: #8a6a5c;
+    --dz-logo-width: 220px;
+    --dz-logo-min-width: 56px;
   --dz-title-font: 'Sora', sans-serif;
   --dz-title-size: 2.2rem;
   --dz-title-weight: 700;
@@ -58,13 +58,14 @@ html[data-theme='dark'] {
    HERO PRINCIPAL Y MARCAS
    ===================================================== */
 .store-hero {
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
     color: var(--dz-heading);
-    border-radius: 1.4rem;
-    margin-top: 1.5rem;
+    border-radius: var(--dz-hero-radius);
+    margin-top: 0.2rem;
+    padding: 0.8rem 1.2rem;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 24px 60px rgba(196, 99, 16, 0.16);
+    box-shadow: var(--dz-hero-shadow);
 }
 .store-hero h1 {
     color: var(--dz-heading, #ff7a00);
@@ -79,12 +80,12 @@ html[data-theme='dark'] {
 .store-hero-brand {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 1.1rem;
-    margin-bottom: 1.5rem;
+    justify-content: center;
+    gap: 0.7rem;
+    margin-bottom: 0.6rem;
     flex-wrap: wrap;
     width: 100%;
-    text-align: left;
+    text-align: center;
 }
 /* Visibilidad según modo para logos del index */
 .logo.logo-light { display: block !important; }
@@ -637,15 +638,40 @@ html[data-theme='dark'] .all-product-cover img {
     background: linear-gradient(145deg, #111827 0%, #3d1e0a 80%, #c46310 100%);
     box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
+.all-product-cover img {
+    width: 100%;
+    height: 180px; /* uniform thumbnail height to match reference */
+    object-fit: cover;
+    display: block;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
 .all-product-stock {
     position: absolute;
-    left: 0.4rem;
-    top: 0.4rem;
+    left: 0.6rem;
+    top: 0.6rem;
     border-radius: 999px;
-    padding: 0.15rem 0.45rem;
-    font-size: 0.62rem;
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    padding: 0.32rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Place availability badge above image for carousel items */
+.product-carousel .all-product-cover {
+    overflow: visible; /* allow badge to sit outside the image box */
+}
+.product-carousel .all-product-stock {
+    top: -0.5rem; /* lift badge above image */
+    left: 0.65rem;
+    padding: 0.28rem 0.6rem;
+    font-size: 0.72rem;
+    transform: translateZ(0);
+    z-index: 40;
 }
 .all-product-body {
     background: #fff7ed; /* Color de fondo para modo claro */
@@ -656,6 +682,39 @@ html[data-theme='dark'] .all-product-cover img {
     flex: 1 1 auto; /* allow body to stretch and keep card heights consistent */
     min-height: 150px;
     box-sizing: border-box;
+}
+
+.all-product-price {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #0f5fa8; /* azul para el precio principal */
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Carousel-specific price styling (icon + size) */
+.product-carousel .carousel-price {
+    font-size: 0.98rem;
+    color: #0f5fa8 !important;
+    font-weight: 800;
+}
+.product-carousel .carousel-price i {
+    font-size: 1.02rem;
+    vertical-align: middle;
+}
+
+/* Ensure carousel prices match .all-product-discount small styling */
+.product-carousel .all-product-discount {
+    font-size: 0.66rem !important;
+    font-weight: 700 !important;
+    color: #0f5fa8 !important;
+    letter-spacing: 0.01em;
+    text-transform: none !important;
+}
+.product-carousel .all-product-discount i {
+    font-size: 0.78rem;
 }
 
 html[data-theme='dark'] .all-product-body {

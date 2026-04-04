@@ -80,18 +80,16 @@
                         @if($producto->imagen)
                             <img src="{{ asset('uploads/productos/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
                         @else
-                            <img src="{{ asset('img/no-image.svg') }}" alt="Sin imagen" width="400" height="300" loading="lazy">
+                            <img src="{{ asset('img/no-image.jpg') }}" alt="Sin imagen">
                         @endif
-
                         @if ($stockAll >= 50)
                             <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                         @elseif ($stockAll > 0)
-                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</span>
+                            <span class="all-product-stock badge bg-warning text-dark"><i class="bi bi-exclamation-circle me-1"></i>Pocas unidades</span>
                         @else
                             <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                         @endif
                     </div>
-
                     <div class="all-product-body">
                         <p class="all-product-name" title="{{ $producto->nombre }}">{{ $producto->nombre }}</p>
                         <p class="all-product-artist">{{ $producto->artista?->nombre ?? 'Artista no especificado' }}</p>

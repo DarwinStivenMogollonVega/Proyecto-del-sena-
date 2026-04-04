@@ -42,8 +42,7 @@
             <?php endif; ?>
 
             <form action="<?php echo e(route('perfil.update')); ?>" method="POST" id="formRegistroUsuario" enctype="multipart/form-data">
-                <?php echo csrf_field(); ?>
-                <?php echo method_field('PUT'); ?>
+                <?php echo csrf_field(); ?>                <?php echo method_field('PUT'); ?>
                 <input type="hidden" name="remove_avatar" id="removeAvatarInput" value="0">
                 <input type="hidden" name="avatar_rotation" id="avatarRotationInput" value="0">
                 <input type="hidden" name="avatar_scale" id="avatarScaleInput" value="1">
@@ -477,6 +476,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // also update main preview if visible
         try {
             if (preview) { preview.style.transition = 'transform 160ms ease'; preview.style.transform = t; }
+            // if a viewport component is active, notify it to re-render
+            const vpEl = document.querySelector('.viewport-viewport');
+            if (vpEl && vpEl.__vp && typeof vpEl.__vp.update === 'function') {
+                try { vpEl.__vp.update(); } catch (e) { /* ignore */ }
+            }
         } catch (e) {}
         updateZoomWarning();
         // schedule a refresh of the rasterized preview so saved image matches what user sees
@@ -551,6 +555,42 @@ document.addEventListener('DOMContentLoaded', function () {
                         preview.src = ringPreviewData;
                         preview.style.display = 'block';
                         if (initial) initial.style.display = 'none';
+                    }
+                    // ALSO: rasterize a display-sized preview for the viewport itself so
+                    // what the user sees in the editor equals the exported raster.
+                    try {
+                        const displayEl = cropBox || vpEl; // prefer cropBox dimensions
+                        const displayPx = Math.max(100, Math.min(1200, Math.round((displayEl && displayEl.clientWidth) || (outSizeVal || 300))));
+                        // Instead of replacing the viewport's internal image (which
+                        // would break pointer interactions), create or update a
+                        // non-interactive overlay image that visually matches the
+                        // exported raster. This lets users still drag/zoom the
+                        // viewport while showing the final rasterized preview.
+                        try {
+                            let overlay = vpEl.querySelector('.viewport-overlay-raster');
+                            if (!overlay) {
+                                overlay = document.createElement('img');
+                                overlay.className = 'viewport-overlay-raster';
+                                overlay.style.position = 'absolute';
+                                overlay.style.inset = '0';
+                                overlay.style.width = '100%';
+                                overlay.style.height = '100%';
+                                overlay.style.objectFit = 'cover';
+                                overlay.style.pointerEvents = 'none';
+                                overlay.style.zIndex = '5';
+                                vpEl.style.position = vpEl.style.position || 'relative';
+                                vpEl.appendChild(overlay);
+                            }
+                            const displayRaster = await vpEl.__vp.exportCropped(displayPx);
+                            if (displayRaster) {
+                                overlay.src = displayRaster;
+                                overlay.style.display = '';
+                            }
+                        } catch (e) {
+                            console.warn('viewport overlay rasterization failed', e);
+                        }
+                    } catch (e) {
+                        console.warn('viewport display rasterization failed', e);
                     }
                     return;
                 } catch (e) {
@@ -1017,19 +1057,32 @@ document.addEventListener('DOMContentLoaded', function () {
         try { zoomRange.min = String(MIN_INITIAL_SCALE); } catch (e) {}
         zoomRange.addEventListener('input', function () {
             const newScale = parseFloat(this.value);
-            // scale about center of crop box
+            // If viewport component is present, apply scale via its API and update
+            const vpEl = document.querySelector('.viewport-viewport');
+            if (vpEl && vpEl.__vp) {
+                try {
+                    // apply scale to viewport instance
+                    vpEl.__vp.scale = Math.max(parseFloat(vpEl.__vp.minScale || MIN_INITIAL_SCALE), newScale);
+                    if (typeof vpEl.__vp.constrain === 'function') vpEl.__vp.constrain();
+                    if (typeof vpEl.__vp.update === 'function') vpEl.__vp.update();
+                } catch (e) {
+                    console.warn('viewport scale update failed', e);
+                }
+                // make sure the raster preview updates to reflect viewport state
+                schedulePreviewRefresh();
+                return;
+            }
+
+            // Legacy behaviour (cropImg-based): scale about center of crop box
             const bw = cropBox.clientWidth, bh = cropBox.clientHeight;
             const cx = bw / 2, cy = bh / 2;
-            // compute minimal allowed scale so rotated image covers the box
             const dims = getRotatedDims(currentRotation, cropImg.naturalWidth || 0, cropImg.naturalHeight || 0);
             const minScale = Math.max(MIN_INITIAL_SCALE, Math.max(bw / Math.max(1, dims.w), bh / Math.max(1, dims.h)));
             let appliedScale = newScale;
-            // if user attempts to go below min, clamp and trigger blink feedback
             if (newScale < minScale) {
                 appliedScale = minScale;
                 if (zoomWarningEl) {
                     zoomWarningEl.classList.add('blink-warning');
-                    // remove blink class after animation ends
                     setTimeout(() => { zoomWarningEl.classList.remove('blink-warning'); }, 500);
                 }
             }
@@ -1136,71 +1189,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         editSave.addEventListener('click', async function () {
-            // Convert the preview data URL to a File and assign to the real file input so
-            // the server receives the exact image the user saw in the preview.
+            // Simplified save: export final cropped data URL (full size when possible),
+            // write it to the hidden `avatar_cropped` input and submit the form.
             try {
                 if (removeInput) removeInput.value = '0';
                 // close modal if open
                 const overlay = document.getElementById('avatarModalOverlay');
                 if (overlay) { overlay.classList.remove('show'); document.body.style.overflow = ''; overlay.remove(); }
 
-                // prefer viewport component export if available (ensures positioning/zoom preserved)
                 let dataUrl = null;
                 const vpEl = document.querySelector('.viewport-viewport');
                 const outSizeEl = document.getElementById('avatarOutputSize');
                 const outSizeVal = outSizeEl ? parseInt(outSizeEl.value || '', 10) : null;
                 if (vpEl && vpEl.__vp && typeof vpEl.__vp.exportCropped === 'function') {
-                    try {
-                        dataUrl = await vpEl.__vp.exportCropped(outSizeVal || null);
-                    } catch (e) { console.warn('viewport export failed', e); }
+                    try { dataUrl = await vpEl.__vp.exportCropped(outSizeVal || null); } catch (e) { console.warn('viewport export failed', e); }
                 }
-                // fallback to hidden base64 or legacy getCroppedData
+
                 if (!dataUrl) {
                     const avatarCroppedInputEl = document.getElementById('avatarCroppedInput');
                     if (avatarCroppedInputEl && avatarCroppedInputEl.value) dataUrl = avatarCroppedInputEl.value;
                     else {
-                        try { const res = typeof getCroppedData === 'function' ? getCroppedData() : null; if (res && res.dataUrl) dataUrl = res.dataUrl; } catch (e) { /* ignore */ }
+                        try { const res = typeof getCroppedData === 'function' ? getCroppedData() : null; if (res) dataUrl = res.dataUrlFull || res.dataUrl; } catch (e) { /* ignore */ }
                     }
                 }
 
                 if (!dataUrl) {
-                    // fallback: if original file exists, submit it
                     if (input && input.files && input.files[0]) { form.submit(); return; }
                     alert('Seleccione una imagen antes de colocar la foto.');
                     return;
                 }
 
-                // convert dataURL -> Blob -> File
-                const blob = await (await fetch(dataUrl)).blob();
-                const filename = 'avatar.jpg';
-                const file = new File([blob], filename, { type: blob.type || 'image/jpeg' });
+                const avatarCroppedInputEl = document.getElementById('avatarCroppedInput');
+                if (avatarCroppedInputEl) avatarCroppedInputEl.value = dataUrl;
 
-                // try to assign to input.files using DataTransfer
-                try {
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    input.files = dt.files;
-                    // submit the form normally
-                    try { form.submit(); } catch (e) { console.error('form.submit failed', e); }
-                    return;
-                } catch (e) {
-                    console.warn('DataTransfer assignment failed, falling back to fetch POST', e);
-                }
+                const avatarRotationInput = document.getElementById('avatarRotationInput');
+                const avatarScaleInput = document.getElementById('avatarScaleInput');
+                if (avatarRotationInput) avatarRotationInput.value = String(currentRotation);
+                if (avatarScaleInput) avatarScaleInput.value = String(currentScale);
 
-                // Fallback: submit via fetch with FormData (includes the preview file)
-                try {
-                    const fd = new FormData(form);
-                    fd.set('avatar', file, filename);
-                    // ensure remove flag is cleared
-                    if (removeInput) fd.set(removeInput.name || 'remove_avatar', '0');
-                    const opts = { method: form.getAttribute('method') || 'POST', headers: { 'X-CSRF-TOKEN': TELEMETRY_CSRF }, credentials: 'same-origin', body: fd };
-                    const resp = await fetch(form.action, opts);
-                    if (resp.redirected) { window.location.href = resp.url; return; }
-                    const text = await resp.text(); document.open(); document.write(text); document.close();
-                } catch (err) {
-                    console.error('Error enviando formulario de avatar (fallback):', err);
-                    alert('Error al subir la imagen. Inténtalo de nuevo.');
-                }
+                form.submit();
             } catch (err) {
                 console.error('avatar save error', err);
                 alert('Error al preparar la imagen. Inténtalo de nuevo.');
@@ -1242,7 +1269,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Mostrar toast y ocultar alert inline si existe
-    document.addEventListener('DOMContentLoaded', function () {
+    (function () {
         var toastEl = document.getElementById('saveToast');
         if (toastEl && typeof bootstrap !== 'undefined') {
             try {
@@ -1271,8 +1298,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }, 4000);
         }
-    });
-
+    })();
     // Live validation for fecha_nacimiento (client-side immediate feedback)
     (function () {
         const fechaEl = document.getElementById('fecha_nacimiento');

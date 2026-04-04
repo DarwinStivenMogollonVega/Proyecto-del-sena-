@@ -1,4 +1,4 @@
-@push('styles')
+@push('estilos')
 <link rel="stylesheet" href="{{ asset('css/nav-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item">
-                    <a class="nav-link nav-scroll-link nav-cta-btn {{ request()->routeIs('web.index') ? 'active is-section-active' : '' }}" href="{{ $inicioHref }}" data-scrollspy-link aria-current="{{ request()->routeIs('web.index') ? 'page' : 'false' }}">
+                    <a class="nav-link nav-cta-btn {{ request()->routeIs('web.index') ? 'active is-section-active' : '' }}" href="{{ $inicioHref }}" data-scrollspy-link aria-current="{{ request()->routeIs('web.index') ? 'page' : 'false' }}">
                         <span class="nav-cta-icon"><i class="bi bi-house-door"></i></span>
                         <span class="nav-cta-text">Inicio</span>
                     </a>
@@ -141,3 +141,22 @@
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var nav = document.querySelector('.dz-nav');
+        if (!nav) return;
+
+        var onScroll = function () {
+            if (window.scrollY > 10) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        };
+
+        // Inicializar estado (por si la página carga ya scrolleada)
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+    });
+</script>

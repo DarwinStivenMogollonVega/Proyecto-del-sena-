@@ -1,4 +1,5 @@
-<?php $__env->startSection('titulo', $formato->nombre . ' - DiscZone'); ?>
+
+<?php $__env->startSection('titulo', $categoria->nombre . ' - DiscZone'); ?>
 
 <?php $__env->startPush('estilos'); ?>
 <link rel="stylesheet" href="<?php echo e(asset('css/dz-responsive.css')); ?>">
@@ -16,8 +17,8 @@
                 <div class="store-hero-brand">
                     <!-- Logo removido por solicitud -->
                 </div>
-                <h1 class="display-6 fw-bold mb-2">Descubre tu proximo disco favorito</h1>
-                <p class="mb-0 hero-subtitle">Explora el formato, compara precios y encuentra nuevas joyas para tu coleccion.</p>
+                <h1 class="display-6 fw-bold mb-2">Productos en la categoría: <?php echo e($categoria->nombre); ?></h1>
+                <p class="mb-0 hero-subtitle">Explora los productos de esta categoría.</p>
             </div>
             <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
                 <a href="#productos" class="btn btn-light px-4">
@@ -33,10 +34,10 @@
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($productos->count()); ?></strong><span>Productos</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($productos->where('cantidad', '>', 0)->count()); ?></strong><span>Disponibles</span></div></div>
         <div class="col-6 col-md-3"><div class="metric-pill"><strong><?php echo e($productos->unique('categoria_id')->count()); ?></strong><span>Categorías</span></div></div>
-        <div class="col-6 col-md-3"><div class="metric-pill"><strong>1</strong><span>Formato</span></div></div>
+        <div class="col-6 col-md-3"><div class="metric-pill"><strong>1</strong><span>Categoría</span></div></div>
     </div>
 
-<form method="GET" action="<?php echo e(route('web.formato.show', $formato->getKey())); ?>" class="search-panel p-3 p-md-4 mt-4">
+<form method="GET" action="<?php echo e(route('web.categoria.show', $categoria->getKey())); ?>" class="search-panel p-3 p-md-4 mt-4">
     <div class="row align-items-end g-3">
         <div class="col-md-8">
             <label class="form-label fw-semibold" for="searchInput">Buscar por nombre</label>
@@ -61,7 +62,7 @@
 
 <section class="all-products-section mt-5">
     <div class="all-products-head d-flex align-items-center" style="gap:0.7rem;">
-        <h4 class="mb-0 d-flex align-items-center"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Productos del formato
+        <h4 class="mb-0 d-flex align-items-center"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Productos de la categoría
             <span class="section-badge ms-2"><?php echo e($productos->total()); ?> registrados</span>
         </h4>
     </div><br>
@@ -79,9 +80,8 @@
                         <?php if($producto->imagen): ?>
                             <img src="<?php echo e(asset('uploads/productos/' . $producto->imagen)); ?>" alt="<?php echo e($producto->nombre); ?>">
                         <?php else: ?>
-                            <img src="<?php echo e(asset('img/no-image.svg')); ?>" alt="Sin imagen" width="400" height="300" loading="lazy">
+                            <img src="<?php echo e(asset('img/no-image.jpg')); ?>" alt="Sin imagen">
                         <?php endif; ?>
-
                         <?php if($stockAll >= 50): ?>
                             <span class="all-product-stock badge bg-success"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                         <?php elseif($stockAll > 0): ?>
@@ -90,7 +90,6 @@
                             <span class="all-product-stock badge bg-danger"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                         <?php endif; ?>
                     </div>
-
                     <div class="all-product-body">
                         <p class="all-product-name" title="<?php echo e($producto->nombre); ?>"><?php echo e($producto->nombre); ?></p>
                         <p class="all-product-artist"><?php echo e($producto->artista?->nombre ?? 'Artista no especificado'); ?></p>
@@ -143,4 +142,4 @@
 
     <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('web.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/formato.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('web.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/categoria.blade.php ENDPATH**/ ?>

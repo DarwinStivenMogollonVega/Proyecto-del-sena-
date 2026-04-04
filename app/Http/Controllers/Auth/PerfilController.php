@@ -111,7 +111,11 @@ class PerfilController extends Controller
                 if (!is_dir($dir)) mkdir($dir, 0755, true);
                 try {
                     $img = Image::make($decoded)->orientate();
-                    $img->fit($outSize, $outSize, function ($constraint) {}, 'center');
+                    // If the exported cropped image already matches the requested output size,
+                    // avoid re-fitting so the saved file matches the preview exactly.
+                    if ($img->width() !== $outSize || $img->height() !== $outSize) {
+                        $img->fit($outSize, $outSize, function ($constraint) {}, 'center');
+                    }
                     if (in_array($ext, ['jpg','jpeg'])) {
                         $img->encode('jpg', 80);
                     } elseif ($ext === 'webp') {
@@ -122,6 +126,7 @@ class PerfilController extends Controller
                     $img->save($dir . DIRECTORY_SEPARATOR . $filename);
                     $registro->avatar = $filename;
                 } catch (\Throwable $e) {
+                    // Fallback: write raw decoded bytes (best-effort)
                     file_put_contents($dir . DIRECTORY_SEPARATOR . $filename, $decoded);
                     $registro->avatar = $filename;
                 }

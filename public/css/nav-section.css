@@ -66,6 +66,30 @@ html[data-theme='light'], .light {
     font-weight: 700;
     text-shadow: none;
 }
+
+/* Alinear iconos y texto horizontalmente */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn,
+.navbar .cart-cta-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+}
+.navbar .nav-cta-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.05rem;
+    line-height: 1;
+    margin-right: 0 !important;
+}
+.navbar .nav-cta-text {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
 /* Hover para todos los botones y textos del navbar */
 /* Hover usa variables de tema */
 .navbar .nav-link:hover,
@@ -235,4 +259,552 @@ html[data-theme='dark'] .navbar .dropdown-item:hover,
 html[data-theme='dark'] .navbar .dropdown-item:focus {
     background: #c46310;
     color: #fff;
+}
+
+/* =====================
+   Estilos para navbar: transparente al inicio, fondo al hacer scroll
+   ===================== */
+.navbar.dz-nav {
+    background: transparent !important;
+    border-bottom: none !important;
+    transition: background-color 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, backdrop-filter 0.28s ease;
+}
+
+/* Cuando haya contenido bajo el nav se agrega esta clase */
+.navbar.dz-nav.scrolled {
+    background-color: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px) saturate(110%);
+    -webkit-backdrop-filter: blur(6px) saturate(110%);
+    box-shadow: 0 6px 20px rgba(17,24,39,0.06);
+    border-bottom: 1px solid rgba(17,24,39,0.05);
+    z-index: 1050;
+}
+
+html[data-theme='dark'] .navbar.dz-nav.scrolled {
+    background-color: rgba(18,18,20,0.86);
+    backdrop-filter: blur(6px) saturate(90%);
+    -webkit-backdrop-filter: blur(6px) saturate(90%);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.navbar.dz-nav.scrolled .dz-brand-logo {
+    filter: none;
+}
+
+/* Reducir tamaño y padding de los botones cuando el nav está scrolleado */
+.navbar.dz-nav.scrolled .nav-link,
+.navbar.dz-nav.scrolled .nav-cta-btn,
+.navbar.dz-nav.scrolled .dropdown-cta-btn,
+.navbar.dz-nav.scrolled .cart-cta-btn,
+.navbar.dz-nav.scrolled .theme-switch-btn {
+    font-size: 0.86rem !important;
+    padding: 0.32rem 0.6rem !important;
+}
+.navbar.dz-nav.scrolled .nav-cta-text {
+    font-size: 0.86rem !important;
+    line-height: 1 !important;
+}
+
+/* Ajustes específicos para pantallas grandes */
+@media (min-width: 992px) {
+    .navbar.dz-nav.scrolled .nav-link,
+    .navbar.dz-nav.scrolled .nav-cta-btn,
+    .navbar.dz-nav.scrolled .dropdown-cta-btn,
+    .navbar.dz-nav.scrolled .cart-cta-btn {
+        font-size: 0.9rem !important;
+        padding: 0.36rem 0.7rem !important;
+    }
+}
+
+/* REGLAS ADICIONALES: asegurar que TODOS los enlaces del navbar adopten
+   el mismo estilo cuando el nav está en estado scrolled (mayor especificidad) */
+nav.dz-nav.scrolled a.nav-link,
+nav.dz-nav.scrolled a.nav-cta-btn,
+nav.dz-nav.scrolled a.dropdown-cta-btn,
+nav.dz-nav.scrolled a.cart-cta-btn,
+nav.dz-nav.scrolled .nav-scroll-link,
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-text,
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-icon {
+    font-size: 0.88rem !important;
+    padding: 0.34rem 0.68rem !important;
+    background: var(--color-card) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    box-shadow: 0 2px 10px rgba(17,24,39,0.04) !important;
+    color: var(--color-text) !important;
+}
+
+/* Anular reglas previas que aplicaban bordes/grandes paddings a elementos concretos */
+nav.dz-nav.scrolled .nav-link.nav-scroll-link,
+nav.dz-nav.scrolled .nav-cta-btn.nav-scroll-link {
+    background: var(--color-card) !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    padding: 0.34rem 0.68rem !important;
+    font-size: 0.88rem !important;
+}
+
+/* Estilo pill específico que coincide visualmente con la captura */
+nav.dz-nav.scrolled .nav-scroll-link,
+nav.dz-nav.scrolled .nav-scroll-link > .nav-cta-text,
+nav.dz-nav.scrolled .nav-scroll-link > .nav-cta-icon,
+nav.dz-nav.scrolled .nav-cta-btn,
+nav.dz-nav.scrolled .dropdown-cta-btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+}
+
+/* Ajustes para que el icono y texto sigan pegados dentro del pill */
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-icon { margin-right: 0.28rem !important; }
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-text { margin-left: 0 !important; }
+
+/* Mantener tamaño ligeramente mayor en pantallas anchas */
+@media (min-width: 1200px) {
+    nav.dz-nav.scrolled .nav-scroll-link,
+    nav.dz-nav.scrolled .nav-cta-btn {
+        padding: 0.42rem 0.96rem !important;
+        font-size: 0.95rem !important;
+    }
+}
+
+/* Quitar círculos/fondos internos del icono y texto cuando el nav está scrolleado */
+nav.dz-nav.scrolled .nav-cta-icon,
+nav.dz-nav.scrolled .nav-cta-text,
+nav.dz-nav.scrolled a .nav-cta-icon,
+nav.dz-nav.scrolled a .nav-cta-text {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+}
+
+/* Asegurar íconos sin fondo y con espaciado mínimo dentro del pill */
+nav.dz-nav.scrolled .nav-cta-icon {
+    width: auto !important;
+    height: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.12rem !important;
+}
+
+/* Forzar que el carrito y el switch de tema se vean exactamente como otros pills */
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.18rem !important;
+    padding: 0.22rem 0.56rem !important;
+    background: #ffffff !important;
+    border: 1.2px solid rgba(0,0,0,0.16) !important;
+    box-shadow: none !important;
+    border-radius: 0.75rem !important;
+    color: #111827 !important;
+    font-weight: 700 !important;
+}
+
+/* Compactar pills scrolleadas: reducir tamaño y padding para que no se vean tan grandes */
+nav.dz-nav.scrolled .nav-link,
+nav.dz-nav.scrolled .nav-cta-btn,
+nav.dz-nav.scrolled .dropdown-cta-btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    font-size: 0.88rem !important;
+    padding: 0.26rem 0.56rem !important;
+    border-radius: 0.78rem !important;
+}
+
+/* Asegurar que los iconos y texto internos del carrito/switch no creen contenedores */
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Ajuste de la badge del carrito para integrarse dentro del pill sin romper bordes */
+nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
+    background: transparent !important;
+    color: #111827 !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: none !important;
+    padding: 0.12rem 0.36rem !important;
+    margin-left: 0.28rem !important;
+    font-weight: 700 !important;
+    border-radius: 0.6rem !important;
+}
+
+/* Hacer que Carrito y Theme switch tengan exactamente el mismo estilo que los
+   botones `.nav-cta-btn` cuando el navbar está scrolleado. Reglas colocadas
+   aquí para sobreescribir cualquier ajuste previo. */
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+/* Asegurar que iconos/textos dentro no creen contenedores separados */
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Forzar que el enlace contenedor muestre icon+texto juntos sin separarlos */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > .nav-cta-btn,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > .dropdown-cta-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.12rem !important;
+}
+
+/* Anular cualquier fondo/padding de los spans internos para que no formen sus propios pills */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link span,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > .nav-cta-btn span {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* APLICAR MISMO ESTILO 'PILL' A CUALQUIER ENLACE DEL NAV QUE AUN NO LO TENGA */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link .nav-cta-text,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > .nav-cta-btn,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > .dropdown-cta-btn {
+    background: #ffffff !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    font-size: 0.95rem !important;
+}
+
+/* EXCEPCIÓN: no encerrar (sin pill) ciertos enlaces con icon+texto al hacer scroll
+   Mantenerlos planos (sin fondo, sin borde) para que icono y texto no queden dentro de un pill.
+   Ahora se controla mediante la clase `no-pill`. Si quieres que un enlace NO sea pill,
+   añade `no-pill` al <a> en la plantilla. */
+nav.dz-nav.scrolled a.no-pill,
+nav.dz-nav.scrolled a.no-pill .nav-cta-text,
+nav.dz-nav.scrolled a.no-pill .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-link:not(.dropdown-toggle):not(.nav-cta-btn) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.18rem 0.32rem !important;
+    color: var(--color-text) !important;
+    font-weight: 700 !important;
+}
+
+/* ====== UNIFICAR APARIENCIA EXACTA DEL 'PILL' DEL BOTON FORMATO ======
+   Aplicar regla de mayor especificidad para que todos los enlaces se vean
+   exactamente igual al de `Formato` cuando el navbar está scrolleado.
+*/
+nav.dz-nav.scrolled .navbar-nav a.nav-link,
+nav.dz-nav.scrolled .navbar-nav a.nav-cta-btn,
+nav.dz-nav.scrolled .navbar-nav .dropdown-cta-btn,
+nav.dz-nav.scrolled .navbar-nav .dropdown-toggle {
+    background: #ffffff !important;
+    color: #0f1720 !important;
+    padding: 0.36rem 0.86rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    line-height: 1 !important;
+}
+
+/* Anular fondos y bordes de elementos internos que puedan crear dobles contornos */
+nav.dz-nav.scrolled .navbar-nav a.nav-link > .nav-cta-text,
+nav.dz-nav.scrolled .navbar-nav a.nav-link > .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav .dropdown-cta-btn > .nav-cta-text,
+nav.dz-nav.scrolled .navbar-nav .dropdown-cta-btn > .nav-cta-icon {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Asegurar que los toggles de dropdown (Formato/Categorías) tengan mismo padding y sin círculos internos */
+nav.dz-nav.scrolled .navbar-nav .dropdown-toggle {
+    background: #ffffff !important;
+    border: 1.6px solid rgba(0,0,0,0.14) !important;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.06) !important;
+    padding: 0.36rem 0.86rem !important;
+}
+
+/* ======== UNIR ICONO + TEXTO EN CADA BOTON AL HACER SCROLL ======== */
+/* Forzar inline-flex en los links/pills y eliminar padding/margen internos */
+nav.dz-nav.scrolled .navbar-nav a.nav-link,
+nav.dz-nav.scrolled .navbar-nav a.nav-cta-btn,
+nav.dz-nav.scrolled .navbar-nav .dropdown-toggle,
+nav.dz-nav.scrolled .navbar-nav .dropdown-cta-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.18rem !important; /* muy pequeño para quedar juntos */
+    padding: 0.36rem 0.86rem !important;
+}
+
+/* Asegurar que el icono no tenga padding, borde ni fondo que lo separe */
+nav.dz-nav.scrolled .navbar-nav .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav .nav-cta-icon * {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 1.05em !important;
+    height: 1.05em !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Texto pegado al icono sin separadores */
+nav.dz-nav.scrolled .navbar-nav .nav-cta-text {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Si algún elemento interno tenía borde redondeado, anularlo para que solo el pill lo muestre */
+nav.dz-nav.scrolled .navbar-nav a.nav-link .icon-wrapper,
+nav.dz-nav.scrolled .navbar-nav a.nav-link .text-wrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* En pantallas pequeñas reducir gap un poco más para que visualmente queden aún más unidos */
+@media (max-width: 767.98px) {
+    nav.dz-nav.scrolled .navbar-nav a.nav-link,
+    nav.dz-nav.scrolled .navbar-nav a.nav-cta-btn {
+        gap: 0.12rem !important;
+        padding: 0.26rem 0.6rem !important;
+        font-size: 0.92rem !important;
+    }
+}
+
+/* ======= OPCIÓN: EXCLUIR LINKS DEL 'PILL' (NO AGREGAR BORDER/SHADOW/RADIUS) =======
+   Añade la clase `no-pill` al <a> o al contenedor del enlace para que, incluso cuando
+   el navbar tenga la clase `.scrolled`, no se le apliquen border/box-shadow/border-radius.
+*/
+nav.dz-nav.scrolled .navbar-nav a.no-pill,
+nav.dz-nav.scrolled .navbar-nav .no-pill {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0.18rem 0.36rem !important;
+    color: var(--color-text) !important;
+}
+
+/* Anular estilos de hijos que pudieran seguir teniendo fondo/borde */
+nav.dz-nav.scrolled .navbar-nav a.no-pill .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav a.no-pill .nav-cta-text,
+nav.dz-nav.scrolled .navbar-nav .no-pill .nav-cta-icon,
+nav.dz-nav.scrolled .navbar-nav .no-pill .nav-cta-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+
+/* Asegurar que los enlaces pequeños como Inicio/Acerca adopten exactamente la misma apariencia */
+nav.dz-nav.scrolled a.nav-link.nav-scroll-link,
+nav.dz-nav.scrolled a.nav-link.nav-scroll-link .nav-cta-text {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    font-size: 0.95rem !important;
+}
+
+/* Asegurar que los enlaces sin clases adicionales también se transformen */
+nav.dz-nav.scrolled .navbar-nav a.nav-link:not(.dropdown-toggle):not(.nav-cta-btn) {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    font-size: 0.95rem !important;
+}
+
+
+
+/* =====================
+   Responsive: adaptar iconos, texto y botones en distintas pantallas
+   ===================== */
+@media (max-width: 1199.98px) {
+    .dz-brand-logo { width: 66px; }
+    .navbar .nav-link,
+    .navbar .nav-cta-btn,
+    .navbar .dropdown-cta-btn,
+    .navbar .cart-cta-btn {
+        font-size: 0.98rem;
+        padding: 0.45rem 0.9rem;
+    }
+}
+
+/* En pantallas grandes centra la lista de items y aumenta gap */
+@media (min-width: 992px) {
+    .navbar {
+        padding: 0.4rem 1rem;
+    }
+    .navbar .navbar-nav {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        gap: 0.8rem !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    .dz-brand-logo {
+        margin-right: 1rem;
+        width: 50px;
+    }
+}
+
+/* FORZAR estilo compacto en estado no scrolled: sin fondo tipo 'pill' */
+.navbar.dz-nav:not(.scrolled) .nav-link,
+.navbar.dz-nav:not(.scrolled) .nav-cta-btn,
+.navbar.dz-nav:not(.scrolled) .dropdown-cta-btn,
+.navbar.dz-nav:not(.scrolled) .cart-cta-btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.12rem 0.28rem !important;
+    font-size: 0.86rem !important;
+    border-radius: 0.28rem !important;
+}
+
+/* Asegurar que los iconos y texto estén totalmente pegados */
+.navbar.dz-nav .nav-cta-icon { margin-right: 0 !important; }
+.navbar.dz-nav .nav-cta-text { margin-left: 0 !important; padding-left: 0 !important; font-size: 0.92rem !important; }
+
+/* Si todavía hay reglas que generan bordes, anularlas con alta especificidad */
+nav.dz-nav .nav-link,
+nav.dz-nav .nav-cta-btn,
+nav.dz-nav .dropdown-cta-btn {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+@media (max-width: 991.98px) {
+    .dz-brand-logo { width: 56px; }
+    .navbar .nav-link,
+    .navbar .nav-cta-btn,
+    .navbar .dropdown-cta-btn,
+    .navbar .cart-cta-btn {
+        font-size: 0.95rem;
+        padding: 0.38rem 0.8rem;
+    }
+    /* Menú puede envolver; permitir que los items reduzcan su padding */
+    .navbar .nav-link, .navbar .nav-cta-btn { white-space: nowrap; }
+}
+
+@media (max-width: 767.98px) {
+    /* En móviles pequeños mostrar principalmente iconos en la barra superior
+       y mostrar texto cuando el menú colapsado esté abierto (accesible). */
+    .dz-brand-logo { width: 48px; }
+    .navbar .nav-link,
+    .navbar .nav-cta-btn,
+    .navbar .dropdown-cta-btn,
+    .navbar .cart-cta-btn {
+        font-size: 0.92rem;
+        padding: 0.32rem 0.6rem;
+    }
+
+    /* Ocultar el texto en la barra superior para ganar espacio */
+    .navbar .nav-cta-text { display: none !important; }
+    .navbar .nav-cta-icon { margin-right: 0 !important; }
+
+    /* Cuando el collapse esté abierto, mostrar el texto para accesibilidad */
+    .navbar-collapse.show .nav-cta-text { display: inline-block !important; }
+
+    /* Aumentar hit area de los iconos para touch */
+    .navbar .nav-link, .navbar .nav-cta-btn { padding: 0.6rem 0.75rem !important; }
+}
+
+/* Ajustes finos para very small screens (<=420px) */
+@media (max-width: 420px) {
+    .dz-brand-logo { width: 42px; }
+    .navbar .nav-link, .navbar .nav-cta-btn { padding: 0.5rem 0.6rem !important; }
+    .navbar .nav-cta-icon { font-size: 1.05rem !important; }
+}
+
+/* Si quieres mostrar siempre texto en el collapse (por ejemplo en vista móvil),
+   puedes forzar la visualización cuando el menú está abierto */
+.navbar-collapse.show .nav-link,
+.navbar-collapse.show .nav-cta-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+/* Botones estilo 'sin fondo' cuando el nav está en la parte superior */
+.navbar.dz-nav .nav-link,
+.navbar.dz-nav .nav-cta-btn,
+.navbar.dz-nav .dropdown-cta-btn,
+.navbar.dz-nav .cart-cta-btn,
+.navbar.dz-nav .nav-cta-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0.35rem 0.6rem !important;
+    font-weight: 700 !important;
+    color: var(--color-text) !important;
+    border-radius: 0.35rem !important;
+    transition: color 0.18s ease, background 0.18s ease, transform 0.12s ease;
+}
+
+/* Restaurar estilo de botones cuando el nav tiene la clase scrolled */
+.navbar.dz-nav.scrolled .nav-link,
+.navbar.dz-nav.scrolled .nav-cta-btn,
+.navbar.dz-nav.scrolled .dropdown-cta-btn,
+.navbar.dz-nav.scrolled .cart-cta-btn,
+.navbar.dz-nav.scrolled .theme-switch-btn,
+.navbar.dz-nav.scrolled .nav-cta-text {
+    background: var(--color-card) !important;
+    color: var(--color-text) !important;
+    border: 1.5px solid var(--color-primary) !important;
+    box-shadow: 0 2px 12px rgba(196,99,16,0.06) !important;
+    padding: 0.55rem 1.2rem !important;
+    border-radius: 0.6rem !important;
 }
