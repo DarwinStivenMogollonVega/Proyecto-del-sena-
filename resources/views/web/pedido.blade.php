@@ -1,11 +1,16 @@
 @extends('web.app')
 
+
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/pedido-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/header-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/checkout_steps-section.css') }}">
 @endpush
+
+@section('manual_nav')
+    @include('web.partials.nav')
+@endsection
 @section('contenido')
 <section class="cart-wrap">
     @include('web.partials.checkout_steps', ['currentStep' => 0])

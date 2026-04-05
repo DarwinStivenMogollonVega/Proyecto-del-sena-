@@ -15,6 +15,12 @@
     --dz-navbar-border: var(--color-border);
     --dz-navbar-hover-bg: var(--color-primary);
     --dz-navbar-hover-color: #ffffff;
+    /* background used when navbar gets scrolled */
+    --dz-nav-scrolled-bg: #fff7ed;
+    /* Pill variables (defaults - light) */
+    --nav-pill-bg: #ffffff;
+    --nav-pill-text: #111827;
+    --nav-pill-border: rgba(0,0,0,0.12);
 }
 html[data-theme='dark'], .dark {
     --color-bg: #23272e;
@@ -24,6 +30,13 @@ html[data-theme='dark'], .dark {
     --color-heading: #200c03;
     --color-subtle: #cbd5e1;
     --color-primary: #200c03;
+    --bk-color: #1a0800;
+    /* Pill variables - dark */
+    --nav-pill-bg: #18181b;
+    --nav-pill-text: #f3e9e0;
+    --nav-pill-border: rgba(255,255,255,0.06);
+    /* dark scrolled nav background */
+    --dz-nav-scrolled-bg: var(--bk-color, #232c3b);
 }
 html[data-theme='light'], .light {
     --color-bg: #fff8f3;
@@ -40,6 +53,7 @@ html[data-theme='light'], .light {
 .navbar .nav-cta-btn,
 .navbar .dropdown-cta-btn,
 .navbar .cart-cta-btn,
+.navbar .theme-switch-btn,
 .navbar .nav-cta-text {
     color: var(--color-text) !important;
 }
@@ -71,10 +85,28 @@ html[data-theme='light'], .light {
 .navbar .nav-link,
 .navbar .nav-cta-btn,
 .navbar .dropdown-cta-btn,
-.navbar .cart-cta-btn {
+.navbar .cart-cta-btn,
+.navbar .theme-switch-btn {
     display: inline-flex !important;
     align-items: center !important;
     gap: 0 !important;
+}
+
+/* Ensure collapse container aligns its children centrally on wide screens
+   so standalone buttons (cart, theme) line up with nav items */
+@media (min-width: 992px) {
+    .navbar .collapse.navbar-collapse {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem;
+    }
+    .navbar .cart-cta-btn,
+    .navbar .theme-switch-btn {
+        align-self: center !important;
+        vertical-align: middle !important;
+        margin-top: 0 !important;
+        margin-left: 0.5rem !important;
+    }
 }
 .navbar .nav-cta-icon {
     display: inline-flex !important;
@@ -206,7 +238,8 @@ html[data-theme='dark'] .logo-light {
 .navbar .nav-link,
 .navbar .nav-cta-btn,
 .navbar .dropdown-cta-btn,
-.navbar .cart-cta-btn {
+.navbar .cart-cta-btn,
+.navbar .theme-switch-btn {
     font-size: 1.08rem;
     padding: 0.55rem 1.2rem;
     border-radius: 0.7rem;
@@ -218,6 +251,17 @@ html[data-theme='dark'] .logo-light {
     text-shadow: 0 2px 8px #fff, 0 1px 2px #fff8;
     box-shadow: 0 2px 12px 0 #c4631012, 0 1.5px 8px #fff8;
     transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+}
+
+/* Quitar borde, fondo y sombra del botón de cambio de tema en modo claro */
+html[data-theme='light'] .navbar .theme-switch-btn,
+html[data-theme='light'] nav.dz-nav.scrolled .theme-switch-btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-text) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    padding: 0.45rem 0.9rem !important;
 }
 .navbar .nav-link:hover,
 .navbar .nav-cta-btn:hover,
@@ -237,7 +281,7 @@ html[data-theme='dark'] .logo-light {
     font-size: 1.05rem;
 }
 .navbar .dropdown-item {
-    color: #c46310;
+    color: #111827;
     font-weight: 600;
     border-radius: 0.5rem;
     padding: 0.45rem 1.1rem;
@@ -255,10 +299,75 @@ html[data-theme='dark'] .navbar .dropdown-menu {
 html[data-theme='dark'] .navbar .dropdown-item {
     color: #fff;
 }
+/* dropdown-header dark-mode handled centrally in styles.css */
 html[data-theme='dark'] .navbar .dropdown-item:hover,
 html[data-theme='dark'] .navbar .dropdown-item:focus {
     background: #c46310;
     color: #fff;
+}
+
+/* When a dropdown is moved to body (mounted) we need the same visual rules
+   because it no longer matches the `.navbar .dropdown-menu` selector. */
+.dropdown-menu.dz-mounted {
+    background: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--dz-navbar-border);
+    font-size: 1.05rem;
+}
+.dropdown-menu.dz-mounted .dropdown-item {
+    color: var(--nav-pill-text, #111827);
+    font-weight: 600;
+    border-radius: 0.5rem;
+    padding: 0.45rem 1.1rem;
+}
+.dropdown-menu.dz-mounted .dropdown-item:hover,
+.dropdown-menu.dz-mounted .dropdown-item:focus {
+    background: var(--dz-navbar-hover-bg);
+    color: var(--dz-navbar-hover-color);
+}
+
+/* Stronger fallback to guarantee visibility when mounted on <body> */
+.dropdown-menu.dz-mounted {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #f3e3d1 !important;
+    box-shadow: 0 10px 30px rgba(17,24,39,0.12) !important;
+    z-index: 1600 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+.dropdown-menu.dz-mounted {
+    min-width: 12rem !important;
+    border-radius: 0.5rem !important;
+    padding: 0.25rem 0 !important;
+}
+.dropdown-menu.dz-mounted .dropdown-header {
+    color: var(--color-subtle) !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 700 !important;
+}
+.dropdown-menu.dz-mounted .dropdown-item {
+    padding: 0.6rem 1.1rem !important;
+}
+.dropdown-menu.dz-mounted .dropdown-item + .dropdown-item {
+    border-top: 1px solid rgba(0,0,0,0.04) !important;
+}
+.dropdown-menu.dz-mounted .dropdown-item {
+    color: #111827 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+}
+.dropdown-menu.dz-mounted a,
+.dropdown-menu.dz-mounted button {
+    color: inherit !important;
+}
+.dropdown-menu.dz-mounted .dropdown-divider {
+    border-top-color: rgba(0,0,0,0.06) !important;
+}
+.dropdown-menu.dz-mounted .dropdown-item:hover,
+.dropdown-menu.dz-mounted .dropdown-item:focus {
+    background: #ffe5c2 !important;
+    color: #a04a00 !important;
 }
 
 /* =====================
@@ -268,11 +377,12 @@ html[data-theme='dark'] .navbar .dropdown-item:focus {
     background: transparent !important;
     border-bottom: none !important;
     transition: background-color 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, backdrop-filter 0.28s ease;
+    z-index: 1100; /* ensure navbar and dropdowns sit above page content */
 }
 
 /* Cuando haya contenido bajo el nav se agrega esta clase */
 .navbar.dz-nav.scrolled {
-    background-color: rgba(255,255,255,0.92);
+    background: var(--dz-nav-scrolled-bg) !important;
     backdrop-filter: blur(6px) saturate(110%);
     -webkit-backdrop-filter: blur(6px) saturate(110%);
     box-shadow: 0 6px 20px rgba(17,24,39,0.06);
@@ -281,7 +391,7 @@ html[data-theme='dark'] .navbar .dropdown-item:focus {
 }
 
 html[data-theme='dark'] .navbar.dz-nav.scrolled {
-    background-color: rgba(18,18,20,0.86);
+    background: #232c3b;
     backdrop-filter: blur(6px) saturate(90%);
     -webkit-backdrop-filter: blur(6px) saturate(90%);
     box-shadow: 0 6px 22px rgba(0,0,0,0.6);
@@ -464,6 +574,51 @@ nav.dz-nav.scrolled .theme-switch-btn {
     display: inline-flex !important;
     align-items: center !important;
     gap: 0.28rem !important;
+}
+
+/* FORCE: ensure cart and theme buttons always match nav-cta-btn vertical alignment */
+nav.dz-nav .cart-cta-btn,
+nav.dz-nav .theme-switch-btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    padding: 0.55rem 1.2rem !important; /* same as .nav-cta-btn */
+    margin-top: 0 !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+/* If a page applies extra top margin to .navbar children, neutralize for these buttons */
+nav.dz-nav .cart-cta-btn, nav.dz-nav .theme-switch-btn { margin-top: 0 !important; }
+
+/* Small screens: keep compact but vertically aligned */
+@media (max-width: 991px) {
+    nav.dz-nav .cart-cta-btn, nav.dz-nav .theme-switch-btn {
+        padding: 0.45rem 0.9rem !important;
+    }
+}
+
+/* Ensure consistent vertical padding and alignment across themes/pages */
+nav.dz-nav .nav-cta-btn,
+nav.dz-nav .nav-link,
+nav.dz-nav .cart-cta-btn,
+nav.dz-nav .theme-switch-btn {
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+    line-height: 1 !important;
+    height: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Remove any page-specific lighter padding that may override alignment */
+html[data-theme='light'] nav.dz-nav .theme-switch-btn {
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
 }
 
 /* Asegurar que iconos/textos dentro no creen contenedores separados */
@@ -701,6 +856,27 @@ nav.dz-nav.scrolled .navbar-nav a.nav-link:not(.dropdown-toggle):not(.nav-cta-bt
     }
 }
 
+/* Fix vertical alignment: ensure collapse and action buttons align center on large screens */
+@media (min-width: 992px) {
+    .navbar .navbar-collapse {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.6rem;
+    }
+    .navbar .navbar-collapse > .navbar-nav {
+        margin-right: 0.6rem !important; /* keep spacing from action buttons */
+    }
+    .navbar .cart-cta-btn,
+    .navbar .theme-switch-btn {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        align-self: center !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        vertical-align: middle !important;
+    }
+}
+
 /* FORZAR estilo compacto en estado no scrolled: sin fondo tipo 'pill' */
 .navbar.dz-nav:not(.scrolled) .nav-link,
 .navbar.dz-nav:not(.scrolled) .nav-cta-btn,
@@ -808,3 +984,554 @@ nav.dz-nav .dropdown-cta-btn {
     padding: 0.55rem 1.2rem !important;
     border-radius: 0.6rem !important;
 }
+
+/* Ensure theme switch button matches other navbar buttons in all states */
+.navbar .theme-switch-btn {
+    color: var(--color-text) !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+/* Scrolled state: ensure exact pill parity */
+nav.dz-nav.scrolled .theme-switch-btn {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+}
+
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ===== Dark mode: make theme-switch button match other navbar buttons ===== */
+html[data-theme='dark'] .navbar.dz-nav:not(.scrolled) .theme-switch-btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-text) !important; /* should be light text */
+    box-shadow: none !important;
+}
+
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn,
+html[data-theme='dark'] .navbar.dz-nav.scrolled .theme-switch-btn {
+    /* Use dark card background and subtle light border to match other dark pills */
+    background: var(--color-card) !important; /* #18181b from :root dark */
+    color: var(--color-text) !important;
+    border: 1.4px solid rgba(255,255,255,0.06) !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+}
+
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    color: var(--color-text) !important;
+    background: transparent !important;
+}
+
+/* Distinct appearance for theme-switch in dark mode when scrolled (make it visually different) */
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-text {
+    /* subtle lighter inset and a faint outer highlight to differ from cart */
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)) !important;
+    border: 1.2px solid rgba(255,255,255,0.10) !important;
+    color: var(--color-text) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 6px 18px rgba(0,0,0,0.55) !important;
+}
+
+
+/* Ensure hover in dark mode follows same behavior as other buttons */
+html[data-theme='dark'] .navbar .theme-switch-btn:hover,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-0.5px);
+}
+
+/* AJUSTE FINAL: Forzar que el botón de carrito y el botón de modo sean
+   visualmente idénticos al diseño (estado scrolled). */
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    background: #ffffff !important;
+    border: 1.2px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 800 !important;
+    color: #0f1720 !important;
+    font-size: 0.95rem !important;
+    line-height: 1 !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ULTRA OVERRIDE: make cart and theme-switch identical to the 'Inicio' scrolled pill */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.nav-scroll-link,
+nav.dz-nav.scrolled a.nav-scroll-link,
+nav.dz-nav.scrolled .nav-scroll-link,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+    line-height: 1 !important;
+}
+
+/* ensure inner content matches */
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text,
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-icon,
+nav.dz-nav.scrolled .nav-scroll-link .nav-cta-text {
+    color: inherit !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
+    background: transparent !important;
+    color: #0f1720 !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    box-shadow: none !important;
+    padding: 0.12rem 0.36rem !important;
+    margin-left: 0.28rem !important;
+    font-weight: 700 !important;
+    border-radius: 0.6rem !important;
+}
+
+/* Ensure pill variables are fixed when nav is scrolled so OVERRIDE FINAL uses correct colors */
+nav.dz-nav.scrolled {
+    --nav-pill-bg: #ffffff;
+    --nav-pill-text: #0f1720;
+    --nav-pill-border: rgba(0,0,0,0.12);
+}
+
+/* Separate the navbar list from the action buttons (cart / theme) */
+nav.dz-nav.scrolled .navbar-collapse > .navbar-nav {
+    margin-right: 0.8rem !important; /* space between last nav item and actions */
+}
+
+/* Ensure the cart has a small left margin so it doesn't touch the last nav item */
+nav.dz-nav.scrolled .cart-cta-btn {
+    margin-left: 0.4rem !important;
+}
+
+/* ====== OVERRIDE FINAL: ensure all scrolled pills use the pill variables ====== */
+nav.dz-nav.scrolled .nav-scroll-link,
+nav.dz-nav.scrolled .nav-cta-btn,
+nav.dz-nav.scrolled .dropdown-cta-btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn,
+nav.dz-nav.scrolled a.nav-link,
+nav.dz-nav.scrolled .navbar-nav .dropdown-toggle {
+    background: var(--nav-pill-bg) !important;
+    color: var(--nav-pill-text) !important;
+    border: 1.4px solid var(--nav-pill-border) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+nav.dz-nav.scrolled .nav-cta-btn:hover,
+nav.dz-nav.scrolled .cart-cta-btn:hover,
+nav.dz-nav.scrolled .theme-switch-btn:hover,
+nav.dz-nav.scrolled .dropdown-cta-btn:hover,
+nav.dz-nav.scrolled a.nav-link:hover {
+    filter: brightness(1.04) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Ensure inner icon/text inherit the pill text color */
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .nav-cta-btn .nav-cta-icon,
+nav.dz-nav.scrolled .nav-cta-btn .nav-cta-text {
+    color: var(--nav-pill-text) !important;
+}
+
+/* If any rule still forces a hardcoded white background, override it here */
+nav.dz-nav.scrolled [class*="-cta-btn"]{ background: var(--nav-pill-bg) !important; }
+
+/* End override */
+
+/* FINAL HIGHEST-SPEC: force exact pill for cart regardless of markup or other CSS files */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a.cart-cta-btn,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > button.cart-cta-btn,
+nav.dz-nav.scrolled a.cart-cta-btn.btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .cart-cta-btn * {
+    background: #ffffff !important;
+    color: #0f1720 !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+/* Force badge and inner icon/text to be transparent and inherit colors */
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text,
+nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #0f1720 !important;
+}
+
+/* Make cart visually identical to the 'Inicio' pill and place icon+text together */
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled a.cart-cta-btn,
+nav.dz-nav.scrolled button.cart-cta-btn {
+    background: #ffffff !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.28rem !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Ensure the badge sits inline and inherits colors */
+nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-left: 0.28rem !important;
+    color: #0f1720 !important;
+    background: transparent !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+}
+
+/* Absolute high-specificity selector matching actual HTML structure to override any later rules */
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .cart-cta-btn,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container a.btn.cart-cta-btn,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container button.theme-switch-btn,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.36rem 0.86rem !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.28rem !important;
+}
+
+/* Ensure inner spans/icons inherit and sit inline */
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .cart-cta-btn .cart-cta-icon,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .cart-cta-btn .cart-cta-text,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn .theme-switch-icon,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn .theme-switch-text {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: inherit !important;
+}
+
+/* FINAL OVERRIDE: force theme-switch button to appear white in dark ONLY when scrolled */
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn,
+html[data-theme='dark'] nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill {
+    background: #ffffff !important;
+    color: #0f1720 !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+}
+
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text {
+    color: inherit !important;
+}
+
+
+/* Dark-mode final override: ensure theme-switch shows dark pill when theme=dark */
+html[data-theme='dark'] nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn.scrolled-pill,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill {
+    background: #fff !important;
+    color: #111827 !important;
+}
+
+/* Also ensure inner text/icon inherit dark text color */
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-text {
+    color: var(--color-text, #f3e9e0) !important;
+}
+
+
+/* ====== Ajuste: espaciado entre botones cuando el navbar está scrolleado ====== */
+nav.dz-nav.scrolled .navbar-nav {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important; /* compact spacing */
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Ajuste fino de separación entre los elementos individuales */
+nav.dz-nav.scrolled .navbar-nav > .nav-item {
+    margin: 0 !important;
+}
+
+/* Pantallas grandes: más separación horizontal para que coincida visualmente */
+@media (min-width: 1200px) {
+    nav.dz-nav.scrolled .navbar-nav { gap: 0.8rem !important; }
+}
+
+/* Asegurar que los items no rompan el pill: evitar márgenes internos de spans */
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a span,
+nav.dz-nav.scrolled .navbar-nav > .nav-item > a .nav-cta-text {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* ====== FINAL: force Cart icon+text united with visible border when navbar is scrolled ====== */
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .cart-cta-btn,
+nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container a.btn.cart-cta-btn,
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled a.cart-cta-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.32rem !important; /* small gap to join icon and text */
+    padding: 0.36rem 0.9rem !important;
+    background: var(--nav-pill-bg, #ffffff) !important;
+    color: var(--nav-pill-text, #0f1720) !important;
+    border: 1.4px solid var(--nav-pill-border, rgba(0,0,0,0.12)) !important;
+    border-radius: 999px !important; /* fully rounded pill */
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    line-height: 1 !important;
+}
+
+/* Keep icon and text tightly grouped */
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    margin-right: 0.28rem !important;
+    padding: 0 !important;
+}
+nav.dz-nav.scrolled .cart-cta-btn .cart-cta-text {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Make the badge sit inline inside the pill without breaking border */
+nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-left: 0.36rem !important;
+    padding: 0.08rem 0.28rem !important;
+    background: transparent !important;
+    color: var(--nav-pill-text, #0f1720) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 0.6rem !important;
+    box-shadow: none !important;
+    font-weight: 700 !important;
+}
+
+/* Ensure no inner element forces transparency or zero padding */
+nav.dz-nav.scrolled .cart-cta-btn * {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+/* ===== SCRIPT-TOGGLE HELPERS: scrolled-pill class enforcement ===== */
+/* This class is toggled via JS when the navbar has .scrolled to force exact pill spacing */
+nav.dz-nav.scrolled .cart-cta-btn.scrolled-pill,
+nav.dz-nav.scrolled a.cart-cta-btn.scrolled-pill,
+nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.18rem !important; /* espacio aún más compacto */
+    padding: 0.28rem 0.6rem !important; /* compacto para encajar */
+    background: var(--nav-pill-bg, #ffffff) !important;
+    color: var(--nav-pill-text, #0f1720) !important;
+    border: 1px solid var(--nav-pill-border, rgba(0,0,0,0.12)) !important;
+    border-radius: 0.85rem !important;
+    box-shadow: 0 3px 8px rgba(15,23,42,0.05) !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
+    line-height: 1 !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn.scrolled-pill .cart-cta-icon,
+nav.dz-nav.scrolled .cart-cta-btn.scrolled-pill .cart-cta-text,
+nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-icon,
+nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-text {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn.scrolled-pill .cart-count-badge {
+    margin-left: 0.36rem !important;
+    padding: 0.08rem 0.28rem !important;
+    background: transparent !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    color: var(--nav-pill-text, #0f1720) !important;
+}
+
+/* Remove internal borders/backgrounds inside theme-switch icon/text in dark scrolled */
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn .theme-switch-text,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    outline: none !important;
+}
+
+
+/* FINAL-ABSOLUTE OVERRIDE: ensure theme-switch is white in dark no matter previous rules */
+html[data-theme='dark'] nav.navbar.navbar-expand-lg.navbar-dark.dz-nav.scrolled > .container .theme-switch-btn,
+html[data-theme='dark'] nav.navbar.navbar-expand-lg.navbar-dark.dz-nav > .container .theme-switch-btn,
+html[data-theme='dark'] .navbar.dz-nav.scrolled .theme-switch-btn,
+html[data-theme='dark'] .navbar .theme-switch-btn {
+    background: #ffffff !important;
+    color: #0f1720 !important;
+    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
+    border-radius: 0.85rem !important;
+}
+html[data-theme='dark'] .navbar .theme-switch-btn .theme-switch-icon,
+html[data-theme='dark'] .navbar .theme-switch-btn .theme-switch-text {
+    color: inherit !important;
+}
+
+/* Remove white background, border and color overrides for theme-switch in dark mode
+   Apply to both scrolled and normal states so the button blends with dark navbar */
+html[data-theme='dark'] nav.navbar.navbar-expand-lg.navbar-dark.dz-nav > .container .theme-switch-btn,
+html[data-theme='dark'] nav.dz-nav .theme-switch-btn,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn,
+html[data-theme='dark'] nav.dz-nav.scrolled .theme-switch-btn.scrolled-pill {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--color-text) !important; /* keep readable light text */
+}
+
+/* Also remove any inner borders/padding that could create a white inset */
+html[data-theme='dark'] nav.dz-nav .theme-switch-btn .theme-switch-icon,
+html[data-theme='dark'] nav.dz-nav .theme-switch-btn .theme-switch-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ===== Ajuste fino: centrado vertical extra para evitar microdesalineaciones ===== */
+/* Aplica line-height / margin-top / vertical-align y asegura inline-flex centrado */
+.navbar .cart-cta-btn,
+.navbar .theme-switch-btn,
+button.theme-switch-btn,
+.navbar .cart-cta-btn .cart-cta-text,
+.navbar .theme-switch-btn .theme-switch-text {
+    line-height: 1 !important;
+    margin-top: 0 !important;
+    vertical-align: middle !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+nav.dz-nav.scrolled .cart-cta-btn,
+nav.dz-nav.scrolled .theme-switch-btn,
+nav.dz-nav.scrolled button.theme-switch-btn {
+    line-height: 1 !important;
+    margin-top: 0 !important;
+    vertical-align: middle !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Small nudge for any remaining micro offsets on large screens */
+@media (min-width: 992px) {
+    .navbar .cart-cta-btn,
+    .navbar .theme-switch-btn,
+    nav.dz-nav.scrolled .cart-cta-btn,
+    nav.dz-nav.scrolled .theme-switch-btn {
+        margin-top: 0 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+
+
+

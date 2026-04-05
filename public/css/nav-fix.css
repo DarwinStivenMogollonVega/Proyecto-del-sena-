@@ -1,4 +1,4 @@
-/* Asegura que el nav siempre esté arriba y por encima del contenido */
+﻿/* Asegura que el nav siempre esté arriba y por encima del contenido */
 /* Nav siempre fijo arriba */
 .dz-nav {
     position: fixed !important;
@@ -13,5 +13,6 @@ body { padding-top: 76px !important; }
 @media (max-width: 991.98px) {
     body { padding-top: 62px !important; }
 }
+
 
 

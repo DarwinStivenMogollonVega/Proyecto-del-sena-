@@ -18,7 +18,7 @@ class ProveedorRequest extends FormRequest
         $proveedorId = is_object($routeProveedor) ? $routeProveedor->getKey() : $routeProveedor;
 
         return [
-            'nombre' => ['required', 'string', 'min:3', 'max:120', Rule::unique('proveedores', 'nombre')->ignore($proveedorId, 'proveedor_id')],
+            'nombre' => ['required', 'string', 'min:3', 'max:120', Rule::unique('proveedores', 'nombre')->ignore($proveedorId, 'proveedor_id'), 'not_regex:/\\d/'],
             'contacto' => ['nullable', 'string', 'min:3', 'max:120'],
             'telefono' => ['nullable', 'string', 'max:40', 'regex:/^[0-9+\-\s()]+$/'],
             'email' => ['nullable', 'email:rfc,dns', 'max:120'],
@@ -49,6 +49,7 @@ class ProveedorRequest extends FormRequest
             'nombre.min' => 'El nombre del proveedor debe tener al menos 3 caracteres.',
             'nombre.max' => 'El nombre del proveedor no puede superar 120 caracteres.',
             'nombre.unique' => 'Ya existe un proveedor con ese nombre.',
+            'nombre.not_regex' => 'El nombre del proveedor no puede contener números.',
 
             'contacto.string' => 'El contacto debe ser texto válido.',
             'contacto.min' => 'El contacto debe tener al menos 3 caracteres.',

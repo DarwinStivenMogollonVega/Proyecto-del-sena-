@@ -1,4 +1,4 @@
-    /* =====================
+﻿    /* =====================
      Estilos de texto accesible para perfil
      ===================== */
 .profile-hero,
@@ -123,6 +123,34 @@ html[data-theme="light"] .profile-hero {
 /* small screens */
 @media (max-width: 575.98px){ .avatar-ring{ width:92px; height:92px; } .avatar-initial{ font-size:34px; } }
 
+/* Fix: ensure navbar dropdowns are visible on pages that use overflow:hidden (e.g., profile) */
+nav.dz-nav .dropdown-menu {
+    position: fixed !important;
+    z-index: 1300 !important;
+    /* allow Popper to set left/top; force transform to none to avoid clipping issues */
+    transform: none !important;
+}
+
+/* Aggressive fallback: if Popper positions dropdown off-canvas or it's hidden by overflow,
+   force visible and place it below the navbar at a predictable offset. */
+nav.dz-nav .dropdown-menu.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    /* place approx. under navbar; adjust if your navbar height differs */
+    top: 72px !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+/* Ensure dropdown items are clickable when over profile content */
+nav.dz-nav .dropdown-menu .dropdown-item {
+    pointer-events: auto !important;
+}
+
 /* Layout for cropper + controls */
 .avatar-edit-flex { display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap; }
 .avatar-edit-flex .avatar-cropper { flex:0 0 auto; }
@@ -171,4 +199,5 @@ html[data-theme="light"] .profile-hero {
     50% { opacity: 0; transform: scale(1.15); }
  100% { opacity: 1; transform: scale(1); }
 }
+
 

@@ -1,12 +1,14 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
+
 @section('titulo', 'Historial de facturas - DiscZone')
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/recibos-factura-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 invoice-page">
     <section class="invoice-hero" @if(!empty($heroImage)) style="--invoice-hero-image: url('{{ $heroImage }}')" @endif>

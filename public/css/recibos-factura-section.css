@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
      Variables de color base para texto accesible (recibos factura)
      ===================== */
 :root {
@@ -14,7 +14,7 @@ html[data-theme='dark'], .dark {
     --dz-text-subtle: #cbd5e1;
 }
 html[data-theme='light'], .light {
-    --dz-text-main: #23272e;
+    --dz-text-main: var(--nav-pill-hover-text);
     --dz-text-heading: #b45309;
     --dz-text-subtle: #475569;
 }
@@ -126,3 +126,4 @@ html[data-theme='light'] .invoice-hero,
     }
     .invoice-hero::before { background: linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(0,0,0,0.03)); }
 }
+

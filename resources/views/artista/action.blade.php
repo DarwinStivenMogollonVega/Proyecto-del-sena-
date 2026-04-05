@@ -29,7 +29,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Nombre</label>
-                                    <input type="text" id="nombre" name="nombre" class="form-control @error('nombre') is-invalid @enderror" value="{{ old('nombre', $registro->nombre ?? '') }}" minlength="3" maxlength="120" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s\-\.]+$" required>
+                                    <input type="text" id="nombre" name="nombre" class="form-control @error('nombre') is-invalid @enderror" value="{{ old('nombre', $registro->nombre ?? '') }}" minlength="3" maxlength="120" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s\-\.]+$" required oninput="this.value = this.value.replace(/[0-9]/g, '')" title="El nombre no puede contener números">
                                     @error('nombre')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror

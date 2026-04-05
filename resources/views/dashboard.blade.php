@@ -147,7 +147,7 @@
                     <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
                         <i class="bi bi-truck-front-fill me-2" style="color:#f97316"></i>Rendimiento de Proveedores
                     </h6>
-                    <a href="{{ route('estadisticas.show', ['categoria' => 'proveedores']) }}" class="btn btn-sm btn-outline-primary">
+                    <a href="{{ route('estadisticas.show', ['categoria' => 'proveedores']) }}" class="btn btn-sm btn-outline-primary btn-gestor-right">
                         Ver analisis completo <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -260,7 +260,7 @@
                     <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
                         <i class="bi bi-clock-history me-2" style="color:var(--adm-accent)"></i>Últimos Pedidos
                     </h6>
-                    <a href="{{ route('admin.pedidos') }}" class="btn btn-sm btn-outline-primary px-3" style="font-size:.78rem">
+                    <a href="{{ route('admin.pedidos') }}" class="btn btn-sm btn-outline-primary btn-gestor-right px-3" style="font-size:.78rem">
                         Ver todos <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -352,7 +352,7 @@
                     <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
                         <i class="bi bi-star-fill me-2 text-amber"></i>Clientes Más Activos
                     </h6>
-                    <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-outline-primary px-3" style="font-size:.78rem">
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-outline-primary btn-gestor-right px-3" style="font-size:.78rem">
                         Gestionar <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -412,7 +412,7 @@
                     <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
                         <i class="bi bi-people-fill me-2" style="color:var(--adm-accent)"></i>Gestor de Clientes
                     </h6>
-                    <a href="{{ route('admin.clientes.index') }}" class="btn btn-sm btn-outline-primary">Ver todos &nbsp;<i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ route('admin.clientes.index') }}" class="btn btn-sm btn-outline-primary btn-gestor-right">Ver todos &nbsp;<i class="bi bi-arrow-right"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -520,7 +520,7 @@
                     <h6 class="mb-0 fw-bold" style="color:var(--adm-heading)">
                         <i class="bi bi-person-plus-fill me-2 text-blue"></i>Usuarios Recientes
                     </h6>
-                    <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-outline-primary px-2" style="font-size:.75rem">
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-outline-primary btn-gestor-right px-2" style="font-size:.75rem">
                         Ver todos
                     </a>
                 </div>

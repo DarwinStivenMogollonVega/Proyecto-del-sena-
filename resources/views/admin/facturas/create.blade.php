@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Nombre cliente</label>
-                                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required>
+                                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{ old('nombre') }}" required pattern="^[^0-9]+$" oninput="this.value = this.value.replace(/[0-9]/g, '')" title="El nombre no puede contener números">
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Email cliente</label>

@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
      Variables de color base para texto accesible (pedido)
      ===================== */
 :root {
@@ -12,7 +12,7 @@ html[data-theme='dark'], .dark {
     --dz-text-subtle: #cbd5e1;
 }
 html[data-theme='light'], .light {
-    --dz-text-main: #23272e;
+    --dz-text-main: var(--nav-pill-hover-text);
     --dz-text-heading: #b45309;
     --dz-text-subtle: #475569;
 }
@@ -183,3 +183,4 @@ html[data-theme='dark'] .cart-shell .btn-outline-danger:hover {
     color: var(--dz-text-muted);
     font-size: 0.86rem;
 }
+

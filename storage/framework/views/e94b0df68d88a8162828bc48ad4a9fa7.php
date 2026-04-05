@@ -1,8 +1,7 @@
 <?php $__env->startPush('estilos'); ?>
 <link rel="stylesheet" href="<?php echo e(asset('css/header-section.css')); ?>">
 <link rel="stylesheet" href="<?php echo e(asset('css/responsive-section.css')); ?>">
-<?php $__env->stopPush(); ?>
-
+<?php $__env->stopPush(); ?>    
 <?php $__env->startSection('header'); ?>
 <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php $__env->stopSection(); ?>

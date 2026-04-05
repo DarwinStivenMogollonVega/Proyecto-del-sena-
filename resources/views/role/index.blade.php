@@ -76,7 +76,9 @@
             </div>
             @foreach($registros as $reg)
                 @can('rol-delete')
-                    @include('role.delete', ['reg' => $reg])
+                    @push('modals')
+                        @include('role.delete', ['reg' => $reg])
+                    @endpush
                 @endcan
             @endforeach
             <div class="card-footer d-flex justify-content-between align-items-center">

@@ -1,11 +1,11 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
+
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/acerca-section.css') }}">
-<link rel="stylesheet" href="{{ asset('css/header-section.css') }}">
-<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 acerca-theme-root">
     <section class="about-hero text-center mb-4">
@@ -118,3 +118,87 @@
     <!-- Fin sección de adaptabilidad visual -->
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    (function () {
+        function alignAcercaNavButtons() {
+            var nav = document.querySelector('.dz-nav');
+            if (!nav) return;
+
+            // referencia: primer pill dentro del nav
+            var ref = nav.querySelector('.navbar-nav > .nav-item > a.nav-link, .navbar-nav > .nav-item > .nav-cta-btn, .navbar-nav > .nav-item > .dropdown-cta-btn');
+            var cartBtn = nav.querySelector('.cart-cta-btn');
+            var themeBtn = nav.querySelector('.theme-switch-btn');
+            if (!ref || !cartBtn || !themeBtn) return;
+
+            var cs = window.getComputedStyle(ref);
+
+            // aplicar padding, tamaño de fuente y border-radius para igualar visualmente
+            try {
+                var padding = cs.paddingTop + ' ' + cs.paddingRight + ' ' + cs.paddingBottom + ' ' + cs.paddingLeft;
+                cartBtn.style.padding = padding;
+                themeBtn.style.padding = padding;
+
+                cartBtn.style.fontSize = cs.fontSize;
+                themeBtn.style.fontSize = cs.fontSize;
+
+                cartBtn.style.borderRadius = cs.borderRadius || '0.8rem';
+                themeBtn.style.borderRadius = cs.borderRadius || '0.8rem';
+
+                cartBtn.style.alignSelf = 'center';
+                themeBtn.style.alignSelf = 'center';
+
+                // Asegurar gap pequeño entre icon y texto, consistente con pills
+                cartBtn.style.gap = '0.28rem';
+                themeBtn.style.gap = '0.28rem';
+
+                // calcular desplazamiento vertical dinámico respecto al primer pill
+                var refRect = ref.getBoundingClientRect();
+                var cartRect = cartBtn.getBoundingClientRect();
+                var themeRect = themeBtn.getBoundingClientRect();
+
+                var deltaCart = Math.round(refRect.top - cartRect.top);
+                var deltaTheme = Math.round(refRect.top - themeRect.top);
+
+                // limitar el desplazamiento razonable (evitar saltos grandes)
+                var clamp = function (v, min, max) { return Math.max(min, Math.min(max, v)); };
+                deltaCart = clamp(deltaCart, -16, 16);
+                deltaTheme = clamp(deltaTheme, -16, 16);
+
+                // Aplicar margin-top relativo (si ya existe margin previo, lo sobreescribimos)
+                cartBtn.style.marginTop = (deltaCart) + 'px';
+                themeBtn.style.marginTop = (deltaTheme) + 'px';
+            } catch (e) {
+                // no bloquear si algo falla
+                console.warn('alignAcercaNavButtons:', e);
+            }
+        }
+
+        var rafId;
+        function scheduleAlign() {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(alignAcercaNavButtons);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ejecutar solo en la vista 'acerca' (contenedor con clase dedicada)
+            if (!document.querySelector('.acerca-theme-root')) return;
+
+            scheduleAlign();
+            window.addEventListener('resize', scheduleAlign, { passive: true });
+            window.addEventListener('scroll', scheduleAlign, { passive: true });
+
+            // Observador para detectar toggles de clase (p.ej. .scrolled) en el nav
+            var nav = document.querySelector('.dz-nav');
+            if (nav) {
+                var mo = new MutationObserver(function () { scheduleAlign(); });
+                mo.observe(nav, { attributes: true, attributeFilter: ['class'] });
+            }
+
+            // Repetir ligeramente después para capturar estilos aplicados tardíamente
+            setTimeout(scheduleAlign, 220);
+        });
+    })();
+</script>
+@endpush

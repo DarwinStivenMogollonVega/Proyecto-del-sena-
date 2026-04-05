@@ -1,4 +1,8 @@
-/* Dashboard section styles extracted from inline Blade */
+﻿/* Dashboard section styles extracted from inline Blade */
+/* Theme variable used by dashboard components */
+:root {
+    --adm-surface-soft: #fff;
+}
 /* ── Stat Cards ───────────────────────────────────────── */
 .stat-card {
     border-radius: 1rem;
@@ -117,3 +121,4 @@
     font-weight: 700;
     color: var(--adm-heading);
 }
+

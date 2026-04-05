@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
    Variables de color base para texto accesible (artista)
    ===================== */
 /* =====================
@@ -8,7 +8,7 @@
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -28,7 +28,7 @@ html[data-theme='light'], .light {
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -101,3 +101,4 @@ html[data-theme='light'], .light {
 /* =====================
    Fin sistema de temas para artista
    ===================== */
+

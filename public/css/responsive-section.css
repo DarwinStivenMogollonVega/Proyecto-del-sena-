@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
    Variables de color base para texto accesible (responsive)
    ===================== */
 :root {
@@ -15,8 +15,8 @@ html[data-theme='dark'], .dark {
   --dz-nav-link: var(--dz-text-heading);
 }
 html[data-theme='light'], .light {
-  --dz-text-main: #23272e;
-  --dz-text-heading: #23272e;
+  --dz-text-main: var(--nav-pill-hover-text);
+  --dz-text-heading: var(--nav-pill-hover-text);
   --dz-text-subtle: #475569;
   --dz-nav-link: var(--dz-text-heading);
 }
@@ -308,3 +308,4 @@ html[data-theme='dark'] .logo-dark {
 /* --------------------- Desktop (min-width: 993px, max-width: 1400px) --------------------- */
 /*
   /* Desktop: restaurado a diseño original */
+

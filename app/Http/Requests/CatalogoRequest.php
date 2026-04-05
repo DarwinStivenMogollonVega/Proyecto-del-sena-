@@ -28,7 +28,7 @@ class CatalogoRequest extends FormRequest
         $idColumn = Schema::hasTable('formatos') ? 'formato_id' : 'catalogo_id';
 
         return [
-            'nombre' => ['required', 'string', 'min:3', 'max:150', Rule::unique($table, 'nombre')->ignore($id, $idColumn)],
+            'nombre' => ['required', 'string', 'min:3', 'max:150', Rule::unique($table, 'nombre')->ignore($id, $idColumn), 'not_regex:/\\d/'],
             'descripcion' => ['nullable', 'string', 'max:1000'],
         ];
     }
@@ -52,6 +52,7 @@ class CatalogoRequest extends FormRequest
             'nombre.min' => 'El nombre del catálogo debe tener al menos 3 caracteres.',
             'nombre.max' => 'El nombre no puede tener más de 150 caracteres.',
             'nombre.unique' => 'Ya existe un catálogo con ese nombre.',
+            'nombre.not_regex' => 'El nombre del catálogo no puede contener números.',
             'descripcion.string' => 'La descripción del catálogo debe ser texto válido.',
             'descripcion.max' => 'La descripción no puede tener más de 1000 caracteres.',
         ];

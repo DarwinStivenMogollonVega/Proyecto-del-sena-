@@ -26,7 +26,7 @@ class CategoriaRequest extends FormRequest
         $id = is_object($routeCategoria) ? $routeCategoria->getKey() : $routeCategoria;
 
         return [
-            'name' => ['required', 'string', 'min:3', 'max:100', Rule::unique('categorias', 'nombre')->ignore($id)],
+            'name' => ['required', 'string', 'min:3', 'max:100', Rule::unique('categorias', 'nombre')->ignore($id), 'not_regex:/\\d/'],
             'description' => ['nullable', 'string', 'max:1000'],
         ];
     }
@@ -47,6 +47,7 @@ class CategoriaRequest extends FormRequest
             'name.min' => 'El nombre de la categoría debe tener al menos 3 caracteres.',
             'name.max' => 'El nombre de la categoría no puede tener más de 100 caracteres.',
             'name.unique' => 'Ya existe una categoría con ese nombre.',
+            'name.not_regex' => 'El nombre de la categoría no puede contener números.',
 
             'description.string' => 'La descripción de la categoría debe ser texto válido.',
             'description.max' => 'La descripción no puede tener más de 1000 caracteres.',

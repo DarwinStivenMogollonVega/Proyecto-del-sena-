@@ -33,7 +33,7 @@
                                     <label for="codigo" class="form-label">Código</label>
                                     <input type="text" class="form-control @error('codigo') is-invalid @enderror"
                                         id="codigo" name="codigo"
-                                        value="{{ old('codigo', $registro->codigo ?? '') }}" maxlength="16" required>
+                                        value="{{ old('codigo', $registro->codigo ?? '') }}" maxlength="16" required pattern="[A-Za-z0-9_-]+" oninput="this.value = this.value.replace(/[^A-Za-z0-9_-]/g, '')" title="El código solo puede contener letras, números, guiones y guiones bajos">
                                     @error('codigo')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -44,7 +44,7 @@
                                     <label for="nombre" class="form-label">Nombre</label>
                                     <input type="text" class="form-control @error('nombre') is-invalid @enderror"
                                         id="nombre" name="nombre"
-                                        value="{{ old('nombre', $registro->nombre ?? '') }}" minlength="3" maxlength="100" required>
+                                        value="{{ old('nombre', $registro->nombre ?? '') }}" minlength="3" maxlength="100" required pattern="^[^0-9]+$" oninput="this.value = this.value.replace(/[0-9]/g, '')" title="El nombre no puede contener números">
                                     @error('nombre')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -288,7 +288,7 @@
                         <div class="modal-content">
                             <div class="modal-header"><h5 class="modal-title">Nuevo artista</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                             <div class="modal-body">
-                                <div class="mb-2"><label class="form-label">Nombre</label><input id="modal_artista_nombre" class="form-control" name="nombre"></div>
+                                <div class="mb-2"><label class="form-label">Nombre</label><input id="modal_artista_nombre" class="form-control" name="nombre" oninput="this.value = this.value.replace(/[0-9]/g, '')"></div>
                                 <div class="mb-2"><label class="form-label">Identificador único (opcional)</label><input id="modal_artista_identificador" class="form-control" name="identificador_unico"></div>
                                 <div class="mb-2"><label class="form-label">Fotografía (opcional)</label><input id="modal_artista_foto" type="file" accept="image/*" class="form-control" name="foto"></div>
                                 <div id="modal_artista_preview" class="mt-2"></div>

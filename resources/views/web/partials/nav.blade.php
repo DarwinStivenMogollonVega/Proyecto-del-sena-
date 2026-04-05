@@ -125,6 +125,7 @@
                 </li>
             </ul>
 
+            @unless(View::hasSection('hide_nav_actions'))
             <a href="{{ route('carrito.mostrar') }}" class="btn cart-cta-btn">
                 <span class="cart-cta-icon">
                     <i class="bi bi-cart-fill"></i>
@@ -138,6 +139,7 @@
                 </span>
                 <span class="theme-switch-text" data-theme-label>Oscuro</span>
             </button>
+            @endunless
         </div>
     </div>
 </nav>
@@ -155,8 +157,81 @@
             }
         };
 
+        // Toggle 'scrolled-pill' on cart and theme buttons to force final pill styles
+        var cartBtn = document.querySelector('.cart-cta-btn');
+        var themeBtn = document.querySelector('.theme-switch-btn');
+        var togglePills = function () {
+            var sc = window.scrollY > 10;
+            if (cartBtn) cartBtn.classList.toggle('scrolled-pill', sc);
+            if (themeBtn) themeBtn.classList.toggle('scrolled-pill', sc);
+        };
+
         // Inicializar estado (por si la página carga ya scrolleada)
         onScroll();
+        togglePills();
         window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('scroll', togglePills, { passive: true });
     });
+    
+        // Interceptar formularios "Agregar al carrito" para actualizar la badge sin recargar
+        document.addEventListener('DOMContentLoaded', function () {
+            // Evita registrar el listener más de una vez (por inclusiones duplicadas del partial)
+            if (window.__dzAddToCartInit) return;
+            window.__dzAddToCartInit = true;
+
+            // Delegación: capturamos submit de cualquier formulario que contenga un botón con clase .add-to-cart-btn
+            document.body.addEventListener('submit', function (e) {
+                var form = e.target;
+                if (!form) return;
+                if (!form.querySelector || !form.querySelector('.add-to-cart-btn')) return;
+
+                e.preventDefault();
+
+                var url = form.getAttribute('action');
+                var method = (form.getAttribute('method') || 'POST').toUpperCase();
+                var fd = new FormData(form);
+
+                fetch(url, {
+                    method: method,
+                    body: fd,
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                }).then(function (res) {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                }).then(function (data) {
+                    if (data && typeof data.items !== 'undefined') {
+                        var badge = document.querySelector('.cart-count-badge');
+                        if (badge) {
+                            badge.textContent = data.items;
+                            // pequeña animación de actualización
+                            badge.classList.add('cart-count-updated');
+                            setTimeout(function () { badge.classList.remove('cart-count-updated'); }, 800);
+                        }
+                        // Mostrar toast global de confirmación (usa el contenedor en web.app)
+                        try {
+                            var toastEl = document.getElementById('dz-global-toast');
+                            if (toastEl) {
+                                var body = toastEl.querySelector('.toast-body');
+                                if (body) body.textContent = 'Producto agregado al carrito';
+                                // Inicializar y mostrar toast via Bootstrap
+                                if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                                    var bsToast = bootstrap.Toast.getOrCreateInstance(toastEl);
+                                    bsToast.show();
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('No se pudo mostrar el toast del carrito', e);
+                        }
+                    }
+                }).catch(function (err) {
+                    // En caso de fallo, dejar que el comportamiento por defecto ocurra (recarga)
+                    console.error('Error agregando al carrito (AJAX):', err);
+                    form.submit();
+                });
+            }, { passive: false });
+        });
+
 </script>

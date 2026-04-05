@@ -27,8 +27,8 @@ class ProductoRequest extends FormRequest
         $id = is_object($routeProducto) ? $routeProducto->getKey() : $routeProducto;
 
         $rules = [
-            'codigo' => ['required', 'string', 'max:16', Rule::unique('productos', 'codigo')->ignore($id)],
-            'nombre' => ['required', 'string', 'min:3', 'max:100'],
+            'codigo' => ['required', 'string', 'max:16', Rule::unique('productos', 'codigo')->ignore($id), 'regex:/^[A-Za-z0-9_-]+$/'],
+            'nombre' => ['required', 'string', 'min:3', 'max:100', 'not_regex:/\\d/'],
             'precio' => ['required', 'numeric', 'regex:/^\d+(\.\d{1,2})?$/', 'min:0'],
             'cantidad' => ['required', 'integer', 'regex:/^\d+$/', 'min:0'],
             'categoria_id' => ['required', 'exists:categorias,id'],
@@ -60,10 +60,12 @@ class ProductoRequest extends FormRequest
             'codigo.required' => 'El código del producto es obligatorio.',
             'codigo.unique' => 'Este código ya está registrado en otro producto.',
             'codigo.max' => 'El código no puede tener más de 16 caracteres.',
+            'codigo.regex' => 'El código solo puede contener letras, números, guiones y guiones bajos (sin espacios ni caracteres especiales).',
 
             'nombre.required' => 'El nombre del producto es obligatorio.',
             'nombre.min' => 'El nombre debe tener al menos 3 caracteres.',
             'nombre.max' => 'El nombre no puede tener más de 100 caracteres.',
+            'nombre.not_regex' => 'El nombre del producto no puede contener números.',
 
             'precio.required' => 'El precio del producto es obligatorio.',
             'precio.numeric' => 'El precio debe ser un valor numérico.',

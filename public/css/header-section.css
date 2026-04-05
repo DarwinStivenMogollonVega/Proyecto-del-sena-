@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
    Variables de color base para texto accesible (header)
    ===================== */
 :root {
@@ -12,8 +12,8 @@ html[data-theme='dark'], .dark {
   --dz-text-subtle: #cbd5e1;
 }
 html[data-theme='light'], .light {
-  --dz-text-main: #23272e;
-  --dz-text-heading: #23272e;
+  --dz-text-main: var(--nav-pill-hover-text);
+  --dz-text-heading: var(--nav-pill-hover-text);
   --dz-text-subtle: #475569;
 }
 
@@ -77,3 +77,30 @@ html[data-theme='dark'] .logo-dis-music.dark { display: block !important; }
 }
 
 /* Fin de archivo optimizado */
+
+/* =============================================
+   Personalizaciones: botón blanco y aside blanco
+   Aplica solo a la vista pública (search-panel) para evitar
+   afectar estilos de la zona admin.
+   ============================================= */
+.search-panel .btn.btn-dark {
+  background: #ffffff !important;
+  color: #0d0d0d !important;
+  border-color: #e6e6e6 !important;
+  box-shadow: none !important;
+}
+.search-panel .btn.btn-dark:hover,
+.search-panel .btn.btn-dark:focus {
+  background: #f8f9fa !important;
+  color: #0d0d0d !important;
+}
+
+/* Aside / barra lateral (variantes comunes) */
+aside,
+.sidebar,
+.app-sidebar,
+.site-aside {
+  background: #ffffff !important;
+  color: #0d0d0d !important;
+}
+

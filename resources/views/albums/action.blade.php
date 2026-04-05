@@ -30,7 +30,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="nombre" class="form-label">Nombre</label>
                                     <input type="text" class="form-control @error('nombre') is-invalid @enderror"
-                                     id="nombre" name="nombre" value="{{old('nombre', $registro->nombre ?? '')}}" minlength="1" maxlength="150" required>
+                                     id="nombre" name="nombre" value="{{old('nombre', $registro->nombre ?? '')}}" minlength="1" maxlength="150" required pattern="^[^0-9]+$" oninput="this.value = this.value.replace(/[0-9]/g, '')" title="El nombre no puede contener números">
                                      @error('nombre')
                                         <small class="text-danger">{{ $message }}</small>
                                      @enderror

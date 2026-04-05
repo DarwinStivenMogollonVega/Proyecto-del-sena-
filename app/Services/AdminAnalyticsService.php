@@ -470,7 +470,7 @@ class AdminAnalyticsService
     {
         $stats = $this->dashboardStats();
 
-        $rows = Producto::with(['categoria', 'catalogo', 'artista'])
+        $rows = Producto::with(['categoria', 'formato', 'artista'])
             ->orderBy('cantidad')
             ->orderBy('nombre')
             ->limit(50)
@@ -478,7 +478,7 @@ class AdminAnalyticsService
             ->map(fn (Producto $producto) => [
                 'producto' => $producto->nombre,
                 'categoria' => $producto->categoria->nombre ?? 'Sin categoria',
-                'catalogo' => $producto->catalogo->nombre ?? 'Sin catalogo',
+            'formato' => $producto->formato->nombre ?? 'Sin formato',
                 'artista' => $producto->artista->nombre ?? 'Sin artista',
                 'stock' => (int) $producto->cantidad,
                 'estado_stock' => $producto->cantidad <= 0
@@ -498,7 +498,7 @@ class AdminAnalyticsService
                 ['label' => 'Productos agotados', 'value' => $stats['productosSinStock']],
                 ['label' => 'Promedio stock por producto', 'value' => number_format($promedioStock, 2)],
             ],
-            'headings' => ['Producto', 'Categoria', 'Catalogo', 'Artista', 'Stock', 'Estado'],
+            'headings' => ['Producto', 'Categoria', 'Formato', 'Artista', 'Stock', 'Estado'],
             'rows' => $rows,
         ];
     }

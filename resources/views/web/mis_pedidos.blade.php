@@ -1,12 +1,14 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
+
 @section('titulo', 'Mis pedidos - DiscZone')
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/mis-pedidos-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 orders-page">
 

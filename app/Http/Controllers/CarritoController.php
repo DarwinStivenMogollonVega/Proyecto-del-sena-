@@ -26,6 +26,12 @@ class CarritoController extends Controller
             ];
         }
         session()->put('carrito', $carrito);
+        // Si la petición espera JSON (AJAX), devolvemos el total de items
+        $items = collect($carrito)->sum(fn($it) => (int) ($it['cantidad'] ?? 0));
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['items' => $items]);
+        }
+
         return redirect()->back()->with('mensaje', 'Producto agregado al carrito');
     }
 

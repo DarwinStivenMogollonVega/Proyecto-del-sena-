@@ -20,7 +20,7 @@ class PedidoRealizarRequest extends FormRequest
         }
 
         return [
-            'nombre' => ['required', 'string', 'max:120'],
+            'nombre' => ['required', 'string', 'max:120', 'not_regex:/\\d/'],
             'email' => ['required', 'email', 'max:120'],
             'telefono' => ['required', 'string', 'max:30'],
             'direccion' => ['required', 'string', 'max:255'],
@@ -32,6 +32,7 @@ class PedidoRealizarRequest extends FormRequest
     {
         return [
             'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.not_regex' => 'El nombre no puede contener números.',
             'email.required' => 'El correo es obligatorio.',
             'email.email' => 'El correo no tiene un formato válido.',
             'telefono.required' => 'El teléfono es obligatorio.',

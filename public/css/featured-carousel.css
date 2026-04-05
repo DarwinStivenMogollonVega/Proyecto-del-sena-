@@ -1,4 +1,4 @@
-/* Styles for featured carousel */
+﻿/* Styles for featured carousel */
 .featured-carousel .featured-card{
     width: 220px;
     border-radius: .8rem;
@@ -26,3 +26,4 @@
 @media (max-width: 480px){
     .featured-carousel .featured-card{width:90%;}
 }
+

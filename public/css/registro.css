@@ -1,4 +1,4 @@
-  .register-brand .auth-brand-mark-full {
+﻿  .register-brand .auth-brand-mark-full {
     width: min(15rem, 62vw);
     height: 4.2rem;
     padding: 0.28rem 0.4rem;
@@ -37,3 +37,4 @@
   html[data-theme='dark'] .summary-list li {
     color: #fff !important;
   }
+

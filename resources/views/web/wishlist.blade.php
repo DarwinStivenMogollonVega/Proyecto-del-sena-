@@ -1,13 +1,15 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
+
 @section('titulo', 'Lista de Deseados - DiscZone')
 
 @push('estilos')
-<link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/wishlist-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/index-section.css') }}">
-@endpush
 
+@endpush
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 mt-5 wishlist-container">
     <section class="wishlist-hero p-4 p-lg-5 mb-4">

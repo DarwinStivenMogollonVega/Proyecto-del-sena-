@@ -99,7 +99,7 @@
                                                         <button 
                                                             type="button"
                                                             class="btn btn-sm btn-outline-danger btn-delete-action"
-                                                            -bs-toggle="modal"
+                                                            data-bs-toggle="modal"
                                                             data-bs-target="#modal-eliminar-producto-{{ $reg->getKey() }}"
                                                             aria-label="Eliminar producto {{ $reg->nombre ?? 'producto' }}"
                                                             title="Eliminar producto"

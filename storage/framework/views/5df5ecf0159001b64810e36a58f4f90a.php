@@ -1,4 +1,4 @@
-<?php if (! $__env->hasRenderedOnce('614535e6-c6fb-439f-b7f2-54c22b21486d')): $__env->markAsRenderedOnce('614535e6-c6fb-439f-b7f2-54c22b21486d'); ?>
+<?php if (! $__env->hasRenderedOnce('325eeb68-9fcc-4046-93c3-2136de6e65b5')): $__env->markAsRenderedOnce('325eeb68-9fcc-4046-93c3-2136de6e65b5'); ?>
 <style>
     .dz-admin-sidebar .sidebar-brand {
         background: var(--adm-sidebar-panel);

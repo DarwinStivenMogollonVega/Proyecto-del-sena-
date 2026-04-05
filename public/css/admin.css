@@ -1,4 +1,4 @@
-
+﻿
 /* Admin theme variables (light default) — used by admin views */
 :root {
     --adm-surface: #2d3650;
@@ -95,6 +95,14 @@ html[data-theme='dark'] {
     background: transparent;
     border-bottom: none;
     padding: 1.3rem 1.7rem 0.7rem 1.7rem;
+}
+
+/* Position helper: place small action buttons at top-right of card headers */
+.card .card-header { position: relative; }
+.card .card-header .btn-gestor-right {
+    position: absolute;
+    right: 1rem;
+    top: 0.6rem;
 }
 .dz-admin-table-card .form-control {
     background: var(--adm-surface-soft);
@@ -252,3 +260,4 @@ html[data-theme='dark'] .dz-admin-table-card .table {
 .dz-admin-sidebar .nav-link:hover .nav-icon {
     color: var(--adm-sidebar-active-text, #fff);
 }
+

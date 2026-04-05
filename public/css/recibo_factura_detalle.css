@@ -1,4 +1,4 @@
-.receipt-shell {
+﻿.receipt-shell {
     max-width: 980px;
     margin: 2rem auto 3rem;
 }
@@ -63,3 +63,4 @@ html[data-theme='dark'] .receipt-block {
         border-color: #d1d5db;
     }
 }
+

@@ -14,7 +14,7 @@ class PedidoDatosRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => ['required', 'string', 'max:120'],
+            'nombre' => ['required', 'string', 'max:120', 'not_regex:/\\d/'],
             'email' => ['required', 'email', 'max:120'],
             // allow plus, spaces, parentheses and dashes; enforce reasonable length
             'telefono' => ['required', 'string', 'max:30', 'regex:/^[0-9+\s()\-]{7,30}$/'],
@@ -25,6 +25,7 @@ class PedidoDatosRequest extends FormRequest
     {
         return [
             'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.not_regex' => 'El nombre no puede contener números.',
             'email.required' => 'El correo es obligatorio.',
             'email.email' => 'El correo no tiene un formato válido.',
             'telefono.required' => 'El teléfono es obligatorio.',

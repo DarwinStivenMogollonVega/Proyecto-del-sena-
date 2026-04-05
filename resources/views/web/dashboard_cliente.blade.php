@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard-cliente.css') }}">
     <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 pb-5 client-dashboard-page">
     <section class="client-hero">

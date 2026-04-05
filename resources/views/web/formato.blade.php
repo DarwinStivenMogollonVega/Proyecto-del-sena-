@@ -1,4 +1,5 @@
 @extends('web.app')
+
 @section('titulo', $formato->nombre . ' - DiscZone')
 
 @push('estilos')
@@ -8,6 +9,7 @@
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 @section('header')
+@include('web.partials.nav')
 @endsection
 @section('contenido')
 <div class="container px-4 px-lg-5">

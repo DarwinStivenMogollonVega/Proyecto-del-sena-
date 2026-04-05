@@ -15,8 +15,45 @@
             document.documentElement.setAttribute('data-theme', savedTheme);
             document.documentElement.setAttribute('data-bs-theme', savedTheme === 'dark' ? 'dark' : 'light');
         })();
+        // Marca inicial: evita mostrar header/nav hasta que la inicialización JS y CSS ocurran
+        document.documentElement.classList.add('dz-initializing');
     </script>
 
+    <!-- Critical CSS to avoid FOUC on logos / header while main CSS loads -->
+    <style>
+        /* Constrain logo visuals until external CSS loads to prevent flash */
+        img.logo-dis-music,
+        img.logo-light,
+        img.logo-dark,
+        .dz-brand-logo,
+        .logo-dis-music {
+            max-width: 160px;
+            height: auto;
+            display: block;
+        }
+
+        /* Default state: show light variant, hide dark variant until CSS or JS switches theme */
+        .logo-dark,
+        .logo-dis-music.dark {
+            display: none !important;
+        }
+
+        html[data-theme='dark'] .logo-dis-music.light,
+        html[data-theme='dark'] .logo-light {
+            display: none !important;
+        }
+        html[data-theme='dark'] .logo-dis-music.dark,
+        html[data-theme='dark'] .logo-dark {
+            display: block !important;
+        }
+        /* Mientras dure la inicialización mantenemos ocultos header y nav */
+        html.dz-initializing .dz-site-header,
+        html.dz-initializing .dz-nav {
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transform: translateY(-6px) !important;
+        }
+    </style>
     <link rel="icon" type="image/x-icon" href="<?php echo e(asset('assets/favicon.ico')); ?>" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,11 +63,26 @@
     <link rel="stylesheet" href="<?php echo e(asset('css/app-section.css')); ?>">
         <link rel="stylesheet" href="<?php echo e(asset('css/index-section.css')); ?>">
 
-    <?php echo $__env->yieldPushContent('estilos'); ?>
     <link rel="stylesheet" href="<?php echo e(asset('css/nav-fix.css')); ?>">
+    <style>
+        /* Evita FOUC: oculta el nav hasta que la inicialización JS lo muestre */
+        .dz-nav{opacity:0;transform:translateY(-6px);transition:opacity .28s ease, transform .28s ease}
+        .dz-nav.is-ready{opacity:1;transform:none}
+    </style>
+    <?php echo $__env->yieldPushContent('estilos'); ?>
 </head>
-<body>
-    <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <body>
+    
+    <?php if(View::hasSection('manual_nav')): ?>
+        <?php echo $__env->yieldContent('manual_nav'); ?>
+    <?php else: ?>
+        <?php if(!View::hasSection('hide_nav')): ?>
+            <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php
+        $showHeader = request()->routeIs('web.index', 'web.productos*', 'web.formato*', 'web.categoria*');
+    ?>
 
     <!-- Toast container for global notifications -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
@@ -42,7 +94,7 @@
         </div>
     </div>
 
-    <?php if(View::hasSection('header')): ?>
+    <?php if($showHeader): ?>
         <?php echo $__env->make('web.partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php endif; ?>
 
@@ -197,6 +249,15 @@
             applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
             initSiteVisualFx();
             initHoverDropdowns();
+            // Mostrar el nav una vez que las inicializaciones JS han corrido
+            (function(){
+                var nav = document.querySelector('.dz-nav');
+                if(!nav) return;
+                // pequeña espera para permitir render y estilos; evita parpadeos visibles
+                setTimeout(function(){ nav.classList.add('is-ready'); }, 40);
+                // Quitamos la marca de inicialización para permitir que el header se muestre
+                setTimeout(function(){ document.documentElement.classList.remove('dz-initializing'); }, 60);
+            })();
         })();
     </script>
     <?php echo $__env->yieldPushContent('scripts'); ?>

@@ -1,4 +1,4 @@
-/* =====================================================
+﻿/* =====================================================
    VARIABLES Y CONFIGURACIÓN GLOBAL CATEGORÍA
    ===================================================== */
 
@@ -15,7 +15,7 @@
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -35,7 +35,7 @@ html[data-theme='light'], .light {
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -156,3 +156,4 @@ html[data-theme='dark'] .logo-light { filter: none; }
   background: var(--color-subtle);
   color: #fff;
 }
+

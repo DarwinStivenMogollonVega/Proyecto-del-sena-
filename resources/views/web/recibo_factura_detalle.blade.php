@@ -1,12 +1,14 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
+
 @section('titulo', 'Factura ' . $factura->numero_factura . ' - DiscZone')
 
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/recibo_factura_detalle.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <div class="container px-4 px-lg-5 receipt-shell">
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3 receipt-no-print">

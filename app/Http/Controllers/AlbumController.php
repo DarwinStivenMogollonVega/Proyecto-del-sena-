@@ -10,7 +10,8 @@ class AlbumController extends Controller
 {
     public function index()
     {
-        $albums = Album::orderBy('nombre')->get();
+        // Ordenar álbumes por id descendente (mayor a menor)
+        $albums = Album::orderByDesc('album_id')->get();
         $productos = Producto::orderBy('nombre')->get();
         return view('albums.index', compact('albums', 'productos'));
     }
@@ -22,7 +23,7 @@ class AlbumController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate(['nombre' => 'required|string|max:150', 'descripcion' => 'nullable|string']);
+        $data = $request->validate(['nombre' => ['required','string','max:150','not_regex:/\\d/'], 'descripcion' => 'nullable|string']);
         Album::create($data);
         return redirect()->route('albums.index')->with('success', 'Álbum creado');
     }
@@ -34,7 +35,7 @@ class AlbumController extends Controller
 
     public function update(Request $request, Album $album)
     {
-        $data = $request->validate(['nombre' => 'required|string|max:150', 'descripcion' => 'nullable|string']);
+        $data = $request->validate(['nombre' => ['required','string','max:150','not_regex:/\\d/'], 'descripcion' => 'nullable|string']);
         $album->update($data);
         return redirect()->route('albums.index')->with('success', 'Álbum actualizado');
     }

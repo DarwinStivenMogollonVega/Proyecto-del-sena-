@@ -74,7 +74,7 @@
         color-scheme: light;
         --adm-body-bg: #f4f7fb;
         --adm-surface: #ffffff;
-        --adm-surface-soft: #172033;
+        --adm-surface-soft: #ffffff; /* usar blanco en modo light */
         --adm-border: #dbe4ef;
         --adm-text: #172033;
         --adm-muted: #607086;
@@ -113,6 +113,29 @@
         --adm-sidebar-active-bg: rgba(148, 163, 184, 0.12);
         --adm-sidebar-active-text: #ffffff;
         --adm-sidebar-panel: rgba(148, 163, 184, 0.05);
+      }
+
+      /* === Light-mode: separar colores de "soft" y botones === */
+      html[data-theme='light'] {
+        /* aseguramos que los paneles suaves usen blanco */
+        --adm-surface-soft: #ffffff;
+      }
+
+      /* Forzar fondos blancos en botones del sidebar y header en modo light */
+      html[data-theme='light'] .dz-admin-sidebar .nav-treeview,
+      html[data-theme='light'] .dz-admin-sidebar .nav-treeview .nav-link,
+      html[data-theme='light'] .dz-admin-sidebar .nav-link {
+        background: #162133 !important; /* background requested */
+        color: #ffffff !important; /* ensure contrast */
+        border: 1px solid #162133 !important; /* border requested */
+        box-shadow: none !important;
+      }
+
+      html[data-theme='light'] .app-header .nav-link,
+      html[data-theme='light'] .app-header .navbar-nav .nav-link.admin-profile-btn {
+        background: #ffffff !important;
+        color: var(--adm-text) !important;
+        border-radius: .6rem;
       }
 
       /* Responsive sidebar color adjustments */
@@ -993,7 +1016,11 @@
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
       <!--begin::Header-->
-      @include('plantilla.header')
+      @hasSection('header')
+        @yield('header')
+      @else
+        @include('plantilla.header')
+      @endif
       <!--end::Header-->
       <!--begin::Sidebar-->
       @include('plantilla.menu')
@@ -1208,6 +1235,7 @@
     </script>
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->
+    @stack('modals')
     @stack('scripts')
   </body>
   <!--end::Body-->

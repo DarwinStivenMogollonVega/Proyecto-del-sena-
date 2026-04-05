@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
 
+@include('web.partials.nav')
 @section('contenido')
 <section class="formulario-pedido-wrap py-5" style="margin-top: 0rem;">
     @include('web.partials.checkout_steps', ['currentStep' => 2])

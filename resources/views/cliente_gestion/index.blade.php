@@ -60,7 +60,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            @include('cliente_gestion.delete', ['reg' => $reg])
+                            {{-- modales incluidos fuera de la tabla para evitar problemas de layout --}}
                             @empty
                             <tr>
                                 <td colspan="5" class="text-center py-3" style="color:var(--adm-muted)">No hay clientes registrados.</td>
@@ -70,6 +70,16 @@
                     </table>
                 </div>
             </div>
+
+            {{-- Modales fuera del flujo de la tabla: los pushamos al stack 'modals' para renderizar al final del body --}}
+            @foreach($registros as $reg)
+                @can('user-delete')
+                    @push('modals')
+                        @include('cliente_gestion.delete', ['reg' => $reg])
+                    @endpush
+                @endcan
+            @endforeach
+
             <div class="card-footer d-flex justify-content-between align-items-center">
                 <div>
                     Mostrando {{ $registros->count() }} de {{ $registros->total() }} clientes

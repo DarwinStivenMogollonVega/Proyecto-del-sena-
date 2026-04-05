@@ -1,4 +1,4 @@
-/* app-section.css: Migración de estilos desde app.blade.php */
+﻿/* app-section.css: Migración de estilos desde app.blade.php */
 
 :root {
     color-scheme: light;
@@ -86,3 +86,4 @@ body {
         filter: saturate(1) brightness(1);
     }
 }
+

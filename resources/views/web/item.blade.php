@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/item-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-
+@include('web.partials.nav')
 @section('contenido')
 <section class="product-page">
     <div class="container px-4 px-lg-5">
@@ -56,14 +56,6 @@
                         <strong>{{ number_format($promedio, 1) }}</strong>
                         <span class="text-muted">({{ $totalResenas }} calificaciones)</span>
                     </div>
-
-                    @if ($producto->cantidad >= 50)
-                        <p class="text-success fw-semibold mb-2"><i class="bi bi-check-circle me-1"></i> Disponible</p>
-                    @elseif ($producto->cantidad > 0)
-                        <p class="text-warning fw-semibold mb-2"><i class="bi bi-tag-fill me-1"></i> ${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</p>
-                    @else
-                        <p class="text-danger fw-semibold mb-2"><i class="bi bi-x-circle me-1"></i> Agotado</p>
-                    @endif
 
                     <p class="lead">{{ $producto->descripcion }}</p>
 

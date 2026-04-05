@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*!
 * Start Bootstrap - Shop Homepage v5.0.6 (https://startbootstrap.com/template/shop-homepage)
 * Copyright 2013-2023 Start Bootstrap
@@ -3255,7 +3255,8 @@ textarea.form-control-lg {
   --bs-dropdown-link-disabled-color: #adb5bd;
   --bs-dropdown-item-padding-x: 1rem;
   --bs-dropdown-item-padding-y: 0.25rem;
-  --bs-dropdown-header-color: #6c757d;
+  --bs-dropdown-header-color: #23272e;
+  --bs-dropdown-header-color-dark: #fff;
   --bs-dropdown-header-padding-x: 1rem;
   --bs-dropdown-header-padding-y: 0.5rem;
   position: absolute;
@@ -3498,6 +3499,31 @@ textarea.form-control-lg {
   font-size: 0.875rem;
   color: var(--bs-dropdown-header-color);
   white-space: nowrap;
+}
+html [theme="dark"] .dropdown-header {
+  color: var(--bs-dropdown-header-color-dark);
+}
+/* also target dropdown headers specifically inside a navbar when attribute-based dark theme is used */
+html [theme="dark"] .navbar .dropdown-header {
+  color: var(--bs-dropdown-header-color-dark) !important;
+}
+
+/* Also support data-theme="dark" usage (our project uses html[data-theme='dark']) */
+html[data-theme='dark'] .dropdown-header {
+  color: var(--bs-dropdown-header-color-dark) !important;
+}
+html[data-theme='dark'] .navbar .dropdown-header {
+  color: var(--bs-dropdown-header-color-dark) !important;
+}
+
+/* As fallback, set the variable so components using --bs-dropdown-header-color pick the dark value */
+html[data-theme='dark'] {
+  --bs-dropdown-header-color: var(--bs-dropdown-header-color-dark);
+}
+
+/* Ensure --dz-surface uses #1a0800 in dark theme as requested */
+html[data-theme='dark'] {
+  --dz-surface: #1a0800;
 }
 
 .dropdown-item-text {

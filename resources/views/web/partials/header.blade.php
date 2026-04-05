@@ -8,7 +8,7 @@
             </div>
             </div>
          <div class="dz-header-title">
-            <p class="lead fw-normal text-white-50 mb-0">Tienda de Discos Musicales</p>
+            <p class="lead fw-normal mb-0">Tienda de Discos Musicales</p>
         </div>
     </div>
 </header>

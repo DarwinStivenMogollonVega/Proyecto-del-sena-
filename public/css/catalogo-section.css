@@ -1,4 +1,4 @@
-
+﻿
 /* =====================
      Variables de color base para texto accesible (catálogo)
      ===================== */
@@ -14,7 +14,7 @@
     --color-bg: #f8fafc; /* fondo general muy claro */
     --color-card: #fff;   /* tarjetas blancas */
     --color-border: #e5e7eb; /* bordes suaves */
-    --color-text: #23272e; /* texto principal */
+    --color-text: var(--nav-pill-hover-text); /* texto principal */
     --color-heading: #1e293b; /* títulos oscuros */
     --color-subtle: #64748b; /* texto secundario */
     --color-primary: #2563eb; /* azul para acentos */
@@ -34,7 +34,7 @@ html[data-theme='light'], .light {
     --color-bg: #f8fafc;
     --color-card: #fff;
     --color-border: #e5e7eb;
-    --color-text: #23272e;
+    --color-text: var(--nav-pill-hover-text);
     --color-heading: #1e293b;
     --color-subtle: #64748b;
     --color-primary: #2563eb;
@@ -193,4 +193,5 @@ html[data-theme='dark'] .logo-light { filter: none; }
     background: var(--color-subtle);
     color: #fff;
 }
+
 

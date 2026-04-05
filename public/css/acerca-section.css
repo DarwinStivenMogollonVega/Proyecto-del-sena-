@@ -1,4 +1,4 @@
-/* acerca-section.css: Estilos personalizados para la vista Acerca con soporte de temas */
+﻿/* acerca-section.css: Estilos personalizados para la vista Acerca con soporte de temas */
 
 /* =====================
      Variables globales y sistema de temas para Acerca (unificado)
@@ -14,7 +14,7 @@
     --color-nav-link: var(--color-heading);
 }
 html[data-theme='dark'], .dark {
-    --color-bg: #23272e;
+    --color-bg: var(--nav-pill-hover-text);
     --color-card: #18181b;
     --color-border: #3a2415;
     --color-text: #f3e9e0;
@@ -27,7 +27,7 @@ html[data-theme='light'], .light {
     --color-bg: #fff8f3;
     --color-card: #fff;
     --color-border: #e5e7eb;
-    --color-text: #23272e;
+    --color-text: var(--nav-pill-hover-text);
     --color-heading: #c46310; /* Naranja vibrante para headings y enlaces en light */
     --color-subtle: #475569;
     --color-primary: #fdf0e4;
@@ -334,3 +334,4 @@ html[data-theme='dark'] .about-highlight {
         padding: 1rem;
     }
 }
+

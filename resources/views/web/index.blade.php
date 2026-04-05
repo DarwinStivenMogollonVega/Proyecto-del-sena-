@@ -3,8 +3,7 @@
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/header-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
-@endpush
-
+@endpush    
 @section('header')
 @include('web.partials.nav')
 @endsection

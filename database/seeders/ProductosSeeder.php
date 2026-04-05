@@ -10,6 +10,7 @@ use App\Models\Formato;
 use App\Models\Proveedor;
 use App\Models\Artista;
 use App\Models\Producto;
+use Illuminate\Support\Facades\Storage;
 
 class ProductosSeeder extends Seeder
 {
@@ -103,9 +104,33 @@ class ProductosSeeder extends Seeder
         }
 
         // Insertar o actualizar productos y vincular
+        // Preparar rutas para imágenes de seed
+        $seedImagesPath = resource_path('seeders/product-images');
+        $uploadsPath = public_path('uploads/productos');
+        if (!is_dir($uploadsPath)) {
+            mkdir($uploadsPath, 0755, true);
+        }
+
         foreach ($productsData as $p) {
             $categoria = $categorias->firstWhere('nombre', $p['categoria']);
             $artista = $artistas->get($p['artista']);
+
+            // Buscar imagen en resources/seeders/product-images usando slug del nombre
+            $slug = Str::slug($p['nombre']);
+            $imageFile = 'default-product.jpg';
+            foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+                $src = $seedImagesPath . DIRECTORY_SEPARATOR . $slug . '.' . $ext;
+                if (file_exists($src)) {
+                    $imageFile = $slug . '.' . $ext;
+                    // copiar a public/uploads/productos
+                    $dest = $uploadsPath . DIRECTORY_SEPARATOR . $imageFile;
+                    // solo copiar si no existe o es más nuevo
+                    if (!file_exists($dest)) {
+                        copy($src, $dest);
+                    }
+                    break;
+                }
+            }
 
             Producto::updateOrCreate([
                 'nombre' => $p['nombre']
@@ -117,7 +142,7 @@ class ProductosSeeder extends Seeder
                 'cantidad' => 10,
                 'descripcion' => $p['descripcion'],
                 'lista_canciones' => [],
-                'imagen' => 'default-product.jpg',
+                'imagen' => $imageFile,
                 'categoria_id' => $categoria ? $categoria->getKey() : null,
                 'catalogo_id' => null,
                 'formato_id' => ($formatos->has($p['formato']) ? $formatos->get($p['formato'])->getKey() : null),

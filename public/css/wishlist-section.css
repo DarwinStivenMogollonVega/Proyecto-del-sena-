@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
    Variables de color base para texto accesible (wishlist)
    ===================== */
 :root {
@@ -12,8 +12,8 @@ html[data-theme='dark'], .dark {
   --dz-text-subtle: #cbd5e1;
 }
 html[data-theme='light'], .light {
-  --dz-text-main: #23272e;
-  --dz-text-heading: #23272e;
+  --dz-text-main: var(--nav-pill-hover-text);
+  --dz-text-heading: var(--nav-pill-hover-text);
   --dz-text-subtle: #475569;
 }
 
@@ -73,6 +73,7 @@ html[data-theme='light'], .light {
 }
 
 .hero-subtitle {
-  color: #6c757d;
+  color: var(--nav-pill-hover-text);
   font-size: 1.1rem;
 }
+

@@ -1,4 +1,4 @@
-/* =====================
+﻿/* =====================
    Variables globales y sistema de temas para productos
    ===================== */
 /* =====================
@@ -8,7 +8,7 @@
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -28,7 +28,7 @@ html[data-theme='light'], .light {
   --color-bg: #f8fafc;
   --color-card: #fff;
   --color-border: #e5e7eb;
-  --color-text: #23272e;
+  --color-text: var(--nav-pill-hover-text);
   --color-heading: #1e293b;
   --color-subtle: #64748b;
   --color-primary: #2563eb;
@@ -187,3 +187,12 @@ html[data-theme='dark'] {
   background: var(--color-subtle);
   color: #fff;
 }
+
+/* Quitar subrayado en enlaces dentro de la vista de producto */
+.product-main-card a,
+.rating-card a,
+.review-list-card a,
+.product-page a {
+  text-decoration: none !important;
+}
+
