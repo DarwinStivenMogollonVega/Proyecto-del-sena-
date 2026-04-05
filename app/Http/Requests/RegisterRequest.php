@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 
 class RegisterRequest extends FormRequest
 {
@@ -15,10 +16,28 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3', 'max:100', 'not_regex:/\d/'],
+            // allow digits at rule level; enforce conditional digit policy in withValidator()
+            'name' => ['required', 'string', 'min:3', 'max:100'],
             'email' => ['required', 'email:rfc,dns', 'max:100', Rule::unique('usuarios', 'email')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
+    }
+
+    public function withValidator(ValidatorContract $validator): void
+    {
+        $validator->after(function ($validator) {
+            $name = trim((string) $this->input('name', ''));
+            if ($name === '') return;
+
+            // Count words (non-empty tokens separated by whitespace)
+            $words = preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+            $wordCount = is_array($words) ? count($words) : 0;
+
+            // If the name contains any digit but has fewer than 5 words, it's invalid
+            if (preg_match('/\\d/', $name) && $wordCount < 5) {
+                $validator->errors()->add('name', 'El nombre no puede contener números a menos que tenga al menos 5 palabras.');
+            }
+        });
     }
 
     protected function prepareForValidation(): void

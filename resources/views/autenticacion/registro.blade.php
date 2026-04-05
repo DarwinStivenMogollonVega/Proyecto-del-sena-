@@ -35,16 +35,17 @@
           </ul>
         </div>
       @endif
-      <form action="{{ route('registro.store') }}" method="post" class="mt-4">
+      <form id="registerForm" action="{{ route('registro.store') }}" method="post" class="mt-4">
         @csrf
         <div class="input-group mb-3">
           <div class="form-floating">
-            <input id="registerName" type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre" minlength="3" maxlength="100" pattern="^(?!.*\d).+$" title="El nombre no puede contener números." required />
+            <input id="registerName" type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="Nombre" minlength="3" maxlength="100" title="El nombre no puede contener números a menos que tenga al menos 5 palabras." required />
             <label for="registerName">Nombre</label>
           </div>
           <div class="input-group-text"><span class="bi bi-person"></span></div>
         </div>
         @error('name')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+        <div id="registerNameClientFeedback" class="invalid-feedback d-none">El nombre no puede contener números a menos que tenga al menos 5 palabras.</div>
         <div class="input-group mb-3">
           <div class="form-floating">
             <input id="registerEmail" type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="correo@ejemplo.com" maxlength="100" required />
@@ -115,15 +116,42 @@
 <script>
 (() => {
   const nameInput = document.getElementById('registerName');
+  const registerForm = document.getElementById('registerForm');
+  const nameClientFeedback = document.getElementById('registerNameClientFeedback');
   const passwordInput = document.getElementById('registerPassword');
   const confirmationInput = document.getElementById('registerPasswordConfirmation');
 
+  function nameHasDigitAndTooFewWords(val) {
+    const v = (val || '').trim();
+    if (!v) return false;
+    if (!/\d/.test(v)) return false; // no digits => ok
+    const words = v.split(/\s+/).filter(Boolean);
+    return words.length < 5;
+  }
+
   nameInput?.addEventListener('input', function () {
-    if (/\d/.test(this.value)) {
+    const invalid = nameHasDigitAndTooFewWords(this.value);
+    if (invalid) {
       this.classList.add('is-invalid');
+      if (nameClientFeedback) { nameClientFeedback.classList.remove('d-none'); }
     } else {
       this.classList.remove('is-invalid');
+      if (nameClientFeedback) { nameClientFeedback.classList.add('d-none'); }
     }
+  });
+
+  // form submit guard for browsers without JS validation or to give immediate feedback
+  registerForm?.addEventListener('submit', function (ev) {
+    const v = nameInput ? nameInput.value : '';
+    if (nameHasDigitAndTooFewWords(v)) {
+      ev.preventDefault(); ev.stopPropagation();
+      if (nameInput) nameInput.classList.add('is-invalid');
+      if (nameClientFeedback) { nameClientFeedback.classList.remove('d-none'); }
+      // focus the field so user can edit
+      if (nameInput) nameInput.focus();
+      return false;
+    }
+    return true;
   });
 
   const validatePasswords = () => {
