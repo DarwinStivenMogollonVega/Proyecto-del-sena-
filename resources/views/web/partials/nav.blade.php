@@ -120,7 +120,10 @@
                             @csrf
                         </form>
                     @else
-                        <a class="nav-link" href="{{ route('login') }}">Iniciar sesión</a>
+                        <a class="nav-link nav-cta-btn" href="{{ route('login') }}">
+                            <span class="nav-cta-icon"><i class="bi bi-box-arrow-in-right"></i></span>
+                            <span class="nav-cta-text">Iniciar sesión</span>
+                        </a>
                     @endauth
                 </li>
             </ul>

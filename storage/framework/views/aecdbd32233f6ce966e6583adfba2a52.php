@@ -121,7 +121,10 @@
                             <?php echo csrf_field(); ?>
                         </form>
                     <?php else: ?>
-                        <a class="nav-link" href="<?php echo e(route('login')); ?>">Iniciar sesión</a>
+                        <a class="nav-link nav-cta-btn" href="<?php echo e(route('login')); ?>">
+                            <span class="nav-cta-icon"><i class="bi bi-box-arrow-in-right"></i></span>
+                            <span class="nav-cta-text">Iniciar sesión</span>
+                        </a>
                     <?php endif; ?>
                 </li>
             </ul>
