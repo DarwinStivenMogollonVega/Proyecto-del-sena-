@@ -27,7 +27,6 @@
         img.logo-dark,
         .dz-brand-logo,
         .logo-dis-music {
-            max-width: 160px;
             height: auto;
             display: block;
         }

@@ -172,6 +172,31 @@ html[data-theme='dark'] .checkout-steps-bg {
   height: auto;
   object-fit: contain;
 }
+
+/* === OVERRIDE: duplicar tamaño del logo en responsive-section.css === */
+.dz-brand-logo.logo-dis-music.dz-logo-custom {
+  width: calc(80px * 2) !important;
+  min-width: calc(20px * 2) !important;
+  max-width: calc(40px * 2) !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 1400px) {
+  .dz-brand-logo.logo-dis-music.dz-logo-custom { width: calc(80px * 2) !important; }
+}
+@media (min-width: 1401px) and (max-width: 1920px) {
+  .dz-brand-logo.logo-dis-music.dz-logo-custom { width: calc(180px * 2) !important; }
+}
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .dz-brand-logo.logo-dis-music.dz-logo-custom { width: calc(220px * 2) !important; }
+}
+@media (min-width: 2561px) and (max-width: 3840px) {
+  .dz-brand-logo.logo-dis-music.dz-logo-custom { width: calc(260px * 2) !important; }
+}
+@media (min-width: 3841px) {
+  .dz-brand-logo.logo-dis-music.dz-logo-custom { width: calc(320px * 2) !important; }
+}
 .logo-light {
   display: block;
 }

@@ -1132,6 +1132,33 @@ nav.dz-nav.scrolled .cart-cta-btn .cart-count-badge {
     border-radius: 0.6rem !important;
 }
 
+/* === OVERRIDE: Duplicar tamaño del logo del header ===
+   Aplicado con alta especificidad y !important para no depender
+   de múltiples reglas dispersas en este archivo.
+   Si prefieres ajustar solo en pantallas grandes o móviles, indícalo. */
+nav.dz-nav .dz-brand-logo {
+    width: calc(59px * 2) !important;
+    min-width: calc(30px * 2) !important;
+    max-width: calc(86px * 2) !important;
+    height: auto !important;
+}
+
+@media (max-width: 1199.98px) {
+    nav.dz-nav .dz-brand-logo { width: calc(66px * 2) !important; }
+}
+@media (min-width: 992px) {
+    nav.dz-nav .dz-brand-logo { width: calc(50px * 2) !important; }
+}
+@media (max-width: 991.98px) {
+    nav.dz-nav .dz-brand-logo { width: calc(56px * 2) !important; }
+}
+@media (max-width: 767.98px) {
+    nav.dz-nav .dz-brand-logo { width: calc(48px * 2) !important; }
+}
+@media (max-width: 420px) {
+    nav.dz-nav .dz-brand-logo { width: calc(42px * 2) !important; }
+}
+
 /* Ensure pill variables are fixed when nav is scrolled so OVERRIDE FINAL uses correct colors */
 nav.dz-nav.scrolled {
     --nav-pill-bg: #ffffff;

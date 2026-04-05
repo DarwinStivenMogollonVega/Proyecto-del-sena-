@@ -71,6 +71,15 @@ return [
         'role_has_permissions' => 'role_has_permissions',
     ],
 
+    /* Spanish aliases for keys (compatibilidad) */
+    'nombres_tablas' => [
+        'roles' => 'roles',
+        'permissions' => 'permissions',
+        'model_has_permissions' => 'model_has_permissions',
+        'model_has_roles' => 'model_has_roles',
+        'role_has_permissions' => 'role_has_permissions',
+    ],
+
     'column_names' => [
         /*
          * Change this if you want to name the related pivots other than defaults
@@ -93,6 +102,20 @@ return [
          * foreign key is other than `team_id`.
          */
 
+        'team_foreign_key' => 'team_id',
+    ],
+
+    /* Spanish aliases for column names (compatibilidad) */
+    'nombres_columnas' => [
+        'role_pivot_key' => null,
+        'permission_pivot_key' => null,
+        'model_morph_key' => 'model_id',
+        /*
+         * Primary key names for package tables. These defaults avoid assuming
+         * a generic `id` column and can be overridden per-project.
+         */
+        'permission_primary_key' => 'permission_id',
+        'role_primary_key' => 'role_id',
         'team_foreign_key' => 'team_id',
     ],
 
@@ -132,6 +155,8 @@ return [
      */
 
     'teams' => false,
+    /* Spanish alias for teams */
+    'equipos' => false,
 
     /*
      * The class to use to resolve the permissions team id
