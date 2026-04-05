@@ -103,6 +103,7 @@ class ProductosSeeder extends Seeder
             $albumsMap->put($p['nombre'], $album);
         }
 
+
         // Insertar o actualizar productos y vincular
         // Preparar rutas para imágenes de seed
         $seedImagesPath = resource_path('seeders/product-images');
@@ -111,24 +112,47 @@ class ProductosSeeder extends Seeder
             mkdir($uploadsPath, 0755, true);
         }
 
+        // Listar archivos de imagen ya presentes en public/uploads/productos
+        $existingFiles = [];
+        if (is_dir($uploadsPath)) {
+            $all = scandir($uploadsPath);
+            foreach ($all as $f) {
+                if (in_array(strtolower(pathinfo($f, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp'])) {
+                    $existingFiles[] = $f;
+                }
+            }
+        }
+
         foreach ($productsData as $p) {
             $categoria = $categorias->firstWhere('nombre', $p['categoria']);
             $artista = $artistas->get($p['artista']);
 
-            // Buscar imagen en resources/seeders/product-images usando slug del nombre
+            // Buscar imagen existente en public/uploads/productos por coincidencia de slug o artista
             $slug = Str::slug($p['nombre']);
+            $artistSlug = Str::slug($p['artista']);
             $imageFile = 'default-product.jpg';
-            foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
-                $src = $seedImagesPath . DIRECTORY_SEPARATOR . $slug . '.' . $ext;
-                if (file_exists($src)) {
-                    $imageFile = $slug . '.' . $ext;
-                    // copiar a public/uploads/productos
-                    $dest = $uploadsPath . DIRECTORY_SEPARATOR . $imageFile;
-                    // solo copiar si no existe o es más nuevo
-                    if (!file_exists($dest)) {
-                        copy($src, $dest);
-                    }
+
+            foreach ($existingFiles as $f) {
+                $nameNoExt = pathinfo($f, PATHINFO_FILENAME);
+                $nameSlug = Str::slug($nameNoExt);
+                if (Str::contains($nameSlug, $slug) || Str::contains($nameSlug, $artistSlug)) {
+                    $imageFile = $f;
                     break;
+                }
+            }
+
+            // Si no hay coincidencias en uploads, intentar copiar desde resources/seeders/product-images por slug exacto
+            if ($imageFile === 'default-product.jpg') {
+                foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+                    $src = $seedImagesPath . DIRECTORY_SEPARATOR . $slug . '.' . $ext;
+                    if (file_exists($src)) {
+                        $imageFile = $slug . '.' . $ext;
+                        $dest = $uploadsPath . DIRECTORY_SEPARATOR . $imageFile;
+                        if (!file_exists($dest)) {
+                            copy($src, $dest);
+                        }
+                        break;
+                    }
                 }
             }
 

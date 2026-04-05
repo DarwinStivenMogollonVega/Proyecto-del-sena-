@@ -36,7 +36,7 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($nombresTablas['roles'], static function (Blueprint $table) use ($equipos, $nombresColumnas) {
+        Schema::create($nombresTablas['roles'], static function (Blueprint $table) use ($equipos, $nombresColumnas, $rolePk) {
             // $table->engine('InnoDB');
             $table->bigIncrements($rolePk); // role primary key (explicit)
             if ($equipos || config('permission.testing')) { // permission.testing is a fix for sqlite testing
@@ -52,7 +52,7 @@ return new class extends Migration
                 $table->unique(['name', 'guard_name']);
             }
         });
-        Schema::create($nombresTablas['model_has_permissions'], static function (Blueprint $table) use ($nombresTablas, $nombresColumnas, $pivotPermiso, $equipos) {
+        Schema::create($nombresTablas['model_has_permissions'], static function (Blueprint $table) use ($nombresTablas, $nombresColumnas, $pivotPermiso, $equipos, $permissionPk) {
             $table->unsignedBigInteger($pivotPermiso);
 
             $table->string('model_type');
@@ -76,7 +76,7 @@ return new class extends Migration
 
         });
 
-        Schema::create($nombresTablas['model_has_roles'], static function (Blueprint $table) use ($nombresTablas, $nombresColumnas, $pivotRol, $equipos) {
+        Schema::create($nombresTablas['model_has_roles'], static function (Blueprint $table) use ($nombresTablas, $nombresColumnas, $pivotRol, $equipos, $rolePk) {
             $table->unsignedBigInteger($pivotRol);
 
             $table->string('model_type');
@@ -99,7 +99,7 @@ return new class extends Migration
             }
         });
 
-        Schema::create($nombresTablas['role_has_permissions'], static function (Blueprint $table) use ($nombresTablas, $pivotRol, $pivotPermiso) {
+        Schema::create($nombresTablas['role_has_permissions'], static function (Blueprint $table) use ($nombresTablas, $pivotRol, $pivotPermiso, $permissionPk, $rolePk) {
             $table->unsignedBigInteger($pivotPermiso);
             $table->unsignedBigInteger($pivotRol);
 

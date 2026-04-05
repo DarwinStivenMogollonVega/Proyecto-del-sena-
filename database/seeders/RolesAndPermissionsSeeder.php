@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\RoleCustom as Role;
+use App\Models\PermissionCustom as Permission;
 
 
 class RolesAndPermissionsSeeder extends Seeder
@@ -16,9 +16,10 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear los roles
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $clienteRole = Role::firstOrCreate(['name' => 'cliente']);
+        // Crear los roles (incluyendo guard_name explícito)
+        $guard = config('auth.defaults.guard') ?? 'web';
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => $guard]);
+        $clienteRole = Role::firstOrCreate(['name' => 'cliente', 'guard_name' => $guard]);
         
         // Definir permisos
         $adminPermissions = [
@@ -38,12 +39,18 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Crear y asignar permisos
         foreach ($adminPermissions as $permiso) {
-            $permission = Permission::firstOrCreate(['name' => $permiso]);
+            $permission = Permission::firstOrCreate([
+                'name' => $permiso,
+                'guard_name' => $guard,
+            ]);
             $adminRole->givePermissionTo($permission);
         }
 
         foreach ($clientePermissions as $permiso) {
-            $permission = Permission::firstOrCreate(['name' => $permiso]);
+            $permission = Permission::firstOrCreate([
+                'name' => $permiso,
+                'guard_name' => $guard,
+            ]);
             $clienteRole->givePermissionTo($permission);
         }
 
