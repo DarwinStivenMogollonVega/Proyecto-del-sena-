@@ -42,7 +42,11 @@ class AppServiceProvider extends ServiceProvider
         // Disponibles solo en vistas web para evitar consultas innecesarias en admin.
         View::composer('web.*', function ($view) {
             $categorias = Cache::remember('shared.web.categorias', now()->addMinutes(30), function () {
-                return Categoria::select('id', 'nombre')->orderBy('nombre')->get();
+                if (Schema::hasTable('categorias')) {
+                    return Categoria::select('id', 'nombre')->orderBy('nombre')->get();
+                }
+
+                return collect();
             });
 
             $formatos = Cache::remember('shared.web.formatos', now()->addMinutes(30), function () {
@@ -54,7 +58,11 @@ class AppServiceProvider extends ServiceProvider
             });
 
             $artistas = Cache::remember('shared.web.artistas', now()->addMinutes(30), function () {
-                return Artista::select('artista_id', 'nombre')->orderBy('nombre')->get();
+                if (Schema::hasTable('artistas')) {
+                    return Artista::select('artista_id', 'nombre')->orderBy('nombre')->get();
+                }
+
+                return collect();
             });
 
             $view->with('categorias', $categorias);

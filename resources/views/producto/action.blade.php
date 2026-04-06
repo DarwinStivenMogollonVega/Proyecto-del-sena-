@@ -60,6 +60,16 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <!-- Descuento (porcentaje) -->
+                                <div class="col-md-3 mb-3">
+                                    <label for="descuento" class="form-label">Descuento (%)</label>
+                                    <input type="number" step="0.01" min="0" max="100" inputmode="decimal" class="form-control @error('descuento') is-invalid @enderror"
+                                        id="descuento" name="descuento"
+                                        value="{{ old('descuento', $registro->descuento ?? 0) }}" placeholder="0 - 100">
+                                    @error('descuento')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                               <!--cantidad -->
                                 <div class="col-md-3 mb-3">
                                     <label for="cantidad" class="form-label">Cantidad</label>

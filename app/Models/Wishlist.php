@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wishlist extends Model
 {
+    protected $table = 'lista_deseos';
     protected $fillable = [
         'user_id',
         'producto_id',

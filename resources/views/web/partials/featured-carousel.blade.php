@@ -28,7 +28,7 @@
                                         <div class="card-body p-2">
                                             <h6 class="card-title mb-1">{{ Str::limit($prod->nombre, 40) }}</h6>
                                             <p class="card-text small text-muted mb-1">{{ $prod->artista?->nombre ?? '' }}</p>
-                                            <div class="price fw-bold">${{ number_format($prod->precio - ($prod->descuento ?? 0), 2) }}</div>
+                                            <div class="price fw-bold">${{ number_format($prod->precio * (1 - (($prod->descuento ?? 0)/100)), 2) }}</div>
                                         </div>
                                     </a>
                                 </div>

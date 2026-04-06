@@ -39,6 +39,7 @@ class ProductoRequest extends FormRequest
             'anio_lanzamiento' => ['nullable', 'integer', 'regex:/^\d+$/', 'between:1900,2100'],
             'lista_canciones' => ['nullable', 'string', 'max:5000'],
             'descripcion' => ['nullable', 'string', 'max:1000'],
+            'descuento' => ['nullable', 'numeric', 'between:0,100'],
             'imagen' => [$method === 'POST' ? 'required' : 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];
         return $rules;
@@ -51,6 +52,7 @@ class ProductoRequest extends FormRequest
             'nombre' => strip_tags(trim((string) $this->input('nombre', ''))),
             'descripcion' => is_null($this->input('descripcion')) ? null : trim((string) $this->input('descripcion')),
             'lista_canciones' => is_null($this->input('lista_canciones')) ? null : trim((string) $this->input('lista_canciones')),
+            'descuento' => $this->input('descuento') === null || $this->input('descuento') === '' ? 0 : $this->input('descuento'),
         ]);
     }
 
@@ -97,6 +99,9 @@ class ProductoRequest extends FormRequest
             'imagen.image' => 'El archivo debe ser una imagen.',
             'imagen.mimes' => 'La imagen debe ser de tipo JPG o PNG.',
             'imagen.max' => 'La imagen no debe pesar más de 2MB.',
+            'descuento.numeric' => 'El descuento debe ser un número válido.',
+            'descuento.between' => 'El descuento debe estar entre 0 y 100 (porcentaje).',
+            'descuento.numeric' => 'El descuento debe ser un número válido.',
         ];
     }
 }

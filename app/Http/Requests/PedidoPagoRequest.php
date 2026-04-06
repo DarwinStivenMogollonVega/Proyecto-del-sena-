@@ -21,7 +21,7 @@ class PedidoPagoRequest extends FormRequest
             // comprobante obligatorio para todos los métodos de pago
             'comprobante_pago' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'requiere_factura_electronica' => ['nullable', 'boolean'],
-            'tipo_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', Rule::in(['nit', 'cedula'])],
+            'tipo_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', Rule::in(['nit', 'cedula', 'ppt', 'pasaporte', 'tarjeta_identidad'])],
             'numero_documento' => ['required_if:requiere_factura_electronica,1', 'nullable', 'digits_between:6,10'],
             'razon_social' => ['required_if:requiere_factura_electronica,1', 'nullable', 'string', 'max:140'],
             'correo_factura' => ['required_if:requiere_factura_electronica,1', 'nullable', 'email', 'max:120'],

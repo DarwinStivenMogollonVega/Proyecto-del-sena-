@@ -87,3 +87,13 @@ body {
     }
 }
 
+/* Ensure main content grows so footer stays at bottom when page content is short */
+.dz-main-content {
+    flex: 1 0 auto;
+}
+
+/* Small safeguard: footer should not be positioned absolute/fixed */
+footer, .app-footer, .footer-discmusic {
+    position: relative;
+}
+

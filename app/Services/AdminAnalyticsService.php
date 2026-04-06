@@ -134,7 +134,7 @@ class AdminAnalyticsService
         );
     }
 
-    private function dashboardStats(): array
+    protected function dashboardStats(): array
     {
         return Cache::remember('analytics.dashboard.stats', now()->addMinutes(5), function (): array {
             $proveedoresData = $this->proveedoresAnalytics();
@@ -283,7 +283,7 @@ class AdminAnalyticsService
         };
     }
 
-    private function proveedoresData(): array
+    protected function proveedoresData(): array
     {
         $proveedoresData = $this->proveedoresAnalytics();
         $rows = $proveedoresData['rows'];
@@ -335,7 +335,7 @@ class AdminAnalyticsService
     /**
      * Analitica agregada por proveedor usando proveedores -> productos -> pedido_detalles.
      */
-    private function proveedoresAnalytics(): array
+    protected function proveedoresAnalytics(): array
     {
         $rows = Cache::remember('analytics.proveedores.rows', now()->addMinutes(5), function () {
             // proveedores table uses `proveedor_id` as primary key; select and group by that column
@@ -393,7 +393,7 @@ class AdminAnalyticsService
         ];
     }
 
-    private function ventasData(): array
+    protected function ventasData(): array
     {
         $stats = $this->dashboardStats();
 
@@ -442,10 +442,12 @@ class AdminAnalyticsService
                 'stock' => (int) $producto->cantidad,
                 'precio' => number_format((float) $producto->precio, 2, '.', ''),
                 'descuento' => number_format((float) $producto->descuento, 2, '.', ''),
-                'precio_final' => number_format((float) ($producto->precio - $producto->descuento), 2, '.', ''),
+                'precio_final' => number_format((float) ($producto->precio * (1 - ($producto->descuento/100))), 2, '.', ''),
             ]);
 
-        $totalDescuentos = Producto::where('descuento', '>', 0)->sum('descuento');
+        $totalDescuentos = Producto::where('descuento', '>', 0)
+            ->get()
+            ->sum(fn (Producto $p) => (float) $p->precio * ((float) $p->descuento / 100));
         $productosConDescuento = Producto::where('descuento', '>', 0)->count();
         return [
             'categoria' => 'productos',
@@ -601,7 +603,7 @@ class AdminAnalyticsService
      * Usa las mismas fuentes de datos (pedidos, pedido_detalles, productos)
      * que emplea el dashboard del cliente para $productosFrecuentes y $categoriasInteres.
      */
-    private function categoriaEspecificaData(int $catId): array
+    protected function categoriaEspecificaData(int $catId): array
     {
         $cat = Categoria::findOrFail($catId);
 
@@ -659,7 +661,7 @@ class AdminAnalyticsService
         ];
     }
 
-    private function panelModuleRow(string $moduleName, $query): array
+    protected function panelModuleRow(string $moduleName, $query): array
     {
         $count = (clone $query)->count();
         $lastUpdatedAt = (clone $query)->max('updated_at') ?? (clone $query)->max('created_at');

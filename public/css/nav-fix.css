@@ -1,18 +1,27 @@
-﻿/* Asegura que el nav siempre esté arriba y por encima del contenido */
-/* Nav siempre fijo arriba */
+﻿/* Make navbar fixed only when scrolled to avoid overlapping header */
+/* By default nav flows with the document so it doesn't cover the hero/header. */
 .dz-nav {
-    position: fixed !important;
-    z-index: 1002 !important;
+    /* Keep nav in normal document flow so it does NOT overlap the header/hero */
+    position: relative;
     width: 100%;
+    z-index: 1002; /* keep above most content but below any overlay elements */
+    border-radius: 0;
+    background: transparent;
+}
+
+/* When JS adds the `.scrolled` class we fix the nav to the top */
+.dz-nav.scrolled {
+    position: fixed !important;
     top: 0;
     left: 0;
     right: 0;
-    border-radius: 0 !important;
+    width: 100%;
+    z-index: 1100 !important;
 }
-body { padding-top: 76px !important; }
-@media (max-width: 991.98px) {
-    body { padding-top: 62px !important; }
-}
+
+/* Padding for fixed navbar is applied dynamically via JS (inline style).
+   The legacy helper class `body.navbar-fixed-padding` was removed to avoid
+   duplicate/unused CSS. */
 
 
 

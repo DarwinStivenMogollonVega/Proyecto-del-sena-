@@ -7,6 +7,11 @@
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
+            <file>tests/Unit/PagoPedidoViewTest.php</file>
+            <file>tests/Unit/ContactoViewTest.php</file>
+            <file>tests/Unit/HomeControllerTest.php</file>
+            <file>tests/Unit/IndexViewTest.php</file>
+            <file>tests/Unit/CategoriaViewTest.php</file>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>

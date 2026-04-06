@@ -19,27 +19,26 @@
       name="description"
       content="Sistema."
     />
-    <meta
-      name="keywords"
-      content="Sistema, ArtCode"
-        /* Sticky actions column for small screens */
-        @media (max-width: 768px) {
-          .table-responsive { overflow: visible; }
-          th.actions-col,
-          td.actions-col {
-            position: -webkit-sticky;
-            position: sticky;
-            right: 0;
-            background: var(--adm-surface);
-            z-index: 1051;
-            box-shadow: -8px 0 18px rgba(15,23,42,0.06);
-            min-width: 72px;
-            vertical-align: middle;
-          }
-          th.actions-col { text-align: right; }
-          td.actions-col .btn { min-width: 40px; }
+    <meta name="keywords" content="Sistema, ArtCode" />
+    <!-- Sticky actions column for small screens -->
+    <style>
+      @media (max-width: 768px) {
+        .table-responsive { overflow: visible; }
+        th.actions-col,
+        td.actions-col {
+          position: -webkit-sticky;
+          position: sticky;
+          right: 0;
+          background: var(--adm-surface);
+          z-index: 1051;
+          box-shadow: -8px 0 18px rgba(15,23,42,0.06);
+          min-width: 72px;
+          vertical-align: middle;
         }
-    />
+        th.actions-col { text-align: right; }
+        td.actions-col .btn { min-width: 40px; }
+      }
+    </style>
     <!--end::Primary Meta Tags-->
     <!--begin::Fonts-->
     <link

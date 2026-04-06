@@ -153,12 +153,29 @@
         var nav = document.querySelector('.dz-nav');
         if (!nav) return;
 
+        var updateBodyPadding = function () {
+            var h = nav.offsetHeight || 0;
+            // set inline padding-top with !important so it overrides stylesheet helpers
+            document.body.style.setProperty('padding-top', h + 'px', 'important');
+        };
+
+        var clearBodyPadding = function () {
+            document.body.style.removeProperty('padding-top');
+        };
+
         var onScroll = function () {
             if (window.scrollY > 10) {
                 nav.classList.add('scrolled');
+                updateBodyPadding();
             } else {
                 nav.classList.remove('scrolled');
+                clearBodyPadding();
             }
+        };
+
+        // Recalculate padding when window resizes (e.g., responsive layout changes)
+        var onResize = function () {
+            if (nav.classList.contains('scrolled')) updateBodyPadding();
         };
 
         // Toggle 'scrolled-pill' on cart and theme buttons to force final pill styles
@@ -175,6 +192,7 @@
         togglePills();
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('scroll', togglePills, { passive: true });
+        window.addEventListener('resize', onResize, { passive: true });
     });
     
         // Interceptar formularios "Agregar al carrito" para actualizar la badge sin recargar
@@ -237,6 +255,37 @@
                 });
             }, { passive: false });
         });
+
+    // Ensure navbar toggler visual consistency across pages (override page-specific CSS)
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            var toggler = document.querySelector('nav.dz-nav button.navbar-toggler');
+            if (!toggler) return;
+            // use CSS variables for colors so mode (light/dark) is respected
+            var rootStyles = getComputedStyle(document.documentElement);
+            var textColor = rootStyles.getPropertyValue('--color-text') || rootStyles.getPropertyValue('--dz-text-main') || '#111827';
+            textColor = textColor.trim() || '#111827';
+
+            toggler.style.background = 'transparent';
+            toggler.style.border = '1.2px solid ' + textColor;
+            toggler.style.boxShadow = 'none';
+            toggler.style.padding = '0.22rem 0.6rem';
+            toggler.style.borderRadius = '0.6rem';
+
+            var icon = toggler.querySelector('.navbar-toggler-icon');
+            if (icon) {
+                icon.style.backgroundImage = 'none';
+                icon.style.backgroundColor = textColor;
+                icon.style.width = '1.6rem';
+                icon.style.height = '2px';
+                // before/after bars
+                icon.style.setProperty('--bar-color', textColor);
+            }
+        } catch (e) {
+            // silent
+            console.warn('Failed to enforce toggler styles', e);
+        }
+    });
 
 </script>
 <?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/partials/nav.blade.php ENDPATH**/ ?>

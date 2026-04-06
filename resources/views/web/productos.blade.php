@@ -90,7 +90,16 @@
                                 @if ($stockAll >= 50)
                                     <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                 @elseif ($stockAll > 0)
-                                    <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($producto->precio - ($producto->descuento ?? 0)), 2) }}</span>
+                                    @if(!empty($producto->descuento) && $producto->descuento > 0)
+                                        <p class="all-product-discount carousel-price">
+                                            <i class="bi bi-tag-fill me-1"></i>
+                                            ${{ number_format($producto->precio * (1 - ($producto->descuento/100)), 2) }}
+                                            <span class="text-decoration-line-through text-muted ms-2">${{ number_format($producto->precio, 2) }}</span>
+                                            <span class="badge bg-warning text-dark ms-2">- {{ number_format($producto->descuento, 2) }}% descuento</span>
+                                        </p>
+                                    @else
+                                        <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format($producto->precio, 2) }}</span>
+                                    @endif
                                 @else
                                     <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                 @endif
@@ -108,7 +117,7 @@
                                     <span><i class="bi bi-box-seam me-1"></i>{{ $stockAll }}</span>
                                 </div>
                                 @php
-                                    if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                                    if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('lista_deseos')) {
                                         $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
                                     } else {
                                         $inWishlist = session('wishlist') && array_key_exists($producto->getKey(), session('wishlist'));

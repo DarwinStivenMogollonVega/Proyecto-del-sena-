@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Resumen: Vistas y Tecnologías — Proyecto DiscZone</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:#0f172a;color:#e6eef8;margin:0}
+    header{padding:1rem 1.25rem;background:#0b1220;border-bottom:1px solid rgba(255,255,255,.04)}
+    .wrap{max-width:1000px;margin:2rem auto;padding:1rem}
+    h1{margin:.2rem 0 1rem;font-size:1.25rem}
+    .slide{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);border-radius:10px;padding:1rem;margin:1rem 0}
+    .row{display:flex;gap:1rem;flex-wrap:wrap}
+    .card{flex:1 1 320px;background:rgba(7,10,16,.5);padding:.8rem;border-radius:8px;border:1px solid rgba(255,255,255,.03)}
+    .k{font-weight:700;color:#ffd580}
+    ul{margin:.4rem 0 0 1rem;padding:0}
+    li{margin:.35rem 0}
+    footer{padding:1rem;text-align:right;font-size:.9rem;color:#9fb0c9}
+    a.file{color:#8be9fd}
+    .note{color:#9fb0c9;font-size:.95rem}
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Presentación técnica</strong> · Tecnologías y funciones por vista
+  </header>
+  <main class="wrap">
+    <h1>Contenido</h1>
+    <div class="slide">
+      <div class="row">
+        <div class="card">
+          <div class="k">Layout principal</div>
+          <ul>
+            <li><strong>Archivo:</strong> <a class="file" href="resources/views/web/app.blade.php">resources/views/web/app.blade.php</a></li>
+            <li><strong>Tecnologías:</strong> Blade, Bootstrap 5 (CDN), Bootstrap Icons, Google Fonts, CSS modulares, vanilla JS.</li>
+            <li><strong>Funciones:</strong> `@yield`, `@stack`, theme toggle (localStorage), global toast, IntersectionObserver reveal, includes de partials.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Partials: nav, header, footer</div>
+          <ul>
+            <li><strong>Archivos:</strong> <a class="file" href="resources/views/web/partials/nav.blade.php">nav</a>, <a class="file" href="resources/views/web/partials/header.blade.php">header</a>, <a class="file" href="resources/views/web/partials/footer.blade.php">footer</a></li>
+            <li><strong>Tecnologías:</strong> Blade partials, Bootstrap navbar, custom CSS sections.</li>
+            <li><strong>Funciones:</strong> Auth checks, `@can`/`@canany`, AJAX add-to-cart delegate, cart badge update, wishlist toggle hook.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="k">Vistas públicas — Tienda</div>
+      <div class="row">
+        <div class="card">
+          <div class="k">Index / Home</div>
+          <ul>
+            <li>Archivo: <a class="file" href="resources/views/web/index.blade.php">index.blade.php</a></li>
+            <li>Muestra secciones: carousels, métricas, búsqueda/orden.</li>
+            <li>JS: controlador de carousel (vanilla), reveal FX, wishlist button.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Listado y detalle</div>
+          <ul>
+            <li>Archivos: <a class="file" href="resources/views/web/productos.blade.php">productos.blade.php</a>, <a class="file" href="resources/views/web/item.blade.php">item.blade.php</a></li>
+            <li>Funciones: paginación (`->links()`), filtros GET, formulario `carrito.agregar` (POST + `@csrf`), reseñas (`@auth`).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="k">Flujo de compra (checkout)</div>
+      <div class="row">
+        <div class="card">
+          <div class="k">Carrito y pedido</div>
+          <ul>
+            <li>Archivos: <a class="file" href="resources/views/web/pedido.blade.php">pedido.blade.php</a>, <a class="file" href="resources/views/web/formulario_pedido.blade.php">formulario_pedido.blade.php</a>, <a class="file" href="resources/views/web/entrega_pedido.blade.php">entrega_pedido.blade.php</a>, <a class="file" href="resources/views/web/pago_pedido.blade.php">pago_pedido.blade.php</a></li>
+            <li>Tecnologías: selects dinámicos (`colombia-selects.js`), JS para campos condicionales en pago, composición de `direccion` antes de submit.</li>
+            <li>Funciones: rutas `pedido.datos.guardar`, `pedido.entrega`, `pedido.pago.guardar`, manejo de errores e `old()`.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Facturación / Recibos</div>
+          <ul>
+            <li>Archivos: <a class="file" href="resources/views/web/recibos_factura.blade.php">recibos_factura.blade.php</a>, <a class="file" href="resources/views/web/recibo_factura_detalle.blade.php">recibo_factura_detalle.blade.php</a>, <a class="file" href="resources/views/web/factura_pdf.blade.php">factura_pdf.blade.php</a></li>
+            <li>Propósito: listar facturas, ver detalle, descargar PDF (plantilla para dompdf/snappy).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="k">Funciones de usuario</div>
+      <div class="row">
+        <div class="card">
+          <div class="k">Perfil / Pedidos / Wishlist</div>
+          <ul>
+            <li>Vistas: `mis_pedidos`, `wishlist`, `dashboard_cliente`</li>
+            <li>Funciones: gestión de sesiones, muestra datos desde modelos, `@auth`, permisos con `@can`.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="k">Panel de control (Admin)</div>
+      <div class="row">
+        <div class="card">
+          <div class="k">Vista: Panel de control</div>
+          <ul>
+            <li>Archivo: <a class="file" href="resources/views/dashboard.blade.php">dashboard.blade.php</a></li>
+            <li>Tecnologías: Blade admin layout (`plantilla.app`), Bootstrap, Chart.js (CDN), CSS admin (`dashboard-section.css`).</li>
+            <li>Widgets: tarjetas de métricas, tablas responsivas, gráficos (Chart.js), barras de progreso visuales.</li>
+            <li>Funciones: `@can`/`@canany` para módulos, inclusión de módulos (Productos, Pedidos, Clientes, Facturas), llamadas a rutas administrativas (`admin.pedidos`, `admin.facturas`, `usuarios.index`).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="k">Vistas administrativas adicionales</div>
+          <ul>
+            <li>Archivos localizados: <a class="file" href="resources/views/admin/pedidos/index.blade.php">admin/pedidos/index.blade.php</a>, <a class="file" href="resources/views/admin/facturas/index.blade.php">admin/facturas/index.blade.php</a>, creación/edición de facturas.</li>
+            <li>Funciones: listas CRUD, permisos, acciones en lote y enlaces a generación de PDFs.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="k">Patrones comunes</div>
+      <ul>
+        <li>Blade + Bootstrap como base UI.</li>
+        <li>Icons: Bootstrap Icons CDN; CSS modular por sección (header, nav, index, item, checkout, admin).</li>
+        <li>Interactividad: vanilla JS (fetch, event delegation), Chart.js en admin, IntersectionObserver para animaciones.</li>
+        <li>Formularios: `@csrf`, `old()`, `$errors`, rutas nombradas y validación server-side.</li>
+        <li>Acceso: `@auth`, `@can`, `@canany`, checks inline con `auth()->user()->can()`.</li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <div class="k">Siguientes pasos (opcional)</div>
+      <ul>
+        <li>Generar PDF/PowerPoint con estas tarjetas — puedo convertirlo si quieres.</li>
+        <li>Agregar screenshots de cada vista dentro de la presentación (requiere ejecutar app y tomar capturas).</li>
+      </ul>
+    </div>
+
+    <footer>
+      Archivo generado: <a href="docs/presentation.html">docs/presentation.html</a>
+    </footer>
+  </main>
+  <script>
+    (function(){
+      try {
+        var slides = Array.from(document.querySelectorAll('.slide'));
+        if (!slides.length) return;
+        var idx = 0;
+        function show(i){
+          slides.forEach(function(s, j){ s.style.display = (j===i) ? 'block' : 'none'; });
+        }
+        // Inicializar mostrando la primera diapositiva
+        show(0);
+
+        // Intervalo: 30 horas -> 30 * 3600 * 1000 = 108000000 ms
+        var THIRTY_HOURS = 30 * 3600 * 1000;
+
+        // Avanzar cada 30 horas
+        setInterval(function(){
+          idx = (idx + 1) % slides.length;
+          show(idx);
+        }, THIRTY_HOURS);
+      } catch (e) {
+        // silencioso si falla
+        console.warn('autoplay error', e);
+      }
+    })();
+  </script>
+</body>
+</html>

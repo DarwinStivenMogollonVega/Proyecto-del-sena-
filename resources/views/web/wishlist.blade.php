@@ -28,7 +28,7 @@
 
     <div class="wishlist-section rounded shadow-sm p-4">
         <h2 class="text-center mb-4 wishlist-section-title">Lista de Deseados</h2>
-        @if(auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists'))
+        @if(auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('lista_deseos'))
             @php
                 $items = \App\Models\Wishlist::where('user_id', auth()->id())->with('producto')->get();
             @endphp
@@ -66,7 +66,16 @@
                                     @if ($stock >= 50)
                                         <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                     @elseif ($stock > 0)
-                                        <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($p->precio - ($p->descuento ?? 0)), 2) }}</span>
+                                        @if(!empty($p->descuento) && $p->descuento > 0)
+                                            <p class="all-product-discount carousel-price">
+                                                <i class="bi bi-tag-fill me-1"></i>
+                                                ${{ number_format($p->precio * (1 - ($p->descuento/100)), 2) }}
+                                                <span class="text-decoration-line-through text-muted ms-2">${{ number_format($p->precio, 2) }}</span>
+                                                <span class="badge bg-warning text-dark ms-2">- {{ number_format($p->descuento, 2) }}% descuento</span>
+                                            </p>
+                                        @else
+                                            <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format($p->precio, 2) }}</span>
+                                        @endif
                                     @else
                                         <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                     @endif
@@ -133,7 +142,20 @@
                                     @if ($stock >= 50)
                                         <span class="all-product-discount"><i class="bi bi-check-circle me-1"></i>Disponible</span>
                                     @elseif ($stock > 0)
-                                        <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format(($item['precio'] ?? 0) - ($item['descuento'] ?? 0), 2) }}</span>
+                                        @php
+                                            $itmPrice = (float) ($item['precio'] ?? 0);
+                                            $itmDesc = (float) ($item['descuento'] ?? 0);
+                                        @endphp
+                                        @if($itmDesc > 0)
+                                            <p class="all-product-discount carousel-price">
+                                                <i class="bi bi-tag-fill me-1"></i>
+                                                ${{ number_format($itmPrice * (1 - ($itmDesc/100)), 2) }}
+                                                <span class="text-decoration-line-through text-muted ms-2">${{ number_format($itmPrice, 2) }}</span>
+                                                <span class="badge bg-warning text-dark ms-2">- {{ number_format($itmDesc, 2) }}% descuento</span>
+                                            </p>
+                                        @else
+                                            <span class="all-product-discount"><i class="bi bi-tag-fill me-1"></i>${{ number_format($itmPrice, 2) }}</span>
+                                        @endif
                                     @else
                                         <span class="all-product-discount"><i class="bi bi-x-circle me-1"></i>Agotado</span>
                                     @endif

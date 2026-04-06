@@ -38,7 +38,10 @@ class PedidoController extends Controller
             try {
                 $total = 0;
                 foreach ($carrito as $item) {
-                    $total += $item['precio'] * $item['cantidad'];
+                    $unit = (float) ($item['precio'] ?? 0);
+                    $desc = (float) ($item['descuento'] ?? 0);
+                    $unitFinal = $unit * (1 - ($desc / 100));
+                    $total += $unitFinal * ($item['cantidad'] ?? 0);
                 }
 
                 $requiereFactura = $request->boolean('requiere_factura_electronica', false);
@@ -78,13 +81,16 @@ class PedidoController extends Controller
                     if (!$productoExiste) {
                         throw new \RuntimeException('Uno de los productos del carrito ya no existe.');
                     }
+                    $unit = (float) ($item['precio'] ?? 0);
+                    $desc = (float) ($item['descuento'] ?? 0);
+                    $unitFinal = $unit * (1 - ($desc / 100));
                     PedidoDetalle::create([
                         'pedido_id' => $pedido->getKey(),
                         'producto_id' => $productoId,
                         'cantidad' => $item['cantidad'],
-                        'precio' => $item['precio'],
+                        'precio' => $unitFinal,
                     ]);
-                    $subtotal += $item['precio'] * $item['cantidad'];
+                    $subtotal += $unitFinal * $item['cantidad'];
                 }
 
                 $impuestos = round($subtotal * 0.19, 2);
@@ -307,7 +313,10 @@ class PedidoController extends Controller
         try {
             $total = 0;
             foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
+                $unit = (float) ($item['precio'] ?? 0);
+                $desc = (float) ($item['descuento'] ?? 0);
+                $unitFinal = $unit * (1 - ($desc / 100));
+                $total += $unitFinal * ($item['cantidad'] ?? 0);
             }
 
             $requiereFactura = $pago['requiere_factura_electronica'] ?? false;
@@ -349,13 +358,16 @@ class PedidoController extends Controller
                 if (!$productoExiste) {
                     throw new \RuntimeException('Uno de los productos del carrito ya no existe.');
                 }
+                $unit = (float) ($item['precio'] ?? 0);
+                $desc = (float) ($item['descuento'] ?? 0);
+                $unitFinal = $unit * (1 - ($desc / 100));
                 PedidoDetalle::create([
                     'pedido_id' => $pedido->getKey(),
                     'producto_id' => $productoId,
                     'cantidad' => $item['cantidad'],
-                    'precio' => $item['precio'],
+                    'precio' => $unitFinal,
                 ]);
-                $subtotal += $item['precio'] * $item['cantidad'];
+                $subtotal += $unitFinal * $item['cantidad'];
             }
 
             $impuestos = round($subtotal * 0.19, 2);

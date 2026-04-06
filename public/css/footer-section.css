@@ -27,22 +27,21 @@
    FOOTER ESTILOS
 ======================= */
 .footer-discmusic {
-    background-color: var(--footer-bg);
     color: var(--footer-text);
-    
-    margin-top: 80px; /* separación del contenido */
-    padding-top: 50px;
-    padding-bottom: 30px;
+
+    margin-top: 0; /* footer pegado al borde del cuadro */
+    padding-top: 30px;
+    padding-bottom: 24px;
 
     border-top: 3px solid var(--footer-link); /* línea superior */
-    
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.08); /* profundidad */
+
+    box-shadow: 0 -3px 12px rgba(0,0,0,0.06); /* profundidad más sutil */
 }
 
 /* Línea divisoria más elegante */
 .footer-divider {
     border-radius: 20px 20px 0 0;
-    margin: 80px 20px 0 20px;
+    margin: 8px 8px 0 8px; /* reducir margen lateral y superior */
     height: 1px;
     background: linear-gradient(
         to right,
@@ -87,8 +86,42 @@
 .footer-divider {
     border-color: var(--footer-divider);
 }
+html[data-theme='dark'] .footer-divider {
+    border-color: var(--footer-divider);
+}
 
 .footer-copy {
     font-size: 0.9rem;
     margin-top: 10px;
 }
+
+/* --- Estilos específicos cuando la página es 'Acerca' --- */
+/* --- Estilos específicos cuando la página es 'Acerca' --- */
+/* Hacer que el footer en /acerca copie la paleta del index (crema + naranja) */
+body.page-acerca .footer-discmusic {
+    background-color: transparent; /* fondo transparente según solicitud */
+    color: var(--dz-text-main, var(--footer-text));
+    border-top: none; /* sin línea superior */
+    box-shadow: none;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+html[data-theme='dark'] body.page-acerca .footer-discmusic {
+    background-color: transparent; /* también transparente en modo oscuro */
+    color: #f0e0d2;
+    border-top-color: rgba(224,122,48,0.18);
+    box-shadow: none;
+}
+body.page-acerca .footer-links a {
+    color: #ff0000; /* rojo oscuro para coincidir con la captura */
+    text-decoration: underline;
+}
+body.page-acerca .footer-title {
+    color: #2b1a12; /* título oscuro para buen contraste */
+}
+html[data-theme='dark'] body.page-acerca .footer-title {
+    color: #f0e0d2; /* título oscuro para buen contraste */
+}
+body.page-acerca .footer-discmusic::before { display: none; }
+body.page-acerca .footer-copy { margin-top: 18px; }
+

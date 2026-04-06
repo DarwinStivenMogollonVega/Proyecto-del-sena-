@@ -217,7 +217,7 @@ html[data-theme='dark'] .about-hero p {
     background: radial-gradient(circle at 10% 15%, var(--dz-page-grad-1, rgba(245, 158, 11, 0.26)), transparent 36%),
         radial-gradient(circle at 88% 14%, var(--dz-page-grad-2, rgba(249, 115, 22, 0.22)), transparent 30%),
         linear-gradient(135deg, var(--dz-page-grad-3, #111827) 0%, var(--dz-accent, #7c2d12) 52%, var(--dz-surface, #1f2937) 100%);
-    background-attachment: fixed;
+    background-attachment: scroll;
     border: 1px solid #3a2415;
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
@@ -227,7 +227,7 @@ html[data-theme='dark'] .about-hero p {
     transition: box-shadow 0.2s;
 }html[data-theme='dark'] .about-card {
     background: radial-gradient(circle at 10% 12%, rgba(196, 99, 16, 0.14), transparent 28%), radial-gradient(circle at 85% 16%, rgba(184, 153, 144, 0.16), transparent 30%), linear-gradient(165deg, var(--dz-page-grad-1) 0%, var(--dz-page-grad-2) 45%, var(--dz-page-grad-3) 100%);
-    background-attachment: fixed;
+    background-attachment: scroll;
     border: 1px solid #e5e7eb;
     border-radius: 1rem;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
@@ -333,5 +333,13 @@ html[data-theme='dark'] .about-highlight {
     .about-block {
         padding: 1rem;
     }
+}
+
+/* Posicionado del nav específico para la página Acerca: fuera del cuadro principal */
+.acerca-local-nav {
+    margin-top: 1.6rem;
+}
+.acerca-local-nav .dz-nav {
+    margin-bottom: 0;
 }
 

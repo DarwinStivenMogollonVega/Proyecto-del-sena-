@@ -19,8 +19,11 @@
             $total = 0;
             $itemsCount = 0;
             foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
-                $itemsCount += $item['cantidad'];
+                $unit = (float) ($item['precio'] ?? 0);
+                $desc = (float) ($item['descuento'] ?? 0);
+                $unitFinal = $unit * (1 - ($desc / 100));
+                $total += $unitFinal * ($item['cantidad'] ?? 0);
+                $itemsCount += $item['cantidad'] ?? 0;
             }
         @endphp
         <div class="cart-hero mb-4">
@@ -55,7 +58,20 @@
                                 </div>
                             </div>
                             <div class="col-2 text-center cart-price">
-                                <span class="cart-price-value" style="color:#ff9900; font-weight:600; font-size:1.1rem;">${{ number_format($item['precio'], 2) }}</span>
+                                @php
+                                    $unit = (float) ($item['precio'] ?? 0);
+                                    $desc = (float) ($item['descuento'] ?? 0);
+                                    $unitFinal = $unit * (1 - ($desc / 100));
+                                @endphp
+                                @if($desc > 0)
+                                    <div>
+                                        <span class="cart-price-value" style="color:#ff9900; font-weight:600; font-size:1.1rem;">${{ number_format($unitFinal, 2) }}</span>
+                                        <div class="text-decoration-line-through text-muted">${{ number_format($unit, 2) }}</div>
+                                        <div><span class="badge bg-warning text-dark">- {{ number_format($desc, 2) }}% descuento</span></div>
+                                    </div>
+                                @else
+                                    <span class="cart-price-value" style="color:#ff9900; font-weight:600; font-size:1.1rem;">${{ number_format($unit, 2) }}</span>
+                                @endif
                             </div>
                             <div class="col-3 d-flex justify-content-center cart-qty">
                                 <div class="qty-box d-flex align-items-center" style="background:#1a0e07; border-radius: 24px; border:1px solid #3a2417;">
@@ -65,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="col-2 text-end">
-                                <span class="cart-subtotal" style="color:#ff9900; font-weight:600; font-size:1.1rem;">${{ number_format($item['precio'] * $item['cantidad'], 2) }}</span>
+                                <span class="cart-subtotal" style="color:#ff9900; font-weight:600; font-size:1.1rem;">${{ number_format($unitFinal * $item['cantidad'], 2) }}</span>
                             </div>
                             <div class="col-2 text-center">
                                 <a class="btn btn-sm btn-outline-danger" href="{{ route('carrito.eliminar', $id) }}">

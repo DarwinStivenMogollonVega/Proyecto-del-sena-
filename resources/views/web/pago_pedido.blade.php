@@ -4,8 +4,9 @@
 <link rel="stylesheet" href="{{ asset('css/formulario_pedido_section.css') }}"> 
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">        
 @endpush
-
-
+@section('manual_nav')
+    @include('web.partials.nav')
+@endsection
 @section('contenido')
 <section class="formulario-pedido-wrap py-5" style="margin-top: 0rem;">
     @include('web.partials.checkout_steps', ['currentStep' => 3])
@@ -130,9 +131,12 @@
                             <div class="mb-2">
                                 <label class="form-label">Tipo de documento</label>
                                 <select name="tipo_documento" class="form-select">
-                                    <option value="">Selecciona...</option>     
+                                    <option value="">Selecciona...</option>
                                     <option value="nit">NIT</option>
-                                    <option value="cedula">Cédula</option>      
+                                    <option value="cedula">Cédula</option>
+                                    <option value="ppt">PPT</option>
+                                    <option value="pasaporte">Pasaporte</option>
+                                    <option value="tarjeta_identidad">Tarjeta de identidad</option>
                                 </select>
                             </div>
                             <div class="mb-2">

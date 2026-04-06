@@ -61,6 +61,7 @@ class ProductoController extends Controller
         $registro->codigo = $validated['codigo'];
         $registro->nombre = $validated['nombre'];
         $registro->precio = $validated['precio'];
+        $registro->descuento = $validated['descuento'] ?? 0;
         $registro->cantidad = $validated['cantidad'];
         $registro->categoria_id = $validated['categoria_id'];
         // support both new `formato_id` and legacy `catalogo_id` from payload
@@ -131,6 +132,7 @@ class ProductoController extends Controller
         $registro->codigo = $validated['codigo'];
         $registro->nombre = $validated['nombre'];
         $registro->precio = $validated['precio'];
+        $registro->descuento = $validated['descuento'] ?? 0;
         $registro->cantidad = $validated['cantidad'];
         $registro->categoria_id = $validated['categoria_id'];
         // support both new `formato_id` and legacy `catalogo_id` from payload

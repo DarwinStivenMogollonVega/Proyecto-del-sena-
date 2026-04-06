@@ -306,6 +306,26 @@ html[data-theme='dark'] .navbar .dropdown-item:focus {
     color: #fff;
 }
 
+/* Make navbar link buttons have white background for better contrast */
+.navbar .nav-link,
+.navbar .nav-cta-btn,
+.navbar .dropdown-cta-btn,
+.navbar .cart-cta-btn,
+.navbar .nav-cta-text {
+    background: #ffffff !important;
+    color: var(--color-text) !important;
+    border: 1.2px solid var(--dz-navbar-border) !important;
+}
+
+/* Slightly stronger hover for white buttons */
+.navbar .nav-link:hover,
+.navbar .nav-cta-btn:hover,
+.navbar .dropdown-cta-btn:hover,
+.navbar .cart-cta-btn:hover {
+    background: #fff8f0 !important;
+    color: var(--color-text) !important;
+}
+
 /* When a dropdown is moved to body (mounted) we need the same visual rules
    because it no longer matches the `.navbar .dropdown-menu` selector. */
 .dropdown-menu.dz-mounted {
@@ -335,6 +355,36 @@ html[data-theme='dark'] .navbar .dropdown-item:focus {
     z-index: 1600 !important;
     opacity: 1 !important;
     visibility: visible !important;
+}
+
+/* Dropdown UX improvements: limit height, control width/position, and compact items
+   This prevents very tall dropdowns that overflow the viewport and improves mobile UX. */
+.navbar .dropdown-menu,
+.dropdown-menu.dz-mounted {
+    max-height: 300px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    min-width: 220px;
+    max-width: 280px;
+    right: 0;
+    left: auto;
+    z-index: 1100; /* keep above most page content but below toasts */
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.navbar .dropdown-item,
+.dropdown-menu.dz-mounted .dropdown-item {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+}
+
+/* Ensure dropdowns mounted on body still respect min/max width and scrolling */
+.dropdown-menu.dz-mounted {
+    min-width: 220px !important;
+    max-width: 280px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
 }
 .dropdown-menu.dz-mounted {
     min-width: 12rem !important;
@@ -382,21 +432,17 @@ html[data-theme='dark'] .navbar .dropdown-item:focus {
 
 /* Cuando haya contenido bajo el nav se agrega esta clase */
 .navbar.dz-nav.scrolled {
+    /* Apply theme-aware background when scrolled */
     background: var(--dz-nav-scrolled-bg) !important;
+    color: var(--color-text) !important;
     backdrop-filter: blur(6px) saturate(110%);
     -webkit-backdrop-filter: blur(6px) saturate(110%);
     box-shadow: 0 6px 20px rgba(17,24,39,0.06);
-    border-bottom: 1px solid rgba(17,24,39,0.05);
-    z-index: 1050;
+    border-bottom: 1px solid var(--dz-navbar-border, rgba(17,24,39,0.05)) !important;
+    z-index: 1100 !important;
 }
 
-html[data-theme='dark'] .navbar.dz-nav.scrolled {
-    background: #232c3b;
-    backdrop-filter: blur(6px) saturate(90%);
-    -webkit-backdrop-filter: blur(6px) saturate(90%);
-    box-shadow: 0 6px 22px rgba(0,0,0,0.6);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-}
+/* Dark/light handled by CSS variables; keep same scrolled rules for all themes */
 
 .navbar.dz-nav.scrolled .dz-brand-logo {
     filter: none;
@@ -461,13 +507,13 @@ nav.dz-nav.scrolled .nav-cta-btn,
 nav.dz-nav.scrolled .dropdown-cta-btn,
 nav.dz-nav.scrolled .cart-cta-btn,
 nav.dz-nav.scrolled .theme-switch-btn {
-    background: #ffffff !important;
-    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    background: var(--color-card) !important;
+    border: 1.4px solid var(--dz-navbar-border) !important;
     box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
     border-radius: 0.85rem !important;
     padding: 0.36rem 0.86rem !important;
     font-weight: 700 !important;
-    color: #111827 !important;
+    color: var(--color-text) !important;
 }
 
 /* Ajustes para que el icono y texto sigan pegados dentro del pill */
@@ -477,23 +523,21 @@ nav.dz-nav.scrolled .nav-scroll-link .nav-cta-text { margin-left: 0 !important; 
 /* Mantener tamaño ligeramente mayor en pantallas anchas */
 @media (min-width: 1200px) {
     nav.dz-nav.scrolled .nav-scroll-link,
-    nav.dz-nav.scrolled .nav-cta-btn {
-        padding: 0.42rem 0.96rem !important;
+    nav.dz-nav.scrolled .cart-cta-btn,
+    nav.dz-nav.scrolled .theme-switch-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.18rem !important;
+        padding: 0.22rem 0.56rem !important;
+        background: var(--color-card) !important;
+        border: 1.2px solid var(--dz-navbar-border) !important;
+        box-shadow: none !important;
+        border-radius: 0.75rem !important;
+        color: var(--color-text) !important;
+        font-weight: 700 !important;
         font-size: 0.95rem !important;
+        gap: 0.28rem !important;
     }
-}
-
-/* Quitar círculos/fondos internos del icono y texto cuando el nav está scrolleado */
-nav.dz-nav.scrolled .nav-cta-icon,
-nav.dz-nav.scrolled .nav-cta-text,
-nav.dz-nav.scrolled a .nav-cta-icon,
-nav.dz-nav.scrolled a .nav-cta-text {
-    background: transparent !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
     line-height: 1 !important;
     vertical-align: middle !important;
 }
@@ -688,8 +732,8 @@ nav.dz-nav.scrolled .navbar-nav a.nav-link,
 nav.dz-nav.scrolled .navbar-nav a.nav-cta-btn,
 nav.dz-nav.scrolled .navbar-nav .dropdown-cta-btn,
 nav.dz-nav.scrolled .navbar-nav .dropdown-toggle {
-    background: #ffffff !important;
-    color: #0f1720 !important;
+    background: var(--color-card) !important;
+    color: var(--color-text) !important;
     padding: 0.36rem 0.86rem !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -812,13 +856,13 @@ nav.dz-nav.scrolled a.nav-link.nav-scroll-link .nav-cta-text {
 
 /* Asegurar que los enlaces sin clases adicionales también se transformen */
 nav.dz-nav.scrolled .navbar-nav a.nav-link:not(.dropdown-toggle):not(.nav-cta-btn) {
-    background: #ffffff !important;
-    border: 1.4px solid rgba(0,0,0,0.12) !important;
+    background: var(--color-card) !important;
+    border: 1.4px solid var(--dz-navbar-border) !important;
     box-shadow: 0 6px 18px rgba(15,23,42,0.06) !important;
     border-radius: 0.85rem !important;
     padding: 0.36rem 0.86rem !important;
     font-weight: 700 !important;
-    color: #111827 !important;
+    color: var(--color-text) !important;
     font-size: 0.95rem !important;
 }
 
@@ -836,6 +880,150 @@ nav.dz-nav.scrolled .navbar-nav a.nav-link:not(.dropdown-toggle):not(.nav-cta-bt
         font-size: 0.98rem;
         padding: 0.45rem 0.9rem;
     }
+}
+
+/* Improve collapsed navbar appearance on small screens */
+@media (max-width: 991.98px) {
+    /* Give the opened collapse a card-like background and padding */
+    .navbar .collapse.navbar-collapse {
+        /* keep collapsed menu transparent to match navbar background */
+        background: transparent !important;
+        padding: 1rem 1.25rem;
+        box-shadow: none !important;
+        border-radius: 0.9rem;
+        margin-top: 0.8rem;
+    }
+
+    /* Stack nav items with consistent vertical spacing */
+    .navbar .navbar-nav {
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: stretch;
+    }
+
+    .navbar .navbar-nav .nav-item { width: 100%; }
+
+    /* Make links fill the width and align icon+text to the left */
+    .navbar .nav-link,
+    .navbar .nav-cta-btn,
+    .navbar .dropdown-cta-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+        padding: 0.5rem 0.8rem !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    /* Align brand/logo to the left and avoid centering issues */
+    .dz-brand { margin-right: auto; }
+
+    /* Make dropdowns inside the collapsed menu render inline and full width */
+    .navbar .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        margin: 0; 
+        padding: 0;
+    }
+
+    .navbar .dropdown-item {
+        padding-left: 1.5rem !important;
+    }
+
+    /* Keep toggler above the collapse card so it stays clickable */
+    .navbar-toggler { z-index: 1200; }
+}
+
+/* Mobile button improvements removed (reverted) */
+
+/* Custom toggler icon that follows theme text color:
+   - uses --color-text so it's black in light mode and white in dark mode
+   - replaces default Bootstrap background-image icon for consistent coloring */
+.navbar-toggler {
+    /* ensure toggler uses theme text color, transparent background and visible border */
+    border: 1.2px solid var(--color-text) !important;
+    background: transparent !important;
+    padding: 0.25rem 0.6rem !important;
+    border-radius: 0.6rem !important;
+}
+
+/* Replace bootstrap default image with three bars that follow theme color */
+.navbar-toggler .navbar-toggler-icon {
+    background-image: none !important;
+    display: inline-block !important;
+    width: 1.6rem !important;
+    height: 2px !important; /* central bar */
+    background-color: var(--color-text) !important;
+    position: relative !important;
+    vertical-align: middle !important;
+    transition: transform 0.18s ease, background-color 0.12s ease;
+}
+.navbar-toggler .navbar-toggler-icon::before,
+.navbar-toggler .navbar-toggler-icon::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 2px !important;
+    background-color: var(--color-text) !important;
+}
+.navbar-toggler .navbar-toggler-icon::before { top: -7px !important; }
+.navbar-toggler .navbar-toggler-icon::after  { top: 7px !important; }
+
+/* Make sure the button itself never gets a filled background from other rules */
+.navbar-toggler[aria-expanded="false"] {
+    background: transparent !important;
+}
+
+/* Strong override to ensure toggler looks the same across all views/pages
+   Some pages may include extra button styles (.btn) or inline rules that
+   change appearance; use more specific selectors and !important to avoid
+   accidental overrides. */
+nav.dz-nav button.navbar-toggler,
+nav.dz-nav button.navbar-toggler.collapsed,
+nav.dz-nav .navbar-toggler {
+    background: transparent !important;
+    border: 1.2px solid var(--color-text) !important;
+    box-shadow: none !important;
+    padding: 0.22rem 0.6rem !important;
+}
+
+nav.dz-nav button.navbar-toggler .navbar-toggler-icon,
+nav.dz-nav button.navbar-toggler.collapsed .navbar-toggler-icon {
+    background-image: none !important;
+    width: 1.6rem !important;
+    height: 2px !important;
+    background-color: var(--color-text) !important;
+}
+
+nav.dz-nav button.navbar-toggler .navbar-toggler-icon::before,
+nav.dz-nav button.navbar-toggler .navbar-toggler-icon::after,
+nav.dz-nav button.navbar-toggler.collapsed .navbar-toggler-icon::before,
+nav.dz-nav button.navbar-toggler.collapsed .navbar-toggler-icon::after {
+    background-color: var(--color-text) !important;
+}
+
+/* If some pages add .btn styles, prevent them from applying here */
+nav.dz-nav button.btn.navbar-toggler {
+    background: transparent !important;
+    color: var(--color-text) !important;
+}
+
+/* When toggler is focused/active, ensure contrast remains (use same color) */
+.navbar-toggler:focus,
+.navbar-toggler:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.navbar-toggler:focus .navbar-toggler-icon,
+.navbar-toggler.collapsed .navbar-toggler-icon,
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+    background-color: var(--color-text) !important;
 }
 
 /* En pantallas grandes centra la lista de items y aumenta gap */

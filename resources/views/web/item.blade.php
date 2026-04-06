@@ -1,10 +1,13 @@
 @extends('web.app')
 
+@section('hide_nav')@endsection
 @push('estilos')
 <link rel="stylesheet" href="{{ asset('css/item-section.css') }}">
 <link rel="stylesheet" href="{{ asset('css/responsive-section.css') }}">
 @endpush
-@include('web.partials.nav')
+@section('manual_nav')
+    @include('web.partials.nav')
+@endsection
 @section('contenido')
 <section class="product-page">
     <div class="container px-4 px-lg-5">
@@ -45,7 +48,14 @@
                         @endif
                     </p>
 
-                    <div class="price-big mb-3">${{ number_format($producto->precio, 2) }}</div>
+                    @if(!empty($producto->descuento) && $producto->descuento > 0)
+                        <div class="small text-muted">Precio anterior</div>
+                        <div class="text-muted"><s>${{ number_format($producto->precio, 2) }}</s></div>
+                        <div class="price-big mb-3">${{ number_format($producto->precio * (1 - ($producto->descuento/100)), 2) }}</div>
+                        <div class="mb-2"><span class="badge bg-warning text-dark">- {{ number_format($producto->descuento, 2) }}% descuento</span></div>
+                    @else
+                        <div class="price-big mb-3">${{ number_format($producto->precio, 2) }}</div>
+                    @endif
 
                     <div class="rating-summary mb-3">
                         <div class="star-view" aria-label="Promedio de calificacion">
@@ -65,7 +75,7 @@
                         <input class="form-control text-center" id="inputQuantity" type="number" name="cantidad" min="1" value="1" style="max-width: 5rem" />
                         <button class="btn btn-outline-dark add-to-cart-btn" type="submit"><i class="bi bi-cart-fill me-1"></i> Agregar al carrito</button>
                         @php
-                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('wishlists')) {
+                            if (auth()->check() && \Illuminate\Support\Facades\Schema::hasTable('lista_deseos')) {
                                 $inWishlist = \App\Models\Wishlist::where('user_id', auth()->id())->where('producto_id', $producto->getKey())->exists();
                             } else {
                                 $wishlist = session('wishlist', []);

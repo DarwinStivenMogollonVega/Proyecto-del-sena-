@@ -45,6 +45,8 @@
                                         <th>Álbum</th>
                                         <th>Categoría</th>
                                         <th>Formato</th>
+                                        <th>Descuento</th>
+                                        <th>Precio final</th>
                                         <th>Imagen</th>
                                 <th class="actions-col" style="width: 150px">Acciones</th>
                                     </tr>
@@ -81,10 +83,12 @@
                                                     <span class="badge panel-badge-muted">Sin Formato</span>
                                                 @endif
                                             </td>
+                                                <td>{{ number_format($reg->descuento ?? 0, 2) }}%</td>
+                                                <td>${{ number_format(($reg->precio * (1 - (($reg->descuento ?? 0)/100))), 2) }}</td>
                                             <td>
                                                 <div class="d-flex flex-column flex-md-row align-items-center gap-2">
                                                     @if($reg->imagen)
-                                                <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 100px; height: auto; border-radius:8px;">
+                                                        <img src="{{ asset('uploads/productos/' . $reg->imagen) }}" alt="{{ $reg->nombre }}" style="max-width: 100px; height: auto; border-radius:8px;">
                                                     @else
                                                         <span>Sin imagen</span>
                                                     @endif

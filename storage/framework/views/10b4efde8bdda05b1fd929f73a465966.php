@@ -18,9 +18,9 @@
                 <h5 class="footer-title">Enlaces</h5>
                 <ul class="footer-links list-unstyled">
                     <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Formato</a></li>
-                    <li><a href="#">Artistas</a></li>
-                    <li><a href="#">Acerca de</a></li>
+                    <li><a href="<?php echo e(route('web.wishlist')); ?>">deseados</a></li>
+                    <li><a href="<?php echo e(route('web.productos')); ?>">productos</a></li>
+                    <li><a href="<?php echo e(route('web.acerca')); ?>">Acerca de</a></li>
                 </ul>
             </div>
 
