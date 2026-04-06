@@ -6070,6 +6070,29 @@ html:not([data-theme='dark']) .btn-lg {
   color: #000;
 }
 
+/* Mobile: increase carousel caption font sizes for better readability */
+@media (max-width: 767.98px) {
+  .carousel-caption {
+    left: 5%;
+    right: 5%;
+    bottom: 1rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    font-size: 1.15rem; /* base caption size */
+  }
+  .carousel-caption h1,
+  .carousel-caption h2,
+  .carousel-caption h3,
+  .carousel-caption h4,
+  .carousel-caption h5 {
+    font-size: 1.35rem; /* headline within caption */
+    line-height: 1.1;
+  }
+  .carousel-caption p {
+    font-size: 1.05rem; /* paragraph text */
+  }
+}
+
 .spinner-grow,
 .spinner-border {
   display: inline-block;

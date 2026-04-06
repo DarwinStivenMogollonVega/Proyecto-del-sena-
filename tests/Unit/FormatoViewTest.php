@@ -14,7 +14,10 @@ class FormatoViewTest extends TestCase
     {
         $this->ensureBasicTables();
 
-        $formato = (object)['nombre' => 'Vinilo', 'getKey' => function(){return 1;}];
+        $formato = new class {
+            public $nombre = 'Vinilo';
+            public function getKey() { return 1; }
+        };
 
         $prod = new ProductStub(3);
         $prod->categoria = (object)['nombre'=>'C'];

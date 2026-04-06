@@ -334,3 +334,34 @@ html[data-theme='dark'] .logo-dark {
 /*
   /* Desktop: restaurado a diseño original */
 
+/* Mobile carousel/product text overrides: make titles and prices larger for small screens */
+@media (max-width: 767.98px) {
+  .product-carousel .all-product-name,
+  .all-product-card .all-product-name,
+  .all-product-name,
+  .dz-product-title {
+    font-size: 1.18rem !important;
+    font-weight: 700 !important;
+    line-height: 1.12 !important;
+  }
+
+  .product-carousel .all-product-artist,
+  .all-product-artist {
+    font-size: 1.02rem !important;
+    color: var(--dz-text-subtle) !important;
+  }
+
+  .product-carousel .carousel-price,
+  .all-product-discount.carousel-price {
+    font-size: 1.08rem !important;
+    font-weight: 700 !important;
+  }
+
+  /* Ensure buttons and CTAs don't get too small visually */
+  .all-product-cta,
+  .dz-product-btn {
+    font-size: 1.02rem !important;
+    padding: 0.7rem 0.9rem !important;
+  }
+}
+

@@ -15,7 +15,12 @@ class ArtistaViewTest extends TestCase
     {
         $this->ensureBasicTables();
 
-        $artista = (object)['nombre' => 'A1', 'foto' => null, 'biografia' => null, 'getKey' => function(){return 1;}];
+        $artista = new class {
+            public $nombre = 'A1';
+            public $foto = null;
+            public $biografia = null;
+            public function getKey() { return 1; }
+        };
 
         $prod = new ProductStub(4);
         $prod->categoria = (object)['nombre'=>'C'];

@@ -32,6 +32,24 @@ trait TestDbSetup
             });
         }
 
+        // Minimal spatie/permission tables to avoid package queries during view rendering
+        if (!Schema::hasTable('permissions')) {
+            Schema::create('permissions', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+                $table->string('guard_name')->nullable();
+                $table->timestamps();
+            });
+        }
+        if (!Schema::hasTable('roles')) {
+            Schema::create('roles', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+                $table->string('guard_name')->nullable();
+                $table->timestamps();
+            });
+        }
+
         // Insert default rows if empty
         if (DB::table('categorias')->count() == 0) {
             DB::table('categorias')->insert(['nombre' => 'C1']);

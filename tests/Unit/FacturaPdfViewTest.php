@@ -19,7 +19,8 @@ class FacturaPdfViewTest extends TestCase
             public function getKey(){ return 1; }
         };
 
-        $factura = new class {
+        // create factura with explicit constructor to avoid relying on globals
+        $factura = new class($pedido) {
             public $numero_factura = 'F-1';
             public $fecha_emision;
             public $cliente_nombre = 'C';
@@ -31,12 +32,9 @@ class FacturaPdfViewTest extends TestCase
             public $impuestos = 0.0;
             public $total = 10.0;
             public $estado_pedido = 'enviado';
-            public function __construct() { $this->fecha_emision = Carbon::now(); $this->pedido = (function($p){ return $p; })((function(){ return $GLOBALS['__pp_temp_pedido']; })()); }
+            public function __construct($p) { $this->fecha_emision = Carbon::now(); $this->pedido = $p; }
+            public function getKey() { return 1; }
         };
-
-        // Inject pedido into global for constructor hack
-        $GLOBALS['__pp_temp_pedido'] = $pedido;
-        $factura->pedido = $pedido;
 
         $output = view('web.factura_pdf', compact('factura'))->render();
 

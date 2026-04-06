@@ -18,6 +18,7 @@ class RecibosFacturaViewTest extends TestCase
             public $cliente_email = 'c@example.test';
             public $total = 10.0;
             public function __construct() { $this->pedido = new class { public function getKey(){return 1;} }; $this->fecha_emision = Carbon::now(); }
+            public function getKey() { return 1; }
         };
 
         $registros = new LengthAwarePaginator([$reg], 1, 10, 1);

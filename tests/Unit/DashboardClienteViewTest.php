@@ -30,6 +30,11 @@ class DashboardClienteViewTest extends TestCase
 
         view()->share('errors', new ViewErrorBag());
 
+        // Provide a lightweight authenticated user for auth()->user()->name
+        $user = new \App\Models\User();
+        $user->name = 'Test User';
+        $this->be($user);
+
         $output = view('web.dashboard_cliente', compact('resumen','ultimosPedidos','productosFrecuentes','categoriasInteres'))->render();
 
         $this->assertStringContainsString('Mi dashboard', $output);
