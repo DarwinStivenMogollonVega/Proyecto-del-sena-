@@ -20,20 +20,26 @@ class ResetPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:usuarios,email']);
+        $request->validate(['email' => 'required|email']);
 
-        $token = Str::random(60);
+        // Buscar el usuario; si existe, crear token y enviar correo.
+        $user = User::where('email', $request->email)->first();
 
-        DB::table('password_reset_tokens')->updateOrInsert(
-            ['email' => $request->email],
-            ['token' => $token, 'created_at' => now()]
-        );
+        if ($user) {
+            $token = Str::random(60);
 
-        Mail::send('emails.reset-password', ['token' => $token], function ($message) use ($request) {
-            $message->to($request->email)->subject('Recuperación de contraseña - IncanatoApps');
-        });
+            DB::table('password_reset_tokens')->updateOrInsert(
+                ['email' => $request->email],
+                ['token' => $token, 'created_at' => now()]
+            );
 
-        return back()->with('mensaje', 'Te hemos enviado un enlace de recuperación.');
+            Mail::send('emails.reset-password', ['token' => $token], function ($message) use ($request) {
+                $message->to($request->email)->subject('Recuperación de contraseña - IncanatoApps');
+            });
+        }
+
+        // Responder siempre igual para no filtrar si la cuenta existe.
+        return back()->with('mensaje', 'Si el correo existe, te hemos enviado un enlace de recuperación.');
     }
 
     public function showResetForm($token)

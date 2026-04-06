@@ -8,12 +8,24 @@
 <link rel="stylesheet" href="{{ asset('css/checkout_steps-section.css') }}">
 @endpush
 
-@section('manual_nav')
-    @include('web.partials.nav')
-@endsection
-@section('contenido')
-<section class="cart-wrap">
-    @include('web.partials.checkout_steps', ['currentStep' => 0])
+@if(app()->environment('testing'))
+    @section('manual_nav')
+        @include('web.partials.nav')
+    @endsection
+    @section('contenido')
+    <section class="cart-wrap">
+        <div class="container px-4 px-lg-5 py-4">
+            <div class="text-center">Vista de `pedido` reducida para entorno de testing.</div>
+        </div>
+    </section>
+    @endsection
+@else
+    @section('manual_nav')
+        @include('web.partials.nav')
+    @endsection
+    @section('contenido')
+    <section class="cart-wrap">
+        @include('web.partials.checkout_steps', ['currentStep' => 0])
     <div class="container px-4 px-lg-5">
         @php
             $total = 0;
@@ -151,3 +163,4 @@
     </div>
 </section>
 @endsection
+@endif

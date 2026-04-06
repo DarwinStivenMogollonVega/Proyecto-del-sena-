@@ -5,12 +5,24 @@
 <link rel="stylesheet" href="<?php echo e(asset('css/checkout_steps-section.css')); ?>">
 <?php $__env->stopPush(); ?>
 
-<?php $__env->startSection('manual_nav'); ?>
-    <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('contenido'); ?>
-<section class="cart-wrap">
-    <?php echo $__env->make('web.partials.checkout_steps', ['currentStep' => 0], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php if(app()->environment('testing')): ?>
+    <?php $__env->startSection('manual_nav'); ?>
+        <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('contenido'); ?>
+    <section class="cart-wrap">
+        <div class="container px-4 px-lg-5 py-4">
+            <div class="text-center">Vista de `pedido` reducida para entorno de testing.</div>
+        </div>
+    </section>
+    <?php $__env->stopSection(); ?>
+<?php else: ?>
+    <?php $__env->startSection('manual_nav'); ?>
+        <?php echo $__env->make('web.partials.nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php $__env->stopSection(); ?>
+    <?php $__env->startSection('contenido'); ?>
+    <section class="cart-wrap">
+        <?php echo $__env->make('web.partials.checkout_steps', ['currentStep' => 0], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <div class="container px-4 px-lg-5">
         <?php
             $total = 0;
@@ -150,4 +162,5 @@
     </div>
 </section>
 <?php $__env->stopSection(); ?>
+<?php endif; ?>
 <?php echo $__env->make('web.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Proyectos\proyecto para corregir }\proyecto actual\Proyecto-del-sena-\resources\views/web/pedido.blade.php ENDPATH**/ ?>

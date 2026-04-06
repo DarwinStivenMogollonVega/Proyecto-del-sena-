@@ -29,6 +29,7 @@ trait TestDbSetup
             Schema::create('artistas', function (Blueprint $table) {
                 $table->bigIncrements('artista_id');
                 $table->string('nombre')->nullable();
+                $table->string('identificador_unico')->nullable();
             });
         }
 
@@ -58,7 +59,11 @@ trait TestDbSetup
             DB::table('formatos')->insert(['nombre' => 'F1']);
         }
         if (DB::table('artistas')->count() == 0) {
-            DB::table('artistas')->insert(['nombre' => 'A1']);
+            $artistaData = ['nombre' => 'A1'];
+            if (Schema::hasColumn('artistas', 'identificador_unico')) {
+                $artistaData['identificador_unico'] = 'A1';
+            }
+            DB::table('artistas')->insert($artistaData);
         }
 
         // Ensure $errors exists for blade

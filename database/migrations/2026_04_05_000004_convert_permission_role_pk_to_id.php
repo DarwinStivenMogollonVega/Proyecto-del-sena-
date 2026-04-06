@@ -11,12 +11,16 @@ return new class extends Migration
     {
         // Rename permission_id -> id if present
         if (Schema::hasTable('permissions') && Schema::hasColumn('permissions', 'permission_id')) {
-            DB::statement('ALTER TABLE `permissions` CHANGE `permission_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;');
+            if (Schema::getConnection()->getDriverName() === 'mysql') {
+                DB::statement('ALTER TABLE `permissions` CHANGE `permission_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;');
+            }
         }
 
         // Rename role_id -> id if present
         if (Schema::hasTable('roles') && Schema::hasColumn('roles', 'role_id')) {
-            DB::statement('ALTER TABLE `roles` CHANGE `role_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;');
+            if (Schema::getConnection()->getDriverName() === 'mysql') {
+                DB::statement('ALTER TABLE `roles` CHANGE `role_id` `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;');
+            }
         }
 
         // Update foreign keys in pivot tables to reference the new id columns
